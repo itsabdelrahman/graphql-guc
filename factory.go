@@ -87,3 +87,15 @@ type Grade struct {
 	Point      string `json:"grade"`
 	MaxPoint   string `json:"max_point"`
 }
+
+type CourseAPI struct {
+	Id     string     `json:"id"`
+	Name   string     `json:"name"`
+	Grades []GradeAPI `json:"grades"`
+}
+
+type GradeAPI struct {
+	Module   string `json:"module"`
+	Point    string `json:"point"`
+	MaxPoint string `json:"maxPoint"`
+}
