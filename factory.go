@@ -89,7 +89,8 @@ type Grade struct {
 }
 
 type CourseAPI struct {
-	Id     string     `json:"id"`
+	Id     int
+	Code   string     `json:"code"`
 	Name   string     `json:"name"`
 	Grades []GradeAPI `json:"grades"`
 }
