@@ -9,9 +9,10 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
-func GetUserCoursework(username, password string) []Grade {
+func GetUserCoursework(username, password string) []CourseworkAPI {
 	api := "https://m.guc.edu.eg"
 	resource := "/StudentServices.asmx/GetCourseWork"
 
@@ -24,15 +25,23 @@ func GetUserCoursework(username, password string) []Grade {
 	courseWork := Coursework{}
 	jsonToStruct(responseString.Value, &courseWork)
 
-	for i := range courseWork.Grades {
-		for j := range courseWork.Courses {
-			if courseWork.Grades[i].CourseId == courseWork.Courses[j].Id {
-				courseWork.Grades[i].CourseName = courseWork.Courses[j].Name
+	allCoursework := []CourseworkAPI{}
+
+	for _, course := range courseWork.Courses {
+		courseAPI := NewCourseworkAPI(course)
+
+		for _, grade := range courseWork.Grades {
+			if grade.CourseId == courseAPI.Id {
+				if len(grade.Point) > 0 {
+					courseAPI.Grades = append(courseAPI.Grades, NewGradeAPI(grade))
+				}
 			}
 		}
+
+		allCoursework = append(allCoursework, courseAPI)
 	}
 
-	return courseWork.Grades
+	return allCoursework
 }
 
 func httpPostWithFormDataCredentials(api, resource, username, password, clientVersion string) *http.Response {
@@ -82,8 +91,43 @@ type Course struct {
 
 type Grade struct {
 	CourseId   string `json:"sm_crs_id"`
-	CourseName string
 	ModuleName string `json:"eval_method_name"`
 	Point      string `json:"grade"`
 	MaxPoint   string `json:"max_point"`
+}
+
+type CourseworkAPI struct {
+	Id     string     `json:"-"`
+	Code   string     `json:"code"`
+	Name   string     `json:"name"`
+	Grades []GradeAPI `json:"grades"`
+}
+
+type GradeAPI struct {
+	Module   string `json:"module"`
+	Point    string `json:"point"`
+	MaxPoint string `json:"maxPoint"`
+}
+
+func NewCourseworkAPI(course Course) CourseworkAPI {
+	courseAPI := CourseworkAPI{}
+
+	courseAPI.Id = course.Id
+	courseAPI.Grades = []GradeAPI{}
+
+	courseNameSplit := strings.Split(course.Name, "(")
+	courseAPI.Name = strings.TrimSpace(courseNameSplit[0])
+	courseAPI.Code = courseNameSplit[1][0 : len(courseNameSplit[1])-1]
+
+	return courseAPI
+}
+
+func NewGradeAPI(grade Grade) GradeAPI {
+	gradeAPI := GradeAPI{}
+
+	gradeAPI.Module = grade.ModuleName
+	gradeAPI.Point = grade.Point
+	gradeAPI.MaxPoint = grade.MaxPoint
+
+	return gradeAPI
 }
