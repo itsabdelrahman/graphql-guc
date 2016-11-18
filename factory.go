@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 func GetUserCoursework(username, password string) []Grade {
@@ -89,7 +90,7 @@ type Grade struct {
 }
 
 type CourseAPI struct {
-	Id     int
+	Id     string
 	Code   string     `json:"code"`
 	Name   string     `json:"name"`
 	Grades []GradeAPI `json:"grades"`
@@ -99,4 +100,17 @@ type GradeAPI struct {
 	Module   string `json:"module"`
 	Point    string `json:"point"`
 	MaxPoint string `json:"maxPoint"`
+}
+
+func NewCourseAPI(course Course) CourseAPI {
+	courseAPI := CourseAPI{}
+
+	courseAPI.Id = course.Id
+	courseAPI.Grades = []GradeAPI{}
+
+	courseNameSplit := strings.Split(course.Name, "(")
+	courseAPI.Name = strings.TrimSpace(courseNameSplit[0])
+	courseAPI.Code = courseNameSplit[1][0 : len(courseNameSplit[1])-1]
+
+	return courseAPI
 }
