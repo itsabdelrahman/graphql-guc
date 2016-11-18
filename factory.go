@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func GetUserCoursework(username, password string) []Grade {
+func GetUserCoursework(username, password string) []CourseworkAPI {
 	api := "https://m.guc.edu.eg"
 	resource := "/StudentServices.asmx/GetCourseWork"
 
@@ -33,7 +33,13 @@ func GetUserCoursework(username, password string) []Grade {
 		}
 	}
 
-	return courseWork.Grades
+	allCoursework := []CourseworkAPI{}
+
+	for _, course := range courseWork.Courses {
+			allCoursework = append(allCoursework, NewCourseworkAPI(course))
+	}
+
+	return allCoursework
 }
 
 func httpPostWithFormDataCredentials(api, resource, username, password, clientVersion string) *http.Response {
@@ -90,7 +96,7 @@ type Grade struct {
 }
 
 type CourseworkAPI struct {
-	Id     string
+	Id     string     `json:"-"`
 	Code   string     `json:"code"`
 	Name   string     `json:"name"`
 	Grades []GradeAPI `json:"grades"`
