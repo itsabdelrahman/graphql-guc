@@ -89,7 +89,7 @@ type Grade struct {
 	MaxPoint   string `json:"max_point"`
 }
 
-type CourseAPI struct {
+type CourseworkAPI struct {
 	Id     string
 	Code   string     `json:"code"`
 	Name   string     `json:"name"`
@@ -102,8 +102,8 @@ type GradeAPI struct {
 	MaxPoint string `json:"maxPoint"`
 }
 
-func NewCourseAPI(course Course) CourseAPI {
-	courseAPI := CourseAPI{}
+func NewCourseworkAPI(course Course) CourseworkAPI {
+	courseAPI := CourseworkAPI{}
 
 	courseAPI.Id = course.Id
 	courseAPI.Grades = []GradeAPI{}
