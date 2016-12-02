@@ -25,23 +25,19 @@ func main() {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(IsUserAuthorized(basicAuthentication(r)))
+	sendJsonResponse(w, IsUserAuthorized(basicAuthentication(r)))
 }
 
 func courseworkHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(GetUserCoursework(basicAuthentication(r)))
+	sendJsonResponse(w, GetUserCoursework(basicAuthentication(r)))
 }
 
 func midtermsHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(GetUserMidterms(basicAuthentication(r)))
+	sendJsonResponse(w, GetUserMidterms(basicAuthentication(r)))
 }
 
 func attendanceHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(GetUserAbsenceReports(basicAuthentication(r)))
+	sendJsonResponse(w, GetUserAbsenceReports(basicAuthentication(r)))
 }
 
 func basicAuthentication(r *http.Request) (string, string) {
@@ -50,4 +46,9 @@ func basicAuthentication(r *http.Request) (string, string) {
 	pair := strings.SplitN(string(payload), ":", 2)
 
 	return pair[0], pair[1]
+}
+
+func sendJsonResponse(w http.ResponseWriter, v interface{}) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(v)
 }
