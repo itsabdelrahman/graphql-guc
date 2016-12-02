@@ -16,7 +16,7 @@ func GetUserCoursework(username, password string) []CourseworkAPI {
 	api := "https://m.guc.edu.eg"
 	resource := "/StudentServices.asmx/GetCourseWork"
 
-	response := httpPostWithFormDataCredentials(api, resource, username, password, "1.3")
+	response := httpPostWithFormDataCredentials(api, resource, username, password, "1.3", nil, nil)
 	responseBodyString := httpResponseBodyToString(response.Body)
 
 	responseString := XMLResponseString{}
@@ -48,7 +48,7 @@ func GetUserMidterms(username, password string) []MidtermAPI {
 	api := "https://m.guc.edu.eg"
 	resource := "/StudentServices.asmx/GetCourseWork"
 
-	response := httpPostWithFormDataCredentials(api, resource, username, password, "1.3")
+	response := httpPostWithFormDataCredentials(api, resource, username, password, "1.3", nil, nil)
 	responseBodyString := httpResponseBodyToString(response.Body)
 
 	responseString := XMLResponseString{}
@@ -66,11 +66,16 @@ func GetUserMidterms(username, password string) []MidtermAPI {
 	return midtermsAPI
 }
 
-func httpPostWithFormDataCredentials(api, resource, username, password, clientVersion string) *http.Response {
+func httpPostWithFormDataCredentials(api, resource, username, password, clientVersion, appOS, osVersion string) *http.Response {
 	data := url.Values{}
 	data.Set("username", username)
 	data.Add("password", password)
 	data.Add("clientVersion", clientVersion)
+
+	if appOS != nil && osVersion != nil {
+		data.Add("app_os", appOS)
+		data.Add("os_version", osVersion)
+	}
 
 	uri, _ := url.ParseRequestURI(api)
 	uri.Path = resource
