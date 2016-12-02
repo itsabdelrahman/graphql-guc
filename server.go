@@ -11,6 +11,7 @@ import (
 
 func main() {
 	http.HandleFunc("/api/coursework", courseworkHandler)
+	http.HandleFunc("/api/midterms", midtermsHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -24,6 +25,11 @@ func main() {
 func courseworkHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(GetUserCoursework(basicAuthentication(r)))
+}
+
+func midtermsHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(GetUserMidterms(basicAuthentication(r)))
 }
 
 func basicAuthentication(r *http.Request) (string, string) {

@@ -44,6 +44,28 @@ func GetUserCoursework(username, password string) []CourseworkAPI {
 	return allCoursework
 }
 
+func GetUserMidterms(username, password string) []MidtermAPI {
+	api := "https://m.guc.edu.eg"
+	resource := "/StudentServices.asmx/GetCourseWork"
+
+	response := httpPostWithFormDataCredentials(api, resource, username, password, "1.3")
+	responseBodyString := httpResponseBodyToString(response.Body)
+
+	responseString := XMLResponseString{}
+	xmlToStruct(responseBodyString, &responseString)
+
+	courseWork := Coursework{}
+	jsonToStruct(responseString.Value, &courseWork)
+
+	midtermsAPI := []MidtermAPI{}
+
+	for _, midterm := range courseWork.Midterms {
+		midtermsAPI = append(midtermsAPI, NewMidtermAPI(midterm))
+	}
+
+	return midtermsAPI
+}
+
 func httpPostWithFormDataCredentials(api, resource, username, password, clientVersion string) *http.Response {
 	data := url.Values{}
 	data.Set("username", username)
