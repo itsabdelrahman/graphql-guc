@@ -10,6 +10,7 @@ import (
 )
 
 func main() {
+	http.HandleFunc("/api/login", loginHandler)
 	http.HandleFunc("/api/coursework", courseworkHandler)
 	http.HandleFunc("/api/midterms", midtermsHandler)
 
@@ -20,6 +21,11 @@ func main() {
 
 	fmt.Printf("Server listening on port %s...\n", port)
 	http.ListenAndServe(":"+port, nil)
+}
+
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(IsUserAuthorized(basicAuthentication(r)))
 }
 
 func courseworkHandler(w http.ResponseWriter, r *http.Request) {

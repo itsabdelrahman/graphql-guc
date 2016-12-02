@@ -12,11 +12,24 @@ import (
 	"strings"
 )
 
+func IsUserAuthorized(username, password string) AuthorizedAPI {
+	api := "https://m.guc.edu.eg"
+	resource := "/StudentServices.asmx/Login"
+
+	response := httpPostWithFormDataCredentials(api, resource, username, password, "1.3", "0", "6.0.1")
+	responseBodyString := httpResponseBodyToString(response.Body)
+
+	responseString := XMLResponseString{}
+	xmlToStruct(responseBodyString, &responseString)
+
+	return NewAuthorizedAPI(responseString.Value)
+}
+
 func GetUserCoursework(username, password string) []CourseworkAPI {
 	api := "https://m.guc.edu.eg"
 	resource := "/StudentServices.asmx/GetCourseWork"
 
-	response := httpPostWithFormDataCredentials(api, resource, username, password, "1.3", nil, nil)
+	response := httpPostWithFormDataCredentials(api, resource, username, password, "1.3", "", "")
 	responseBodyString := httpResponseBodyToString(response.Body)
 
 	responseString := XMLResponseString{}
@@ -48,7 +61,7 @@ func GetUserMidterms(username, password string) []MidtermAPI {
 	api := "https://m.guc.edu.eg"
 	resource := "/StudentServices.asmx/GetCourseWork"
 
-	response := httpPostWithFormDataCredentials(api, resource, username, password, "1.3", nil, nil)
+	response := httpPostWithFormDataCredentials(api, resource, username, password, "1.3", "", "")
 	responseBodyString := httpResponseBodyToString(response.Body)
 
 	responseString := XMLResponseString{}
@@ -72,7 +85,7 @@ func httpPostWithFormDataCredentials(api, resource, username, password, clientVe
 	data.Add("password", password)
 	data.Add("clientVersion", clientVersion)
 
-	if appOS != nil && osVersion != nil {
+	if appOS != "" && osVersion != "" {
 		data.Add("app_os", appOS)
 		data.Add("os_version", osVersion)
 	}
@@ -129,6 +142,10 @@ type Midterm struct {
 	Percentage string `json:"total_perc"`
 }
 
+type AuthorizedAPI struct {
+	IsAuthorized bool `json:"authorized"`
+}
+
 type CourseworkAPI struct {
 	Id     string     `json:"-"`
 	Code   string     `json:"code"`
@@ -145,6 +162,18 @@ type GradeAPI struct {
 type MidtermAPI struct {
 	Name       string `json:"name"`
 	Percentage string `json:"percentage"`
+}
+
+func NewAuthorizedAPI(authorized string) AuthorizedAPI {
+	authorizedAPI := AuthorizedAPI{}
+
+	if strings.Compare(authorized, "True") == 0 {
+		authorizedAPI.IsAuthorized = true
+	} else {
+		authorizedAPI.IsAuthorized = false
+	}
+
+	return authorizedAPI
 }
 
 func NewCourseworkAPI(course Course) CourseworkAPI {
