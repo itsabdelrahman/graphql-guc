@@ -16,7 +16,9 @@ Example: if your username is `john.doe` & your password is `12345`, then your HT
 
 ### API Calls
 
-* `GET http://guc-api.herokuapp.com/api/login`
+#### Login 
+
+`GET http://guc-api.herokuapp.com/api/login`
 
 Response:
 ```
@@ -33,7 +35,9 @@ or
 
 ***
 
-* `GET http://guc-api.herokuapp.com/api/coursework`
+#### Coursework 
+
+`GET http://guc-api.herokuapp.com/api/coursework`
 
 Response:
 ```
@@ -56,7 +60,9 @@ Response:
 
 ***
 
-* `GET http://guc-api.herokuapp.com/api/midterms`
+#### Midterms 
+
+`GET http://guc-api.herokuapp.com/api/midterms`
 
 Response:
 ```
@@ -71,7 +77,9 @@ Response:
 
 ***
 
-* `GET http://guc-api.herokuapp.com/api/attendance`
+#### Attendance 
+
+`GET http://guc-api.herokuapp.com/api/attendance`
 
 Response:
 ```
