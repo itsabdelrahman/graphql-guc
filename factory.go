@@ -44,6 +44,28 @@ func GetUserCoursework(username, password string) []CourseworkAPI {
 	return allCoursework
 }
 
+func GetUserMidterms(username, password string) []MidtermAPI {
+	api := "https://m.guc.edu.eg"
+	resource := "/StudentServices.asmx/GetCourseWork"
+
+	response := httpPostWithFormDataCredentials(api, resource, username, password, "1.3")
+	responseBodyString := httpResponseBodyToString(response.Body)
+
+	responseString := XMLResponseString{}
+	xmlToStruct(responseBodyString, &responseString)
+
+	courseWork := Coursework{}
+	jsonToStruct(responseString.Value, &courseWork)
+
+	midtermsAPI := []MidtermAPI{}
+
+	for _, midterm := range courseWork.Midterms {
+		midtermsAPI = append(midtermsAPI, NewMidtermAPI(midterm))
+	}
+
+	return midtermsAPI
+}
+
 func httpPostWithFormDataCredentials(api, resource, username, password, clientVersion string) *http.Response {
 	data := url.Values{}
 	data.Set("username", username)
@@ -80,8 +102,9 @@ type XMLResponseString struct {
 }
 
 type Coursework struct {
-	Courses []Course `json:"CurrentCourses"`
-	Grades  []Grade  `json:"CourseWork"`
+	Courses  []Course  `json:"CurrentCourses"`
+	Grades   []Grade   `json:"CourseWork"`
+	Midterms []Midterm `json:"Midterm"`
 }
 
 type Course struct {
@@ -96,6 +119,11 @@ type Grade struct {
 	MaxPoint   string `json:"max_point"`
 }
 
+type Midterm struct {
+	CourseName string `json:"course_full_name"`
+	Percentage string `json:"total_perc"`
+}
+
 type CourseworkAPI struct {
 	Id     string     `json:"-"`
 	Code   string     `json:"code"`
@@ -107,6 +135,11 @@ type GradeAPI struct {
 	Module   string `json:"module"`
 	Point    string `json:"point"`
 	MaxPoint string `json:"maxPoint"`
+}
+
+type MidtermAPI struct {
+	Name       string `json:"name"`
+	Percentage string `json:"percentage"`
 }
 
 func NewCourseworkAPI(course Course) CourseworkAPI {
@@ -130,4 +163,13 @@ func NewGradeAPI(grade Grade) GradeAPI {
 	gradeAPI.MaxPoint = grade.MaxPoint
 
 	return gradeAPI
+}
+
+func NewMidtermAPI(midterm Midterm) MidtermAPI {
+	midtermAPI := MidtermAPI{}
+
+	midtermAPI.Name = midterm.CourseName
+	midtermAPI.Percentage = midterm.Percentage
+
+	return midtermAPI
 }
