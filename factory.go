@@ -126,10 +126,10 @@ func httpResponseBodyToString(responseBody io.ReadCloser) string {
 	return string(responseBodyRead)
 }
 
-func jsonToStruct(j string, v interface{}) {
-	json.Unmarshal([]byte(j), v)
+func jsonToStruct(j string, v interface{}) error {
+	return json.Unmarshal([]byte(j), v)
 }
 
-func xmlToStruct(x string, v interface{}) {
-	xml.Unmarshal([]byte(x), v)
+func xmlToStruct(x string, v interface{}) error {
+	return xml.Unmarshal([]byte(x), v)
 }
