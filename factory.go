@@ -79,6 +79,28 @@ func GetUserMidterms(username, password string) []MidtermAPI {
 	return midtermsAPI
 }
 
+func GetUserAbsenceReports(username, password string) []AbsenceReportAPI {
+	api := "https://m.guc.edu.eg"
+	resource := "/StudentServices.asmx/GetAttendance"
+
+	response := httpPostWithFormDataCredentials(api, resource, username, password, "1.3", "", "")
+	responseBodyString := httpResponseBodyToString(response.Body)
+
+	responseString := XMLResponseString{}
+	xmlToStruct(responseBodyString, &responseString)
+
+	absence := Absence{}
+	jsonToStruct(responseString.Value, &absence)
+
+	absenceReportsAPI := []AbsenceReportAPI{}
+
+	for _, report := range absence.AbsenceReports {
+		absenceReportsAPI = append(absenceReportsAPI, NewAbsenceReportAPI(report))
+	}
+
+	return absenceReportsAPI
+}
+
 func httpPostWithFormDataCredentials(api, resource, username, password, clientVersion, appOS, osVersion string) *http.Response {
 	data := url.Values{}
 	data.Set("username", username)
@@ -142,6 +164,15 @@ type Midterm struct {
 	Percentage string `json:"total_perc"`
 }
 
+type Absence struct {
+	AbsenceReports []AbsenceReport `json:"AbsenceReport"`
+}
+
+type AbsenceReport struct {
+	CourseName   string `json:"Name"`
+	AbsenceLevel string `json:"AbsenceLevel"`
+}
+
 type AuthorizedAPI struct {
 	IsAuthorized bool `json:"authorized"`
 }
@@ -162,6 +193,11 @@ type GradeAPI struct {
 type MidtermAPI struct {
 	Name       string `json:"name"`
 	Percentage string `json:"percentage"`
+}
+
+type AbsenceReportAPI struct {
+	CourseName string `json:"name"`
+	Level      string `json:"level"`
 }
 
 func NewAuthorizedAPI(authorized string) AuthorizedAPI {
@@ -206,4 +242,13 @@ func NewMidtermAPI(midterm Midterm) MidtermAPI {
 	midtermAPI.Percentage = midterm.Percentage
 
 	return midtermAPI
+}
+
+func NewAbsenceReportAPI(absenceReport AbsenceReport) AbsenceReportAPI {
+	absenceReportAPI := AbsenceReportAPI{}
+
+	absenceReportAPI.CourseName = absenceReport.CourseName
+	absenceReportAPI.Level = absenceReport.AbsenceLevel
+
+	return absenceReportAPI
 }
