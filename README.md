@@ -31,6 +31,8 @@ or
 }
 ```
 
+***
+
 * `GET http://guc-api.herokuapp.com/api/coursework`
 
 Response:
@@ -52,6 +54,8 @@ Response:
 ]
 ```
 
+***
+
 * `GET http://guc-api.herokuapp.com/api/midterms`
 
 Response:
@@ -64,6 +68,8 @@ Response:
    ...
 ]
 ```
+
+***
 
 * `GET http://guc-api.herokuapp.com/api/attendance`
 
