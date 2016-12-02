@@ -80,8 +80,9 @@ type XMLResponseString struct {
 }
 
 type Coursework struct {
-	Courses []Course `json:"CurrentCourses"`
-	Grades  []Grade  `json:"CourseWork"`
+	Courses  []Course  `json:"CurrentCourses"`
+	Grades   []Grade   `json:"CourseWork"`
+	Midterms []Midterm `json:"Midterm"`
 }
 
 type Course struct {
@@ -96,6 +97,11 @@ type Grade struct {
 	MaxPoint   string `json:"max_point"`
 }
 
+type Midterm struct {
+	CourseName string `json:"course_full_name"`
+	Percentage string `json:"total_perc"`
+}
+
 type CourseworkAPI struct {
 	Id     string     `json:"-"`
 	Code   string     `json:"code"`
@@ -107,6 +113,11 @@ type GradeAPI struct {
 	Module   string `json:"module"`
 	Point    string `json:"point"`
 	MaxPoint string `json:"maxPoint"`
+}
+
+type MidtermAPI struct {
+	Name       string `json:"name"`
+	Percentage string `json:"percentage"`
 }
 
 func NewCourseworkAPI(course Course) CourseworkAPI {
@@ -130,4 +141,13 @@ func NewGradeAPI(grade Grade) GradeAPI {
 	gradeAPI.MaxPoint = grade.MaxPoint
 
 	return gradeAPI
+}
+
+func NewMidtermAPI(midterm Midterm) MidtermAPI {
+	midtermAPI := MidtermAPI{}
+
+	midtermAPI.Name = midterm.CourseName
+	midtermAPI.Percentage = midterm.Percentage
+
+	return midtermAPI
 }
