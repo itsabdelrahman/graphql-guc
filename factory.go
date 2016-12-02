@@ -13,13 +13,13 @@ import (
 )
 
 const (
-	API = "https://m.guc.edu.eg"
-	LOGIN_ENDPOINT = "/StudentServices.asmx/Login"
+	API                 = "https://m.guc.edu.eg"
+	LOGIN_ENDPOINT      = "/StudentServices.asmx/Login"
 	COURSEWORK_ENDPOINT = "/StudentServices.asmx/GetCourseWork"
 	ATTENDANCE_ENDPOINT = "/StudentServices.asmx/GetAttendance"
-	CLIENT_VERSION = "1.3"
-	APP_OS = "0"
-	OS_VERSION = "6.0.1"
+	CLIENT_VERSION      = "1.3"
+	APP_OS              = "0"
+	OS_VERSION          = "6.0.1"
 )
 
 func IsUserAuthorized(username, password string) AuthorizedAPI {
