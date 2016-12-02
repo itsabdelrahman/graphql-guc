@@ -12,11 +12,18 @@ import (
 	"strings"
 )
 
-func IsUserAuthorized(username, password string) AuthorizedAPI {
-	api := "https://m.guc.edu.eg"
-	resource := "/StudentServices.asmx/Login"
+const (
+	API = "https://m.guc.edu.eg"
+	LOGIN_ENDPOINT = "/StudentServices.asmx/Login"
+	COURSEWORK_ENDPOINT = "/StudentServices.asmx/GetCourseWork"
+	ATTENDANCE_ENDPOINT = "/StudentServices.asmx/GetAttendance"
+	CLIENT_VERSION = "1.3"
+	APP_OS = "0"
+	OS_VERSION = "6.0.1"
+)
 
-	response := httpPostWithFormDataCredentials(api, resource, username, password, "1.3", "0", "6.0.1")
+func IsUserAuthorized(username, password string) AuthorizedAPI {
+	response := httpPostWithFormDataCredentials(API, LOGIN_ENDPOINT, username, password, CLIENT_VERSION, APP_OS, OS_VERSION)
 	responseBodyString := httpResponseBodyToString(response.Body)
 
 	responseString := XMLResponseString{}
@@ -26,10 +33,7 @@ func IsUserAuthorized(username, password string) AuthorizedAPI {
 }
 
 func GetUserCoursework(username, password string) []CourseworkAPI {
-	api := "https://m.guc.edu.eg"
-	resource := "/StudentServices.asmx/GetCourseWork"
-
-	response := httpPostWithFormDataCredentials(api, resource, username, password, "1.3", "", "")
+	response := httpPostWithFormDataCredentials(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
 	responseBodyString := httpResponseBodyToString(response.Body)
 
 	responseString := XMLResponseString{}
@@ -58,10 +62,7 @@ func GetUserCoursework(username, password string) []CourseworkAPI {
 }
 
 func GetUserMidterms(username, password string) []MidtermAPI {
-	api := "https://m.guc.edu.eg"
-	resource := "/StudentServices.asmx/GetCourseWork"
-
-	response := httpPostWithFormDataCredentials(api, resource, username, password, "1.3", "", "")
+	response := httpPostWithFormDataCredentials(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
 	responseBodyString := httpResponseBodyToString(response.Body)
 
 	responseString := XMLResponseString{}
@@ -80,10 +81,7 @@ func GetUserMidterms(username, password string) []MidtermAPI {
 }
 
 func GetUserAbsenceReports(username, password string) []AbsenceReportAPI {
-	api := "https://m.guc.edu.eg"
-	resource := "/StudentServices.asmx/GetAttendance"
-
-	response := httpPostWithFormDataCredentials(api, resource, username, password, "1.3", "", "")
+	response := httpPostWithFormDataCredentials(API, ATTENDANCE_ENDPOINT, username, password, CLIENT_VERSION, "", "")
 	responseBodyString := httpResponseBodyToString(response.Body)
 
 	responseString := XMLResponseString{}
