@@ -29,15 +29,30 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func courseworkHandler(w http.ResponseWriter, r *http.Request) {
-	sendJsonResponse(w, GetUserCoursework(basicAuthentication(r)))
+	if coursework, err := GetUserCoursework(basicAuthentication(r)); err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		sendJsonResponse(w, ResponseAPI{err.Error(), nil})
+	} else {
+		sendJsonResponse(w, ResponseAPI{nil, coursework})
+	}
 }
 
 func midtermsHandler(w http.ResponseWriter, r *http.Request) {
-	sendJsonResponse(w, GetUserMidterms(basicAuthentication(r)))
+	if midterms, err := GetUserMidterms(basicAuthentication(r)); err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		sendJsonResponse(w, ResponseAPI{err.Error(), nil})
+	} else {
+		sendJsonResponse(w, ResponseAPI{nil, midterms})
+	}
 }
 
 func attendanceHandler(w http.ResponseWriter, r *http.Request) {
-	sendJsonResponse(w, GetUserAbsenceReports(basicAuthentication(r)))
+	if reports, err := GetUserAbsenceReports(basicAuthentication(r)); err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		sendJsonResponse(w, ResponseAPI{err.Error(), nil})
+	} else {
+		sendJsonResponse(w, ResponseAPI{nil, reports})
+	}
 }
 
 func basicAuthentication(r *http.Request) (string, string) {
