@@ -4,11 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
 const (
@@ -31,12 +33,16 @@ func IsUserAuthorized(username, password string) AuthorizedAPI {
 	return NewAuthorizedAPI(responseString.Value)
 }
 
-func GetUserCoursework(username, password string) []CourseworkAPI {
+func GetUserCoursework(username, password string) ([]CourseworkAPI, error) {
 	response := httpPostWithFormDataCredentials(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
 	responseBodyString := httpResponseBodyToString(response.Body)
 
 	responseString := XMLResponseString{}
 	xmlToStruct(responseBodyString, &responseString)
+
+	if strings.Compare(responseString.Value, "[{\"error\":\"Unauthorized\"}]") == 0 {
+		return nil, errors.New("Unauthorized")
+	}
 
 	courseWork := Coursework{}
 	jsonToStruct(responseString.Value, &courseWork)
@@ -57,15 +63,19 @@ func GetUserCoursework(username, password string) []CourseworkAPI {
 		allCoursework = append(allCoursework, courseAPI)
 	}
 
-	return allCoursework
+	return allCoursework, nil
 }
 
-func GetUserMidterms(username, password string) []MidtermAPI {
+func GetUserMidterms(username, password string) ([]MidtermAPI, error) {
 	response := httpPostWithFormDataCredentials(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
 	responseBodyString := httpResponseBodyToString(response.Body)
 
 	responseString := XMLResponseString{}
 	xmlToStruct(responseBodyString, &responseString)
+
+	if strings.Compare(responseString.Value, "[{\"error\":\"Unauthorized\"}]") == 0 {
+		return nil, errors.New("Unauthorized")
+	}
 
 	courseWork := Coursework{}
 	jsonToStruct(responseString.Value, &courseWork)
@@ -76,15 +86,19 @@ func GetUserMidterms(username, password string) []MidtermAPI {
 		midtermsAPI = append(midtermsAPI, NewMidtermAPI(midterm))
 	}
 
-	return midtermsAPI
+	return midtermsAPI, nil
 }
 
-func GetUserAbsenceReports(username, password string) []AbsenceReportAPI {
+func GetUserAbsenceReports(username, password string) ([]AbsenceReportAPI, error) {
 	response := httpPostWithFormDataCredentials(API, ATTENDANCE_ENDPOINT, username, password, CLIENT_VERSION, "", "")
 	responseBodyString := httpResponseBodyToString(response.Body)
 
 	responseString := XMLResponseString{}
 	xmlToStruct(responseBodyString, &responseString)
+
+	if strings.Compare(responseString.Value, "[{\"error\":\"Unauthorized\"}]") == 0 {
+		return nil, errors.New("Unauthorized")
+	}
 
 	absence := Absence{}
 	jsonToStruct(responseString.Value, &absence)
@@ -95,7 +109,7 @@ func GetUserAbsenceReports(username, password string) []AbsenceReportAPI {
 		absenceReportsAPI = append(absenceReportsAPI, NewAbsenceReportAPI(report))
 	}
 
-	return absenceReportsAPI
+	return absenceReportsAPI, nil
 }
 
 func httpPostWithFormDataCredentials(api, resource, username, password, clientVersion, appOS, osVersion string) *http.Response {
@@ -126,10 +140,10 @@ func httpResponseBodyToString(responseBody io.ReadCloser) string {
 	return string(responseBodyRead)
 }
 
-func jsonToStruct(j string, v interface{}) {
-	json.Unmarshal([]byte(j), v)
+func jsonToStruct(j string, v interface{}) error {
+	return json.Unmarshal([]byte(j), v)
 }
 
-func xmlToStruct(x string, v interface{}) {
-	xml.Unmarshal([]byte(x), v)
+func xmlToStruct(x string, v interface{}) error {
+	return xml.Unmarshal([]byte(x), v)
 }

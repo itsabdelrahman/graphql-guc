@@ -40,6 +40,11 @@ type AbsenceReport struct {
 	AbsenceLevel string `json:"AbsenceLevel"`
 }
 
+type ResponseAPI struct {
+	Error interface{} `json:"error"`
+	Data  interface{} `json:"data"`
+}
+
 type AuthorizedAPI struct {
 	IsAuthorized bool `json:"authorized"`
 }
