@@ -41,21 +41,24 @@ or
 
 Response:
 ```
-[  
-   {  
-      "code": "CSEN701",
-      "name": "Embedded System Architecture",
-      "grades": [  
-         {  
-            "module": "Assignment 1",
-            "point": "9.75",
-            "maxPoint": "10"
-         },
-         ...
-      ]
-   },
-   ...
-]
+{  
+   "error": null,
+   "data": [  
+      {  
+         "code": "CSEN701",
+         "name": "Embedded System Architecture",
+         "grades": [  
+            {  
+               "module": "Assignment 1",
+               "point": "9.75",
+               "maxPoint": "10"
+            },
+            ...
+         ]
+      },
+      ...
+   ]
+}
 ```
 
 ***
@@ -66,13 +69,16 @@ Response:
 
 Response:
 ```
-[  
-   {  
-      "name": "MET Computer Science 7th Semester - Analysis and Design of Algorithms CSEN703",
-      "percentage": "41.25"
-   },
-   ...
-]
+{  
+   "error": null,
+   "data": [  
+      {  
+         "name": "MET Computer Science 7th Semester - Analysis and Design of Algorithms CSEN703",
+         "percentage": "41.25"
+      },
+      ...
+   ]
+}
 ```
 
 ***
@@ -83,13 +89,15 @@ Response:
 
 Response:
 ```
-[  
-   {  
-      "name": "Computer Graphics",
-      "level": "1"
-   },
-   ...
-]
+{  
+   "error": null,
+   "data": [  
+      {  
+         "name": "Computer Graphics",
+         "level": "1"
+      }
+   ]
+}
 ```
 
 ## Limitations
