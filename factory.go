@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -12,15 +13,36 @@ import (
 	"strings"
 )
 
-func GetUserCoursework(username, password string) []CourseworkAPI {
-	api := "https://m.guc.edu.eg"
-	resource := "/StudentServices.asmx/GetCourseWork"
+const (
+	API                 = "https://m.guc.edu.eg"
+	LOGIN_ENDPOINT      = "/StudentServices.asmx/Login"
+	COURSEWORK_ENDPOINT = "/StudentServices.asmx/GetCourseWork"
+	ATTENDANCE_ENDPOINT = "/StudentServices.asmx/GetAttendance"
+	CLIENT_VERSION      = "1.3"
+	APP_OS              = "0"
+	OS_VERSION          = "6.0.1"
+)
 
-	response := httpPostWithFormDataCredentials(api, resource, username, password, "1.3")
+func IsUserAuthorized(username, password string) AuthorizedAPI {
+	response := httpPostWithFormDataCredentials(API, LOGIN_ENDPOINT, username, password, CLIENT_VERSION, APP_OS, OS_VERSION)
 	responseBodyString := httpResponseBodyToString(response.Body)
 
 	responseString := XMLResponseString{}
 	xmlToStruct(responseBodyString, &responseString)
+
+	return NewAuthorizedAPI(responseString.Value)
+}
+
+func GetUserCoursework(username, password string) ([]CourseworkAPI, error) {
+	response := httpPostWithFormDataCredentials(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
+	responseBodyString := httpResponseBodyToString(response.Body)
+
+	responseString := XMLResponseString{}
+	xmlToStruct(responseBodyString, &responseString)
+
+	if strings.Compare(responseString.Value, "[{\"error\":\"Unauthorized\"}]") == 0 {
+		return nil, errors.New("Unauthorized")
+	}
 
 	courseWork := Coursework{}
 	jsonToStruct(responseString.Value, &courseWork)
@@ -41,14 +63,65 @@ func GetUserCoursework(username, password string) []CourseworkAPI {
 		allCoursework = append(allCoursework, courseAPI)
 	}
 
-	return allCoursework
+	return allCoursework, nil
 }
 
-func httpPostWithFormDataCredentials(api, resource, username, password, clientVersion string) *http.Response {
+func GetUserMidterms(username, password string) ([]MidtermAPI, error) {
+	response := httpPostWithFormDataCredentials(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
+	responseBodyString := httpResponseBodyToString(response.Body)
+
+	responseString := XMLResponseString{}
+	xmlToStruct(responseBodyString, &responseString)
+
+	if strings.Compare(responseString.Value, "[{\"error\":\"Unauthorized\"}]") == 0 {
+		return nil, errors.New("Unauthorized")
+	}
+
+	courseWork := Coursework{}
+	jsonToStruct(responseString.Value, &courseWork)
+
+	midtermsAPI := []MidtermAPI{}
+
+	for _, midterm := range courseWork.Midterms {
+		midtermsAPI = append(midtermsAPI, NewMidtermAPI(midterm))
+	}
+
+	return midtermsAPI, nil
+}
+
+func GetUserAbsenceReports(username, password string) ([]AbsenceReportAPI, error) {
+	response := httpPostWithFormDataCredentials(API, ATTENDANCE_ENDPOINT, username, password, CLIENT_VERSION, "", "")
+	responseBodyString := httpResponseBodyToString(response.Body)
+
+	responseString := XMLResponseString{}
+	xmlToStruct(responseBodyString, &responseString)
+
+	if strings.Compare(responseString.Value, "[{\"error\":\"Unauthorized\"}]") == 0 {
+		return nil, errors.New("Unauthorized")
+	}
+
+	absence := Absence{}
+	jsonToStruct(responseString.Value, &absence)
+
+	absenceReportsAPI := []AbsenceReportAPI{}
+
+	for _, report := range absence.AbsenceReports {
+		absenceReportsAPI = append(absenceReportsAPI, NewAbsenceReportAPI(report))
+	}
+
+	return absenceReportsAPI, nil
+}
+
+func httpPostWithFormDataCredentials(api, resource, username, password, clientVersion, appOS, osVersion string) *http.Response {
 	data := url.Values{}
 	data.Set("username", username)
 	data.Add("password", password)
 	data.Add("clientVersion", clientVersion)
+
+	if appOS != "" && osVersion != "" {
+		data.Add("app_os", appOS)
+		data.Add("os_version", osVersion)
+	}
 
 	uri, _ := url.ParseRequestURI(api)
 	uri.Path = resource
@@ -67,67 +140,10 @@ func httpResponseBodyToString(responseBody io.ReadCloser) string {
 	return string(responseBodyRead)
 }
 
-func jsonToStruct(j string, v interface{}) {
-	json.Unmarshal([]byte(j), v)
+func jsonToStruct(j string, v interface{}) error {
+	return json.Unmarshal([]byte(j), v)
 }
 
-func xmlToStruct(x string, v interface{}) {
-	xml.Unmarshal([]byte(x), v)
-}
-
-type XMLResponseString struct {
-	Value string `xml:",chardata"`
-}
-
-type Coursework struct {
-	Courses []Course `json:"CurrentCourses"`
-	Grades  []Grade  `json:"CourseWork"`
-}
-
-type Course struct {
-	Id   string `json:"sm_crs_id"`
-	Name string `json:"course_short_name"`
-}
-
-type Grade struct {
-	CourseId   string `json:"sm_crs_id"`
-	ModuleName string `json:"eval_method_name"`
-	Point      string `json:"grade"`
-	MaxPoint   string `json:"max_point"`
-}
-
-type CourseworkAPI struct {
-	Id     string     `json:"-"`
-	Code   string     `json:"code"`
-	Name   string     `json:"name"`
-	Grades []GradeAPI `json:"grades"`
-}
-
-type GradeAPI struct {
-	Module   string `json:"module"`
-	Point    string `json:"point"`
-	MaxPoint string `json:"maxPoint"`
-}
-
-func NewCourseworkAPI(course Course) CourseworkAPI {
-	courseAPI := CourseworkAPI{}
-
-	courseAPI.Id = course.Id
-	courseAPI.Grades = []GradeAPI{}
-
-	courseNameSplit := strings.Split(course.Name, "(")
-	courseAPI.Name = strings.TrimSpace(courseNameSplit[0])
-	courseAPI.Code = courseNameSplit[1][0 : len(courseNameSplit[1])-1]
-
-	return courseAPI
-}
-
-func NewGradeAPI(grade Grade) GradeAPI {
-	gradeAPI := GradeAPI{}
-
-	gradeAPI.Module = grade.ModuleName
-	gradeAPI.Point = grade.Point
-	gradeAPI.MaxPoint = grade.MaxPoint
-
-	return gradeAPI
+func xmlToStruct(x string, v interface{}) error {
+	return xml.Unmarshal([]byte(x), v)
 }

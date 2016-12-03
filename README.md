@@ -16,9 +16,30 @@ Example: if your username is `john.doe` & your password is `12345`, then your HT
 
 ### API Calls
 
-* `GET http://guc-api.herokuapp.com/api/coursework`
+#### Login 
 
-Response: 
+`GET http://guc-api.herokuapp.com/api/login`
+
+Response:
+```
+{
+    "authorized": true
+}
+```
+or
+```
+{
+    "authorized": false
+}
+```
+
+***
+
+#### Coursework 
+
+`GET http://guc-api.herokuapp.com/api/coursework`
+
+Response:
 ```
 [  
    {  
@@ -37,6 +58,39 @@ Response:
 ]
 ```
 
+***
+
+#### Midterms 
+
+`GET http://guc-api.herokuapp.com/api/midterms`
+
+Response:
+```
+[  
+   {  
+      "name": "MET Computer Science 7th Semester - Analysis and Design of Algorithms CSEN703",
+      "percentage": "41.25"
+   },
+   ...
+]
+```
+
+***
+
+#### Attendance 
+
+`GET http://guc-api.herokuapp.com/api/attendance`
+
+Response:
+```
+[  
+   {  
+      "name": "Computer Graphics",
+      "level": "1"
+   },
+   ...
+]
+```
 
 ## Limitations
 
@@ -45,4 +99,3 @@ The GUC servers go down quite often. Transitively, our API cannot serve anything
 ## License
 
 This project is licensed under the MIT License.
-
