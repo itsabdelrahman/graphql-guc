@@ -95,7 +95,8 @@ Response:
       {  
          "name": "Computer Graphics",
          "level": "1"
-      }
+      },
+      ...
    ]
 }
 ```
