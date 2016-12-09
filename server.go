@@ -25,7 +25,7 @@ func main() {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	sendJsonResponse(w, IsUserAuthorized(basicAuthentication(r)))
+	sendJsonResponse(w, ResponseAPI{nil, IsUserAuthorized(basicAuthentication(r))})
 }
 
 func courseworkHandler(w http.ResponseWriter, r *http.Request) {
