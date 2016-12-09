@@ -21,13 +21,13 @@ Example: if your username is `john.doe` & your password is `12345`, then your HT
 `GET http://guc-api.herokuapp.com/api/login`
 
 Response:
-```json
+```javascript
 {
     "authorized": true
 }
 ```
 or
-```json
+```javascript
 {
     "authorized": false
 }
@@ -40,7 +40,7 @@ or
 `GET http://guc-api.herokuapp.com/api/coursework`
 
 Response:
-```json
+```javascript
 {  
    "error": null,
    "data": [  
@@ -68,7 +68,7 @@ Response:
 `GET http://guc-api.herokuapp.com/api/midterms`
 
 Response:
-```json
+```javascript
 {  
    "error": null,
    "data": [  
@@ -88,7 +88,7 @@ Response:
 `GET http://guc-api.herokuapp.com/api/attendance`
 
 Response:
-```json
+```javascript
 {  
    "error": null,
    "data": [  
