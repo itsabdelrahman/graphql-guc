@@ -6,8 +6,8 @@ REST API wrapper for the German University in Cairo (GUC) ~~private~~ API.
 
 ## Why?
 
-* The GUC API is only exclusively used by the official GUC mobile application
-* The GUC API is altogether poorly designed _(e.g. JSON embedded within XML responses)_
+* The original GUC API is only exclusively used by the official GUC mobile application
+* The original GUC API is altogether poorly designed _(e.g. JSON embedded within XML responses)_
 
 ## API
 
