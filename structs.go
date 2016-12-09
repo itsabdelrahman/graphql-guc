@@ -5,7 +5,7 @@ import (
 )
 
 type (
-		XMLResponseString struct {
+	XMLResponseString struct {
 		Value string `xml:",chardata"`
 	}
 
