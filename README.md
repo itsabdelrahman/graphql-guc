@@ -20,7 +20,7 @@ Example: if your username is `john.doe` & your password is `12345`, then your HT
 
 #### Login
 
-> GET http://guc-api.herokuapp.com/api/***login***
+<pre>GET http://guc-api.herokuapp.com/api/<b>login</b></pre>
 
 Response:
 ```javascript
