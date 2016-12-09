@@ -52,7 +52,7 @@ type (
 
 	CourseworkAPI struct {
 		Id     string     `json:"-"`
-		Code   string     `json:"code"`
+		Code   string     `json:"-"`
 		Name   string     `json:"name"`
 		Grades []GradeAPI `json:"grades"`
 	}
