@@ -4,73 +4,75 @@ import (
 	"strings"
 )
 
-type XMLResponseString struct {
-	Value string `xml:",chardata"`
-}
+type (
+	XMLResponseString struct {
+		Value string `xml:",chardata"`
+	}
 
-type Coursework struct {
-	Courses  []Course  `json:"CurrentCourses"`
-	Grades   []Grade   `json:"CourseWork"`
-	Midterms []Midterm `json:"Midterm"`
-}
+	Coursework struct {
+		Courses  []Course  `json:"CurrentCourses"`
+		Grades   []Grade   `json:"CourseWork"`
+		Midterms []Midterm `json:"Midterm"`
+	}
 
-type Course struct {
-	Id   string `json:"sm_crs_id"`
-	Name string `json:"course_short_name"`
-}
+	Course struct {
+		Id   string `json:"sm_crs_id"`
+		Name string `json:"course_short_name"`
+	}
 
-type Grade struct {
-	CourseId   string `json:"sm_crs_id"`
-	ModuleName string `json:"eval_method_name"`
-	Point      string `json:"grade"`
-	MaxPoint   string `json:"max_point"`
-}
+	Grade struct {
+		CourseId   string `json:"sm_crs_id"`
+		ModuleName string `json:"eval_method_name"`
+		Point      string `json:"grade"`
+		MaxPoint   string `json:"max_point"`
+	}
 
-type Midterm struct {
-	CourseName string `json:"course_full_name"`
-	Percentage string `json:"total_perc"`
-}
+	Midterm struct {
+		CourseName string `json:"course_full_name"`
+		Percentage string `json:"total_perc"`
+	}
 
-type Absence struct {
-	AbsenceReports []AbsenceReport `json:"AbsenceReport"`
-}
+	Absence struct {
+		AbsenceReports []AbsenceReport `json:"AbsenceReport"`
+	}
 
-type AbsenceReport struct {
-	CourseName   string `json:"Name"`
-	AbsenceLevel string `json:"AbsenceLevel"`
-}
+	AbsenceReport struct {
+		CourseName   string `json:"Name"`
+		AbsenceLevel string `json:"AbsenceLevel"`
+	}
 
-type ResponseAPI struct {
-	Error interface{} `json:"error"`
-	Data  interface{} `json:"data"`
-}
+	ResponseAPI struct {
+		Error interface{} `json:"error"`
+		Data  interface{} `json:"data"`
+	}
 
-type AuthorizedAPI struct {
-	IsAuthorized bool `json:"authorized"`
-}
+	AuthorizedAPI struct {
+		IsAuthorized bool `json:"authorized"`
+	}
 
-type CourseworkAPI struct {
-	Id     string     `json:"-"`
-	Code   string     `json:"code"`
-	Name   string     `json:"name"`
-	Grades []GradeAPI `json:"grades"`
-}
+	CourseworkAPI struct {
+		Id     string     `json:"-"`
+		Code   string     `json:"-"`
+		Name   string     `json:"name"`
+		Grades []GradeAPI `json:"grades"`
+	}
 
-type GradeAPI struct {
-	Module   string `json:"module"`
-	Point    string `json:"point"`
-	MaxPoint string `json:"maxPoint"`
-}
+	GradeAPI struct {
+		Module   string `json:"module"`
+		Point    string `json:"point"`
+		MaxPoint string `json:"maxPoint"`
+	}
 
-type MidtermAPI struct {
-	Name       string `json:"name"`
-	Percentage string `json:"percentage"`
-}
+	MidtermAPI struct {
+		Name       string `json:"name"`
+		Percentage string `json:"percentage"`
+	}
 
-type AbsenceReportAPI struct {
-	CourseName string `json:"name"`
-	Level      string `json:"level"`
-}
+	AbsenceReportAPI struct {
+		CourseName string `json:"name"`
+		Level      string `json:"level"`
+	}
+)
 
 func NewAuthorizedAPI(authorized string) AuthorizedAPI {
 	authorizedAPI := AuthorizedAPI{}
