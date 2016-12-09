@@ -20,7 +20,7 @@ Example: if your username is `john.doe` & your password is `12345`, then your HT
 
 #### Login
 
-<pre><b>GET</b>http://guc-api.herokuapp.com/api/<b><i>login</i></b></pre>
+<pre><b>GET</b> http://guc-api.herokuapp.com/api/<b><i>login</i></b></pre>
 
 Response:
 ```javascript
@@ -39,7 +39,7 @@ or
 
 #### Coursework
 
-<pre><b>GET</b>http://guc-api.herokuapp.com/api/<b><i>coursework</i></b></pre>
+<pre><b>GET</b> http://guc-api.herokuapp.com/api/<b><i>coursework</i></b></pre>
 
 Response:
 ```javascript
@@ -67,7 +67,7 @@ Response:
 
 #### Midterms
 
-<pre><b>GET</b>http://guc-api.herokuapp.com/api/<b><i>midterms</i></b></pre>
+<pre><b>GET</b> http://guc-api.herokuapp.com/api/<b><i>midterms</i></b></pre>
 
 Response:
 ```javascript
@@ -87,7 +87,7 @@ Response:
 
 #### Attendance
 
-<pre><b>GET</b>http://guc-api.herokuapp.com/api/<b><i>attendance</i></b></pre>
+<pre><b>GET</b> http://guc-api.herokuapp.com/api/<b><i>attendance</i></b></pre>
 
 Response:
 ```javascript
