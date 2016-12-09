@@ -16,18 +16,18 @@ Example: if your username is `john.doe` & your password is `12345`, then your HT
 
 ### API Calls
 
-#### Login 
+#### Login
 
 `GET http://guc-api.herokuapp.com/api/login`
 
 Response:
-```
+```json
 {
     "authorized": true
 }
 ```
 or
-```
+```json
 {
     "authorized": false
 }
@@ -35,12 +35,12 @@ or
 
 ***
 
-#### Coursework 
+#### Coursework
 
 `GET http://guc-api.herokuapp.com/api/coursework`
 
 Response:
-```
+```json
 {  
    "error": null,
    "data": [  
@@ -63,12 +63,12 @@ Response:
 
 ***
 
-#### Midterms 
+#### Midterms
 
 `GET http://guc-api.herokuapp.com/api/midterms`
 
 Response:
-```
+```json
 {  
    "error": null,
    "data": [  
@@ -83,12 +83,12 @@ Response:
 
 ***
 
-#### Attendance 
+#### Attendance
 
 `GET http://guc-api.herokuapp.com/api/attendance`
 
 Response:
-```
+```json
 {  
    "error": null,
    "data": [  
