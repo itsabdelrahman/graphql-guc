@@ -108,6 +108,16 @@ Response:
 }
 ```
 
+## Roadmap
+
+- [x] Login
+- [x] Coursework
+- [x] Midterms
+- [x] Attendance
+- [ ] Schedule
+- [ ] Exams Schedule
+- [ ] Transcript
+
 ## Limitations
 
 The GUC servers go down quite often. Transitively, our API cannot serve anything during that time.
