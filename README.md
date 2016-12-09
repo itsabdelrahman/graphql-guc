@@ -24,14 +24,20 @@ Example: if your username is `john.doe` & your password is `12345`, then your HT
 
 Response:
 ```javascript
-{
-    "authorized": true
+{  
+   "error": null,
+   "data": {  
+      "authorized": true
+   }
 }
 ```
 or
 ```javascript
-{
-    "authorized": false
+{  
+   "error": null,
+   "data": {  
+      "authorized": false
+   }
 }
 ```
 
@@ -46,8 +52,7 @@ Response:
 {  
    "error": null,
    "data": [  
-      {  
-         "code": "CSEN701",
+      {
          "name": "Embedded System Architecture",
          "grades": [  
             {  
@@ -75,7 +80,7 @@ Response:
    "error": null,
    "data": [  
       {  
-         "name": "MET Computer Science 7th Semester - Analysis and Design of Algorithms CSEN703",
+         "name": "Analysis and Design of Algorithms",
          "percentage": "41.25"
       },
       ...
