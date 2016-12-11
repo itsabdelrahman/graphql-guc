@@ -18,6 +18,7 @@ const (
 	LOGIN_ENDPOINT      = "/StudentServices.asmx/Login"
 	COURSEWORK_ENDPOINT = "/StudentServices.asmx/GetCourseWork"
 	ATTENDANCE_ENDPOINT = "/StudentServices.asmx/GetAttendance"
+	EXAMS_ENDPOINT      = "/StudentServices.asmx/GetExamsSchedule"
 	CLIENT_VERSION      = "1.3"
 	APP_OS              = "0"
 	OS_VERSION          = "6.0.1"
@@ -111,6 +112,29 @@ func GetUserAbsenceReports(username, password string) ([]AbsenceReportAPI, error
 	}
 
 	return absenceReportsAPI, nil
+}
+
+func GetUserExams(username, password string) ([]ExamAPI, error) {
+	response := httpPostWithFormDataCredentials(API, EXAMS_ENDPOINT, username, password, CLIENT_VERSION, "", "")
+	responseBodyString := httpResponseBodyToString(response.Body)
+
+	responseString := XMLResponseString{}
+	xmlToStruct(responseBodyString, &responseString)
+
+	if strings.Compare(responseString.Value, "[{\"error\":\"Unauthorized\"}]") == 0 {
+		return nil, errors.New("Unauthorized")
+	}
+
+	exams := []Exam{}
+	jsonToStruct(responseString.Value, &exams)
+
+	examsAPI := []ExamAPI{}
+
+	for _, exam := range exams {
+		examsAPI = append(examsAPI, NewExamAPI(exam))
+	}
+
+	return examsAPI, nil
 }
 
 func formatMidtermsData(midtermsAPI []MidtermAPI) {

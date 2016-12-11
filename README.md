@@ -108,14 +108,34 @@ Response:
 }
 ```
 
+#### Exams Schedule
+
+<pre><b>GET</b> http://guc-api.herokuapp.com/api/<b><i>exams</i></b></pre>
+
+Response:
+```javascript
+{
+   "error": null,
+   "data": [
+      {
+         "course": "Analysis and Design of Algorithms",
+         "dateTime": "2016-10-24T16:00:00Z",
+         "venue": "Exam hall 2",
+         "seat": "E6"
+      },
+      ...
+   ]
+}
+```
+
 ## Roadmap
 
 - [x] Login
 - [x] Coursework
 - [x] Midterms
 - [x] Attendance
+- [x] Exams Schedule
 - [ ] Schedule
-- [ ] Exams Schedule
 - [ ] Transcript
 
 ## Limitations
