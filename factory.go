@@ -18,14 +18,14 @@ const (
 	LOGIN_ENDPOINT      = "/StudentServices.asmx/Login"
 	COURSEWORK_ENDPOINT = "/StudentServices.asmx/GetCourseWork"
 	ATTENDANCE_ENDPOINT = "/StudentServices.asmx/GetAttendance"
+	EXAMS_ENDPOINT      = "/StudentServices.asmx/GetExamsSchedule"
 	CLIENT_VERSION      = "1.3"
 	APP_OS              = "0"
 	OS_VERSION          = "6.0.1"
 )
 
 func IsUserAuthorized(username, password string) AuthorizedAPI {
-	response := httpPostWithFormDataCredentials(API, LOGIN_ENDPOINT, username, password, CLIENT_VERSION, APP_OS, OS_VERSION)
-	responseBodyString := httpResponseBodyToString(response.Body)
+	responseBodyString := httpPostWithFormData(API, LOGIN_ENDPOINT, username, password, CLIENT_VERSION, APP_OS, OS_VERSION)
 
 	responseString := XMLResponseString{}
 	xmlToStruct(responseBodyString, &responseString)
@@ -34,8 +34,7 @@ func IsUserAuthorized(username, password string) AuthorizedAPI {
 }
 
 func GetUserCoursework(username, password string) ([]CourseworkAPI, error) {
-	response := httpPostWithFormDataCredentials(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
-	responseBodyString := httpResponseBodyToString(response.Body)
+	responseBodyString := httpPostWithFormData(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
 
 	responseString := XMLResponseString{}
 	xmlToStruct(responseBodyString, &responseString)
@@ -67,8 +66,7 @@ func GetUserCoursework(username, password string) ([]CourseworkAPI, error) {
 }
 
 func GetUserMidterms(username, password string) ([]MidtermAPI, error) {
-	response := httpPostWithFormDataCredentials(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
-	responseBodyString := httpResponseBodyToString(response.Body)
+	responseBodyString := httpPostWithFormData(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
 
 	responseString := XMLResponseString{}
 	xmlToStruct(responseBodyString, &responseString)
@@ -86,13 +84,11 @@ func GetUserMidterms(username, password string) ([]MidtermAPI, error) {
 		midtermsAPI = append(midtermsAPI, NewMidtermAPI(midterm))
 	}
 
-	formatMidtermsData(midtermsAPI)
 	return midtermsAPI, nil
 }
 
 func GetUserAbsenceReports(username, password string) ([]AbsenceReportAPI, error) {
-	response := httpPostWithFormDataCredentials(API, ATTENDANCE_ENDPOINT, username, password, CLIENT_VERSION, "", "")
-	responseBodyString := httpResponseBodyToString(response.Body)
+	responseBodyString := httpPostWithFormData(API, ATTENDANCE_ENDPOINT, username, password, CLIENT_VERSION, "", "")
 
 	responseString := XMLResponseString{}
 	xmlToStruct(responseBodyString, &responseString)
@@ -113,14 +109,29 @@ func GetUserAbsenceReports(username, password string) ([]AbsenceReportAPI, error
 	return absenceReportsAPI, nil
 }
 
-func formatMidtermsData(midtermsAPI []MidtermAPI) {
-	for i := 0; i < len(midtermsAPI); i++ {
-		nameAndCode := strings.TrimSpace(strings.Split(midtermsAPI[i].Name, "-")[1])
-		midtermsAPI[i].Name = strings.TrimSpace(nameAndCode[0:strings.LastIndex(nameAndCode, " ")])
+func GetUserExams(username, password string) ([]ExamAPI, error) {
+	responseBodyString := httpPostWithFormData(API, EXAMS_ENDPOINT, username, password, CLIENT_VERSION, "", "")
+
+	responseString := XMLResponseString{}
+	xmlToStruct(responseBodyString, &responseString)
+
+	if strings.Compare(responseString.Value, "[{\"error\":\"Unauthorized\"}]") == 0 {
+		return nil, errors.New("Unauthorized")
 	}
+
+	exams := []Exam{}
+	jsonToStruct(responseString.Value, &exams)
+
+	examsAPI := []ExamAPI{}
+
+	for _, exam := range exams {
+		examsAPI = append(examsAPI, NewExamAPI(exam))
+	}
+
+	return examsAPI, nil
 }
 
-func httpPostWithFormDataCredentials(api, resource, username, password, clientVersion, appOS, osVersion string) *http.Response {
+func httpPostWithFormData(api, resource, username, password, clientVersion, appOS, osVersion string) string {
 	data := url.Values{}
 	data.Set("username", username)
 	data.Add("password", password)
@@ -140,7 +151,10 @@ func httpPostWithFormDataCredentials(api, resource, username, password, clientVe
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
 
 	response, _ := client.Do(request)
-	return response
+	defer response.Body.Close()
+	
+	responseBodyString := httpResponseBodyToString(response.Body)
+	return responseBodyString
 }
 
 func httpResponseBodyToString(responseBody io.ReadCloser) string {

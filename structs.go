@@ -2,6 +2,7 @@ package main
 
 import (
 	"strings"
+	"time"
 )
 
 type (
@@ -41,6 +42,13 @@ type (
 		AbsenceLevel string `json:"AbsenceLevel"`
 	}
 
+	Exam struct {
+		Course   string `json:"course_name"`
+		DateTime string `json:"start_time"`
+		Venue    string `json:"rsrc_code"`
+		Seat     string `json:"seat_code"`
+	}
+
 	ResponseAPI struct {
 		Error interface{} `json:"error"`
 		Data  interface{} `json:"data"`
@@ -53,7 +61,7 @@ type (
 	CourseworkAPI struct {
 		Id     string     `json:"-"`
 		Code   string     `json:"-"`
-		Name   string     `json:"name"`
+		Name   string     `json:"course"`
 		Grades []GradeAPI `json:"grades"`
 	}
 
@@ -64,13 +72,20 @@ type (
 	}
 
 	MidtermAPI struct {
-		Name       string `json:"name"`
+		Name       string `json:"course"`
 		Percentage string `json:"percentage"`
 	}
 
 	AbsenceReportAPI struct {
-		CourseName string `json:"name"`
+		CourseName string `json:"course"`
 		Level      string `json:"level"`
+	}
+
+	ExamAPI struct {
+		Course   string    `json:"course"`
+		DateTime time.Time `json:"dateTime"`
+		Venue    string    `json:"venue"`
+		Seat     string    `json:"seat"`
 	}
 )
 
@@ -112,7 +127,9 @@ func NewGradeAPI(grade Grade) GradeAPI {
 func NewMidtermAPI(midterm Midterm) MidtermAPI {
 	midtermAPI := MidtermAPI{}
 
-	midtermAPI.Name = midterm.CourseName
+	nameAndCode := strings.TrimSpace(strings.Split(midterm.CourseName, "-")[1])
+	midtermAPI.Name = strings.TrimSpace(nameAndCode[:strings.LastIndex(nameAndCode, " ")])
+
 	midtermAPI.Percentage = midterm.Percentage
 
 	return midtermAPI
@@ -125,4 +142,18 @@ func NewAbsenceReportAPI(absenceReport AbsenceReport) AbsenceReportAPI {
 	absenceReportAPI.Level = absenceReport.AbsenceLevel
 
 	return absenceReportAPI
+}
+
+func NewExamAPI(exam Exam) ExamAPI {
+	examAPI := ExamAPI{}
+
+	codeAndName := strings.TrimSpace(strings.Split(exam.Course, "-")[1])
+	examAPI.Course = strings.TrimSpace(codeAndName[strings.Index(codeAndName, " "):])
+
+	examAPI.DateTime, _ = time.Parse("Jan 2 2006  3:04PM", exam.DateTime)
+
+	examAPI.Venue = exam.Venue
+	examAPI.Seat = exam.Seat
+
+	return examAPI
 }

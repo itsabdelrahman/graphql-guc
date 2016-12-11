@@ -53,7 +53,7 @@ Response:
    "error": null,
    "data": [  
       {
-         "name": "Embedded System Architecture",
+         "course": "Embedded System Architecture",
          "grades": [  
             {  
                "module": "Assignment 1",
@@ -80,7 +80,7 @@ Response:
    "error": null,
    "data": [  
       {  
-         "name": "Analysis and Design of Algorithms",
+         "course": "Analysis and Design of Algorithms",
          "percentage": "41.25"
       },
       ...
@@ -100,8 +100,28 @@ Response:
    "error": null,
    "data": [  
       {  
-         "name": "Computer Graphics",
+         "course": "Computer Graphics",
          "level": "1"
+      },
+      ...
+   ]
+}
+```
+
+#### Exams Schedule
+
+<pre><b>GET</b> http://guc-api.herokuapp.com/api/<b><i>exams</i></b></pre>
+
+Response:
+```javascript
+{
+   "error": null,
+   "data": [
+      {
+         "course": "Analysis and Design of Algorithms",
+         "dateTime": "2016-10-24T16:00:00Z",
+         "venue": "Exam hall 2",
+         "seat": "E6"
       },
       ...
    ]
@@ -114,8 +134,8 @@ Response:
 - [x] Coursework
 - [x] Midterms
 - [x] Attendance
+- [x] Exams Schedule
 - [ ] Schedule
-- [ ] Exams Schedule
 - [ ] Transcript
 
 ## Limitations
