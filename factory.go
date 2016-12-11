@@ -151,9 +151,9 @@ func httpPostWithFormData(api, resource, username, password, clientVersion, appO
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
 
 	response, _ := client.Do(request)
-	responseBodyString := httpResponseBodyToString(response.Body)
 	defer response.Body.Close()
-
+	
+	responseBodyString := httpResponseBodyToString(response.Body)
 	return responseBodyString
 }
 
