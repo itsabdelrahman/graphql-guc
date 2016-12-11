@@ -41,6 +41,13 @@ type (
 		AbsenceLevel string `json:"AbsenceLevel"`
 	}
 
+	Exam struct {
+		Course   string `json:"course_name"`
+		DateTime string `json:"start_time"`
+		Venue    string `json:"rsrc_code"`
+		Seat     string `json:"seat_code"`
+	}
+
 	ResponseAPI struct {
 		Error interface{} `json:"error"`
 		Data  interface{} `json:"data"`
@@ -71,6 +78,14 @@ type (
 	AbsenceReportAPI struct {
 		CourseName string `json:"name"`
 		Level      string `json:"level"`
+	}
+
+	ExamAPI struct {
+		Course string `json:"course"`
+		Date   string `json:"date"`
+		Time   string `json:"time"`
+		Venue  string `json:"venue"`
+		Seat   string `json:"seat"`
 	}
 )
 
@@ -125,4 +140,19 @@ func NewAbsenceReportAPI(absenceReport AbsenceReport) AbsenceReportAPI {
 	absenceReportAPI.Level = absenceReport.AbsenceLevel
 
 	return absenceReportAPI
+}
+
+func NewExamAPI(exam Exam) ExamAPI {
+	examAPI := ExamAPI{}
+
+	codeAndName := strings.TrimSpace(strings.Split(exam.Course, "-")[1])
+	examAPI.Course = strings.TrimSpace(codeAndName[strings.Index(codeAndName, " "):])
+
+	examAPI.Date = strings.TrimSpace(exam.DateTime[:strings.LastIndex(exam.DateTime, " ")])
+	examAPI.Time = strings.TrimSpace(exam.DateTime[strings.LastIndex(exam.DateTime, " "):])
+
+	examAPI.Venue = exam.Venue
+	examAPI.Seat = exam.Seat
+
+	return examAPI
 }

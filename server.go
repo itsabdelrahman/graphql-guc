@@ -14,6 +14,7 @@ func main() {
 	http.HandleFunc("/api/coursework", courseworkHandler)
 	http.HandleFunc("/api/midterms", midtermsHandler)
 	http.HandleFunc("/api/attendance", attendanceHandler)
+	http.HandleFunc("/api/exams", examsHandler)
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -52,6 +53,15 @@ func attendanceHandler(w http.ResponseWriter, r *http.Request) {
 		sendJsonResponse(w, ResponseAPI{err.Error(), nil})
 	} else {
 		sendJsonResponse(w, ResponseAPI{nil, reports})
+	}
+}
+
+func examsHandler(w http.ResponseWriter, r *http.Request) {
+	if exams, err := GetUserExams(basicAuthentication(r)); err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		sendJsonResponse(w, ResponseAPI{err.Error(), nil})
+	} else {
+		sendJsonResponse(w, ResponseAPI{nil, exams})
 	}
 }
 
