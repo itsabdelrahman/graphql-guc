@@ -61,7 +61,7 @@ type (
 	CourseworkAPI struct {
 		Id     string     `json:"-"`
 		Code   string     `json:"-"`
-		Name   string     `json:"name"`
+		Name   string     `json:"course"`
 		Grades []GradeAPI `json:"grades"`
 	}
 
@@ -72,12 +72,12 @@ type (
 	}
 
 	MidtermAPI struct {
-		Name       string `json:"name"`
+		Name       string `json:"course"`
 		Percentage string `json:"percentage"`
 	}
 
 	AbsenceReportAPI struct {
-		CourseName string `json:"name"`
+		CourseName string `json:"course"`
 		Level      string `json:"level"`
 	}
 

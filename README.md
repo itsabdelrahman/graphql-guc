@@ -53,7 +53,7 @@ Response:
    "error": null,
    "data": [  
       {
-         "name": "Embedded System Architecture",
+         "course": "Embedded System Architecture",
          "grades": [  
             {  
                "module": "Assignment 1",
@@ -80,7 +80,7 @@ Response:
    "error": null,
    "data": [  
       {  
-         "name": "Analysis and Design of Algorithms",
+         "course": "Analysis and Design of Algorithms",
          "percentage": "41.25"
       },
       ...
@@ -100,7 +100,7 @@ Response:
    "error": null,
    "data": [  
       {  
-         "name": "Computer Graphics",
+         "course": "Computer Graphics",
          "level": "1"
       },
       ...
