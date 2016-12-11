@@ -148,7 +148,6 @@ func NewExamAPI(exam Exam) ExamAPI {
 	codeAndName := strings.TrimSpace(strings.Split(exam.Course, "-")[1])
 	examAPI.Course = strings.TrimSpace(codeAndName[strings.Index(codeAndName, " "):])
 
-	// Oct 24 2016  4:00PM
 	examAPI.DateTime, _ = time.Parse("Jan 2 2006  3:04PM", exam.DateTime)
 
 	examAPI.Venue = exam.Venue
