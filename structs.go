@@ -2,6 +2,7 @@ package main
 
 import (
 	"strings"
+	"time"
 )
 
 type (
@@ -81,11 +82,10 @@ type (
 	}
 
 	ExamAPI struct {
-		Course string `json:"course"`
-		Date   string `json:"date"`
-		Time   string `json:"time"`
-		Venue  string `json:"venue"`
-		Seat   string `json:"seat"`
+		Course   string    `json:"course"`
+		DateTime time.Time `json:"dateTime"`
+		Venue    string    `json:"venue"`
+		Seat     string    `json:"seat"`
 	}
 )
 
@@ -148,8 +148,8 @@ func NewExamAPI(exam Exam) ExamAPI {
 	codeAndName := strings.TrimSpace(strings.Split(exam.Course, "-")[1])
 	examAPI.Course = strings.TrimSpace(codeAndName[strings.Index(codeAndName, " "):])
 
-	examAPI.Date = strings.TrimSpace(exam.DateTime[:strings.LastIndex(exam.DateTime, " ")])
-	examAPI.Time = strings.TrimSpace(exam.DateTime[strings.LastIndex(exam.DateTime, " "):])
+	// Oct 24 2016  4:00PM
+	examAPI.DateTime, _ = time.Parse("Jan 2 2006  3:04PM", exam.DateTime)
 
 	examAPI.Venue = exam.Venue
 	examAPI.Seat = exam.Seat
