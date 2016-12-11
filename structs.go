@@ -127,7 +127,9 @@ func NewGradeAPI(grade Grade) GradeAPI {
 func NewMidtermAPI(midterm Midterm) MidtermAPI {
 	midtermAPI := MidtermAPI{}
 
-	midtermAPI.Name = midterm.CourseName
+	nameAndCode := strings.TrimSpace(strings.Split(midterm.CourseName, "-")[1])
+	midtermAPI.Name = strings.TrimSpace(nameAndCode[:strings.LastIndex(nameAndCode, " ")])
+
 	midtermAPI.Percentage = midterm.Percentage
 
 	return midtermAPI

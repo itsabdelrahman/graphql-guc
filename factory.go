@@ -87,7 +87,6 @@ func GetUserMidterms(username, password string) ([]MidtermAPI, error) {
 		midtermsAPI = append(midtermsAPI, NewMidtermAPI(midterm))
 	}
 
-	formatMidtermsData(midtermsAPI)
 	return midtermsAPI, nil
 }
 
@@ -135,13 +134,6 @@ func GetUserExams(username, password string) ([]ExamAPI, error) {
 	}
 
 	return examsAPI, nil
-}
-
-func formatMidtermsData(midtermsAPI []MidtermAPI) {
-	for i := 0; i < len(midtermsAPI); i++ {
-		nameAndCode := strings.TrimSpace(strings.Split(midtermsAPI[i].Name, "-")[1])
-		midtermsAPI[i].Name = strings.TrimSpace(nameAndCode[0:strings.LastIndex(nameAndCode, " ")])
-	}
 }
 
 func httpPostWithFormDataCredentials(api, resource, username, password, clientVersion, appOS, osVersion string) *http.Response {
