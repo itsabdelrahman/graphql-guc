@@ -25,8 +25,7 @@ const (
 )
 
 func IsUserAuthorized(username, password string) AuthorizedAPI {
-	response := httpPostWithFormData(API, LOGIN_ENDPOINT, username, password, CLIENT_VERSION, APP_OS, OS_VERSION)
-	responseBodyString := httpResponseBodyToString(response.Body)
+	responseBodyString := httpPostWithFormData(API, LOGIN_ENDPOINT, username, password, CLIENT_VERSION, APP_OS, OS_VERSION)
 
 	responseString := XMLResponseString{}
 	xmlToStruct(responseBodyString, &responseString)
@@ -35,8 +34,7 @@ func IsUserAuthorized(username, password string) AuthorizedAPI {
 }
 
 func GetUserCoursework(username, password string) ([]CourseworkAPI, error) {
-	response := httpPostWithFormData(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
-	responseBodyString := httpResponseBodyToString(response.Body)
+	responseBodyString := httpPostWithFormData(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
 
 	responseString := XMLResponseString{}
 	xmlToStruct(responseBodyString, &responseString)
@@ -68,8 +66,7 @@ func GetUserCoursework(username, password string) ([]CourseworkAPI, error) {
 }
 
 func GetUserMidterms(username, password string) ([]MidtermAPI, error) {
-	response := httpPostWithFormData(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
-	responseBodyString := httpResponseBodyToString(response.Body)
+	responseBodyString := httpPostWithFormData(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
 
 	responseString := XMLResponseString{}
 	xmlToStruct(responseBodyString, &responseString)
@@ -91,8 +88,7 @@ func GetUserMidterms(username, password string) ([]MidtermAPI, error) {
 }
 
 func GetUserAbsenceReports(username, password string) ([]AbsenceReportAPI, error) {
-	response := httpPostWithFormData(API, ATTENDANCE_ENDPOINT, username, password, CLIENT_VERSION, "", "")
-	responseBodyString := httpResponseBodyToString(response.Body)
+	responseBodyString := httpPostWithFormData(API, ATTENDANCE_ENDPOINT, username, password, CLIENT_VERSION, "", "")
 
 	responseString := XMLResponseString{}
 	xmlToStruct(responseBodyString, &responseString)
@@ -114,8 +110,7 @@ func GetUserAbsenceReports(username, password string) ([]AbsenceReportAPI, error
 }
 
 func GetUserExams(username, password string) ([]ExamAPI, error) {
-	response := httpPostWithFormData(API, EXAMS_ENDPOINT, username, password, CLIENT_VERSION, "", "")
-	responseBodyString := httpResponseBodyToString(response.Body)
+	responseBodyString := httpPostWithFormData(API, EXAMS_ENDPOINT, username, password, CLIENT_VERSION, "", "")
 
 	responseString := XMLResponseString{}
 	xmlToStruct(responseBodyString, &responseString)
@@ -136,7 +131,7 @@ func GetUserExams(username, password string) ([]ExamAPI, error) {
 	return examsAPI, nil
 }
 
-func httpPostWithFormData(api, resource, username, password, clientVersion, appOS, osVersion string) *http.Response {
+func httpPostWithFormData(api, resource, username, password, clientVersion, appOS, osVersion string) string {
 	data := url.Values{}
 	data.Set("username", username)
 	data.Add("password", password)
@@ -156,7 +151,10 @@ func httpPostWithFormData(api, resource, username, password, clientVersion, appO
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
 
 	response, _ := client.Do(request)
-	return response
+	responseBodyString := httpResponseBodyToString(response.Body)
+	defer response.Body.Close()
+
+	return responseBodyString
 }
 
 func httpResponseBodyToString(responseBody io.ReadCloser) string {
