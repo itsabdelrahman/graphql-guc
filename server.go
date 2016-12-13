@@ -50,6 +50,7 @@ var queryType = graphql.NewObject(
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 					username, isUsernameOK := p.Args["username"].(string)
 					password, isPasswordOK := p.Args["password"].(string)
+
 					if isUsernameOK && isPasswordOK {
 						authorized := IsUserAuthorized(username, password)
 						coursework, _ := GetUserCoursework(username, password)
@@ -59,6 +60,7 @@ var queryType = graphql.NewObject(
 
 						return NewStudentAPI(authorized, coursework, midtermsGrades, absenceLevels, examsSchedule), nil
 					}
+					
 					return nil, nil
 				},
 			},
