@@ -10,21 +10,23 @@ import (
 	"strings"
 )
 
-type user struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-}
-
-var data map[string]user
-
-var userType = graphql.NewObject(
+var studentType = graphql.NewObject(
 	graphql.ObjectConfig{
-		Name: "User",
+		Name: "Student",
 		Fields: graphql.Fields{
-			"id": &graphql.Field{
+			"authorized": &graphql.Field{
+				Type: graphql.Boolean,
+			},
+			"coursework": &graphql.Field{
 				Type: graphql.String,
 			},
-			"name": &graphql.Field{
+			"midtermsGrades": &graphql.Field{
+				Type: graphql.String,
+			},
+			"absenceLevels": &graphql.Field{
+				Type: graphql.String,
+			},
+			"examsSchedule": &graphql.Field{
 				Type: graphql.String,
 			},
 		},
@@ -35,17 +37,27 @@ var queryType = graphql.NewObject(
 	graphql.ObjectConfig{
 		Name: "Query",
 		Fields: graphql.Fields{
-			"user": &graphql.Field{
-				Type: userType,
+			"student": &graphql.Field{
+				Type: studentType,
 				Args: graphql.FieldConfigArgument{
-					"id": &graphql.ArgumentConfig{
+					"username": &graphql.ArgumentConfig{
+						Type: graphql.String,
+					},
+					"password": &graphql.ArgumentConfig{
 						Type: graphql.String,
 					},
 				},
 				Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-					idQuery, isOK := p.Args["id"].(string)
-					if isOK {
-						return data[idQuery], nil
+					username, isUsernameOK := p.Args["username"].(string)
+					password, isPasswordOK := p.Args["password"].(string)
+					if isUsernameOK && isPasswordOK {
+						authorized := IsUserAuthorized(username, password)
+						coursework, _ := GetUserCoursework(username, password)
+						midtermsGrades, _ := GetUserMidterms(username, password)
+						absenceLevels, _ := GetUserAbsenceReports(username, password)
+						examsSchedule, _ := GetUserExams(username, password)
+
+						return NewStudentAPI(authorized, coursework, midtermsGrades, absenceLevels, examsSchedule), nil
 					}
 					return nil, nil
 				},
@@ -64,16 +76,15 @@ func executeQuery(query string, schema graphql.Schema) *graphql.Result {
 		Schema:        schema,
 		RequestString: query,
 	})
+
 	if len(result.Errors) > 0 {
 		fmt.Printf("Wrong result, unexpected errors: %v", result.Errors)
 	}
+
 	return result
 }
 
 func main() {
-	data = make(map[string]user)
-	data["1"] = user{"1", "Dan"}
-
 	http.HandleFunc("/api/login", loginHandler)
 	http.HandleFunc("/api/coursework", courseworkHandler)
 	http.HandleFunc("/api/midterms", midtermsHandler)

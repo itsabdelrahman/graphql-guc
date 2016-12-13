@@ -87,6 +87,14 @@ type (
 		Venue    string    `json:"venue"`
 		Seat     string    `json:"seat"`
 	}
+
+	StudentAPI struct {
+		Authorized     bool               `json:"authorized"`
+		Coursework     []CourseworkAPI    `json:"coursework"`
+		MidtermsGrades []MidtermAPI       `json:"midtermsGrades"`
+		AbsenceLevels  []AbsenceReportAPI `json:"absenceLevels"`
+		ExamsSchedule  []ExamAPI          `json:"examsSchedule"`
+	}
 )
 
 func NewAuthorizedAPI(authorized string) AuthorizedAPI {
@@ -156,4 +164,16 @@ func NewExamAPI(exam Exam) ExamAPI {
 	examAPI.Seat = exam.Seat
 
 	return examAPI
+}
+
+func NewStudentAPI(authorized AuthorizedAPI, coursework []CourseworkAPI, midtermsGrades []MidtermAPI, absenceLevels []AbsenceReportAPI, examsSchedule []ExamAPI) StudentAPI {
+	student := StudentAPI{}
+
+	student.Authorized = authorized.IsAuthorized
+	student.Coursework = coursework
+	student.MidtermsGrades = midtermsGrades
+	student.AbsenceLevels = absenceLevels
+	student.ExamsSchedule = examsSchedule
+
+	return student
 }
