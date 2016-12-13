@@ -6,14 +6,25 @@ import (
 	"net/http"
 
 	"github.com/graphql-go/graphql"
-	"github.com/graphql-go/graphql/testutil"
 )
 
 func main() {
+	fields := graphql.Fields{
+		"hello": &graphql.Field{
+			Type: graphql.String,
+			Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+				return "world", nil
+			},
+		},
+	}
+	rootQuery := graphql.ObjectConfig{Name: "RootQuery", Fields: fields}
+	schemaConfig := graphql.SchemaConfig{Query: graphql.NewObject(rootQuery)}
+	schema, _ := graphql.NewSchema(schemaConfig)
+
 	http.HandleFunc("/graphql", func(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query()["query"][0]
 		result := graphql.Do(graphql.Params{
-			Schema:        testutil.StarWarsSchema,
+			Schema: schema,
 			RequestString: query,
 		})
 		json.NewEncoder(w).Encode(result)
