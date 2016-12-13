@@ -13,16 +13,16 @@ var studentType = graphql.NewObject(
 				Type: graphql.Boolean,
 			},
 			"coursework": &graphql.Field{
-				Type: graphql.String,
+				Type: graphql.NewList(graphql.String),
 			},
 			"midtermsGrades": &graphql.Field{
-				Type: graphql.String,
+				Type: graphql.NewList(graphql.String),
 			},
 			"absenceLevels": &graphql.Field{
-				Type: graphql.String,
+				Type: graphql.NewList(graphql.String),
 			},
 			"examsSchedule": &graphql.Field{
-				Type: graphql.String,
+				Type: graphql.NewList(graphql.String),
 			},
 		},
 	},
