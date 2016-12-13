@@ -30,9 +30,10 @@ func main() {
 			RequestString: query,
 		})
 
+		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(result)
 	})
-	
+
 	fmt.Println("Now server is running on port 8080...")
 	fmt.Println("Test with GET: curl -g 'http://localhost:8080/graphql?query={hero{name}}'")
 	http.ListenAndServe(":8080", nil)
