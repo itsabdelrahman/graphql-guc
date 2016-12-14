@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/graphql-go/graphql"
+	"strings"
 )
 
 var (
@@ -55,15 +56,20 @@ var (
 						},
 					},
 					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-						_, isCourseNameOK := p.Args["name"].(string)
+						courseName, isCourseNameOK := p.Args["name"].(string)
+
+						student := p.Source.(StudentAPI)
+						allCoursework, _ := GetUserCoursework(student.Username, student.Password)
 
 						if isCourseNameOK {
-							student := p.Source.(StudentAPI)
-							coursework, _ := GetUserCoursework(student.Username, student.Password)
-							return coursework, nil
+							for _, coursework := range allCoursework {
+								if strings.Contains(coursework.Name, courseName) {
+									return []CourseworkAPI{coursework}, nil
+								}
+							}
 						}
 
-						return nil, nil
+						return allCoursework, nil
 					},
 				},
 				"midtermsGrades": &graphql.Field{
