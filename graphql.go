@@ -13,7 +13,7 @@ var studentType = graphql.NewObject(
 				Type: graphql.Boolean,
 			},
 			"coursework": &graphql.Field{
-				Type: graphql.NewList(graphql.String),
+				Type: graphql.NewList(courseworkType),
 			},
 			"midtermsGrades": &graphql.Field{
 				Type: graphql.NewList(graphql.String),
@@ -23,6 +23,37 @@ var studentType = graphql.NewObject(
 			},
 			"examsSchedule": &graphql.Field{
 				Type: graphql.NewList(graphql.String),
+			},
+		},
+	},
+)
+
+var courseworkType = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "coursework",
+		Fields: graphql.Fields{
+			"course": &graphql.Field{
+				Type: graphql.String,
+			},
+			"grades": &graphql.Field{
+				Type: graphql.NewList(gradeType),
+			},
+		},
+	},
+)
+
+var gradeType = graphql.NewObject(
+	graphql.ObjectConfig{
+		Name: "grade",
+		Fields: graphql.Fields{
+			"module": &graphql.Field{
+				Type: graphql.String,
+			},
+			"point": &graphql.Field{
+				Type: graphql.Float,
+			},
+			"maxPoint": &graphql.Field{
+				Type: graphql.Float,
 			},
 		},
 	},
