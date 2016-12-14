@@ -6,6 +6,46 @@ import (
 )
 
 var (
+	schema, _ = graphql.NewSchema(
+		graphql.SchemaConfig{
+			Query: queryType,
+		},
+	)
+
+	queryType = graphql.NewObject(
+		graphql.ObjectConfig{
+			Name: "Query",
+			Fields: graphql.Fields{
+				"student": &graphql.Field{
+					Type: studentType,
+					Args: graphql.FieldConfigArgument{
+						"username": &graphql.ArgumentConfig{
+							Type: graphql.String,
+						},
+						"password": &graphql.ArgumentConfig{
+							Type: graphql.String,
+						},
+					},
+					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+						username, isUsernameOK := p.Args["username"].(string)
+						password, isPasswordOK := p.Args["password"].(string)
+
+						if isUsernameOK && isPasswordOK {
+							authorized := IsUserAuthorized(username, password)
+							coursework, _ := GetUserCoursework(username, password)
+							midtermsGrades, _ := GetUserMidterms(username, password)
+							absenceLevels, _ := GetUserAbsenceReports(username, password)
+							examsSchedule, _ := GetUserExams(username, password)
+
+							return NewStudentAPI(authorized, coursework, midtermsGrades, absenceLevels, examsSchedule), nil
+						}
+
+						return nil, nil
+					},
+				},
+			},
+		})
+
 	studentType = graphql.NewObject(
 		graphql.ObjectConfig{
 			Name: "Student",
@@ -57,46 +97,6 @@ var (
 					Type: graphql.Float,
 				},
 			},
-		},
-	)
-
-	queryType = graphql.NewObject(
-		graphql.ObjectConfig{
-			Name: "Query",
-			Fields: graphql.Fields{
-				"student": &graphql.Field{
-					Type: studentType,
-					Args: graphql.FieldConfigArgument{
-						"username": &graphql.ArgumentConfig{
-							Type: graphql.String,
-						},
-						"password": &graphql.ArgumentConfig{
-							Type: graphql.String,
-						},
-					},
-					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-						username, isUsernameOK := p.Args["username"].(string)
-						password, isPasswordOK := p.Args["password"].(string)
-
-						if isUsernameOK && isPasswordOK {
-							authorized := IsUserAuthorized(username, password)
-							coursework, _ := GetUserCoursework(username, password)
-							midtermsGrades, _ := GetUserMidterms(username, password)
-							absenceLevels, _ := GetUserAbsenceReports(username, password)
-							examsSchedule, _ := GetUserExams(username, password)
-
-							return NewStudentAPI(authorized, coursework, midtermsGrades, absenceLevels, examsSchedule), nil
-						}
-
-						return nil, nil
-					},
-				},
-			},
-		})
-
-	schema, _ = graphql.NewSchema(
-		graphql.SchemaConfig{
-			Query: queryType,
 		},
 	)
 )
