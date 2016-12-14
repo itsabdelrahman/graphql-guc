@@ -2,7 +2,7 @@
 
 # GUC API
 
-REST API wrapper *(with a GraphQL endpoint atop)* <img src="http://graphql.org/img/logo.svg" width="10"/> for the German University in Cairo (GUC) ~~private~~ API.
+REST API wrapper *(with a GraphQL <img src="http://graphql.org/img/logo.svg" width="20"/> endpoint atop)* for the German University in Cairo (GUC) ~~private~~ API.
 
 ## Why?
 
