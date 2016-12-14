@@ -89,6 +89,8 @@ type (
 	}
 
 	StudentAPI struct {
+		Username       string             `json:"-"`
+		Password       string             `json:"-"`
 		Authorized     bool               `json:"authorized"`
 		Coursework     []CourseworkAPI    `json:"coursework"`
 		MidtermsGrades []MidtermAPI       `json:"midtermsGrades"`
@@ -164,16 +166,4 @@ func NewExamAPI(exam Exam) ExamAPI {
 	examAPI.Seat = exam.Seat
 
 	return examAPI
-}
-
-func NewStudentAPI(authorized AuthorizedAPI, coursework []CourseworkAPI, midtermsGrades []MidtermAPI, absenceLevels []AbsenceReportAPI, examsSchedule []ExamAPI) StudentAPI {
-	student := StudentAPI{}
-
-	student.Authorized = authorized.IsAuthorized
-	student.Coursework = coursework
-	student.MidtermsGrades = midtermsGrades
-	student.AbsenceLevels = absenceLevels
-	student.ExamsSchedule = examsSchedule
-
-	return student
 }

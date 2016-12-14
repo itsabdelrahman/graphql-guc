@@ -31,13 +31,7 @@ var (
 						password, isPasswordOK := p.Args["password"].(string)
 
 						if isUsernameOK && isPasswordOK {
-							authorized := IsUserAuthorized(username, password)
-							coursework, _ := GetUserCoursework(username, password)
-							midtermsGrades, _ := GetUserMidterms(username, password)
-							absenceLevels, _ := GetUserAbsenceReports(username, password)
-							examsSchedule, _ := GetUserExams(username, password)
-
-							return NewStudentAPI(authorized, coursework, midtermsGrades, absenceLevels, examsSchedule), nil
+							return StudentAPI{Username: username, Password: password, Authorized: true}, nil
 						}
 
 						return nil, nil
@@ -55,6 +49,22 @@ var (
 				},
 				"coursework": &graphql.Field{
 					Type: graphql.NewList(courseworkType),
+					Args: graphql.FieldConfigArgument{
+						"name": &graphql.ArgumentConfig{
+							Type: graphql.String,
+						},
+					},
+					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+						_, isCourseNameOK := p.Args["name"].(string)
+
+						if isCourseNameOK {
+							student := p.Source.(StudentAPI)
+							coursework, _ := GetUserCoursework(student.Username, student.Password)
+							return coursework, nil
+						}
+
+						return nil, nil
+					},
 				},
 				"midtermsGrades": &graphql.Field{
 					Type: graphql.NewList(graphql.String),
