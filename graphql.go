@@ -97,7 +97,28 @@ var (
 					},
 				},
 				"absenceLevels": &graphql.Field{
-					Type: graphql.NewList(graphql.String),
+					Type: graphql.NewList(absenceType),
+					Args: graphql.FieldConfigArgument{
+						"course": &graphql.ArgumentConfig{
+							Type: graphql.String,
+						},
+					},
+					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+						courseName, isCourseNameOK := p.Args["course"].(string)
+
+						student := p.Source.(StudentAPI)
+						allAbsenceLevels, _ := GetUserAbsenceReports(student.Username, student.Password)
+
+						if isCourseNameOK {
+							for _, absenceLevel := range allAbsenceLevels {
+								if strings.Contains(absenceLevel.CourseName, courseName) {
+									return []AbsenceReportAPI{absenceLevel}, nil
+								}
+							}
+						}
+
+						return allAbsenceLevels, nil
+					},
 				},
 				"examsSchedule": &graphql.Field{
 					Type: graphql.NewList(graphql.String),
@@ -146,6 +167,20 @@ var (
 				},
 				"percentage": &graphql.Field{
 					Type: graphql.Float,
+				},
+			},
+		},
+	)
+
+	absenceType = graphql.NewObject(
+		graphql.ObjectConfig{
+			Name: "absenceLevels",
+			Fields: graphql.Fields{
+				"course": &graphql.Field{
+					Type: graphql.String,
+				},
+				"level": &graphql.Field{
+					Type: graphql.Int,
 				},
 			},
 		},
