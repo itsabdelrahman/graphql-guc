@@ -139,7 +139,7 @@ Response:
 <pre><b>GET</b> http://guc-api.herokuapp.com/<b>graphql</b></pre>
 
 Root Query:
-```javascript
+```graphql
 {
     student(username: "john.doe", password: "12345") {
         authorized,
