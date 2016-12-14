@@ -121,7 +121,30 @@ var (
 					},
 				},
 				"examsSchedule": &graphql.Field{
-					Type: graphql.NewList(graphql.String),
+					Type: graphql.NewList(examType),
+					Args: graphql.FieldConfigArgument{
+						"course": &graphql.ArgumentConfig{
+							Type: graphql.String,
+						},
+					},
+					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
+						courseName, isCourseNameOK := p.Args["course"].(string)
+
+						student := p.Source.(StudentAPI)
+						allExams, _ := GetUserExams(student.Username, student.Password)
+
+						fmt.Println(allExams)
+
+						if isCourseNameOK {
+							for _, exam := range allExams {
+								if strings.Contains(exam.Course, courseName) {
+									return []ExamAPI{exam}, nil
+								}
+							}
+						}
+
+						return allExams, nil
+					},
 				},
 			},
 		},
@@ -181,6 +204,26 @@ var (
 				},
 				"level": &graphql.Field{
 					Type: graphql.Int,
+				},
+			},
+		},
+	)
+
+	examType = graphql.NewObject(
+		graphql.ObjectConfig{
+			Name: "examsSchedule",
+			Fields: graphql.Fields{
+				"course": &graphql.Field{
+					Type: graphql.String,
+				},
+				"dateTime": &graphql.Field{
+					Type: graphql.String,
+				},
+				"venue": &graphql.Field{
+					Type: graphql.String,
+				},
+				"seat": &graphql.Field{
+					Type: graphql.String,
 				},
 			},
 		},
