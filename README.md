@@ -159,7 +159,7 @@ Root Query:
             course,
             level
         },
-        examsSchedule(course: "Graphics") {
+        examsSchedule(course: "Analysis") {
             course,
             dateTime,
             venue,
