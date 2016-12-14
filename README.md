@@ -2,21 +2,21 @@
 
 # GUC API
 
-REST API wrapper for the German University in Cairo (GUC) ~~private~~ API.
+REST API wrapper *(with a GraphQL endpoint atop)* for the German University in Cairo (GUC) ~~private~~ API.
 
 ## Why?
 
 * The original GUC API is only exclusively used by the official GUC mobile application
 * The original GUC API is altogether poorly designed _(e.g. JSON embedded within XML responses)_
 
-## API
+## REST API
 
 ### Authentication
 
 All API calls require [basic authentication](https://en.wikipedia.org/wiki/Basic_access_authentication#Client_side).
 Example: if your username is `john.doe` & your password is `12345`, then your HTTP `Authorization` header should look like this: `Basic Z3VjaWFuOjEyMzQ1`.
 
-### API Calls
+### REST API Calls
 
 #### Login
 
@@ -41,7 +41,7 @@ or
 }
 ```
 
-***
+___
 
 #### Coursework
 
@@ -68,7 +68,7 @@ Response:
 }
 ```
 
-***
+___
 
 #### Midterms
 
@@ -88,7 +88,7 @@ Response:
 }
 ```
 
-***
+___
 
 #### Attendance
 
@@ -108,6 +108,8 @@ Response:
 }
 ```
 
+___
+
 #### Exams Schedule
 
 <pre><b>GET</b> http://guc-api.herokuapp.com/api/<b><i>exams</i></b></pre>
@@ -125,6 +127,45 @@ Response:
       },
       ...
    ]
+}
+```
+
+***
+
+## GraphQL
+
+#### Student
+
+<pre><b>GET</b> http://guc-api.herokuapp.com/<b>graphql</b></pre>
+
+Root Query:
+```javascript
+{
+    student(username: "john.doe", password: "12345") {
+        authorized,
+        coursework(course: "Advanced") {
+            course,
+            grades {
+                module,
+                point,
+                maxPoint
+            }
+        },
+        midtermsGrades(course: "Embedded") {
+            course,
+            percentage
+        },
+        absenceLevels(course: "Graphics") {
+            course,
+            level
+        },
+        examsSchedule(course: "Graphics") {
+            course,
+            dateTime,
+            venue,
+            seat
+        }
+    }
 }
 ```
 
