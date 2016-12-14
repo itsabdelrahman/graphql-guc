@@ -132,7 +132,7 @@ Response:
 
 ***
 
-## GraphQL <img src="http://graphql.org/img/logo.svg" width="25"/>
+## GraphQL <img src="http://graphql.org/img/logo.svg" width="20"/>
 
 #### Student
 
