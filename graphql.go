@@ -32,7 +32,7 @@ var (
 						password, isPasswordOK := p.Args["password"].(string)
 
 						if isUsernameOK && isPasswordOK {
-							return StudentAPI{Username: username, Password: password, Authorized: true}, nil
+							return StudentAPI{Username: username, Password: password, Authorized: IsUserAuthorized(username, password).IsAuthorized}, nil
 						}
 
 						return nil, nil
