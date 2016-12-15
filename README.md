@@ -18,8 +18,6 @@ Example: if your username is `john.doe` & your password is `12345`, then your HT
 
 ### REST API Calls
 
-***
-
 #### Login
 
 <pre><b>GET</b> http://guc-api.herokuapp.com/api/<b><i>login</i></b></pre>
@@ -140,6 +138,9 @@ Response:
 Credentials are plainly provided as arguments to the root query *(to be improved)*.
 
 ### GraphQL Call
+
+***
+___
 
 <pre><b>GET</b> http://guc-api.herokuapp.com/graphql</pre>
 
