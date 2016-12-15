@@ -130,8 +130,6 @@ Response:
 }
 ```
 
-___
-
 ## GraphQL <img src="http://graphql.org/img/logo.svg" width="20"/>
 
 ### Authentication
