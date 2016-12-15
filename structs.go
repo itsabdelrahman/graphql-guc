@@ -87,6 +87,16 @@ type (
 		Venue    string    `json:"venue"`
 		Seat     string    `json:"seat"`
 	}
+
+	StudentAPI struct {
+		Username       string             `json:"-"`
+		Password       string             `json:"-"`
+		Authorized     bool               `json:"authorized"`
+		Coursework     []CourseworkAPI    `json:"coursework"`
+		MidtermsGrades []MidtermAPI       `json:"midtermsGrades"`
+		AbsenceLevels  []AbsenceReportAPI `json:"absenceLevels"`
+		ExamsSchedule  []ExamAPI          `json:"examsSchedule"`
+	}
 )
 
 func NewAuthorizedAPI(authorized string) AuthorizedAPI {
