@@ -41,7 +41,7 @@ or
 }
 ```
 
-___
+***
 
 #### Coursework
 
@@ -68,7 +68,7 @@ Response:
 }
 ```
 
-___
+***
 
 #### Midterms
 
@@ -88,7 +88,7 @@ Response:
 }
 ```
 
-___
+***
 
 #### Attendance
 
@@ -108,7 +108,7 @@ Response:
 }
 ```
 
-___
+***
 
 #### Exams Schedule
 
@@ -130,7 +130,7 @@ Response:
 }
 ```
 
-***
+___
 
 ## GraphQL <img src="http://graphql.org/img/logo.svg" width="20"/>
 
@@ -138,9 +138,6 @@ Response:
 Credentials are plainly provided as arguments to the root query *(to be improved)*.
 
 ### GraphQL Call
-
-***
-___
 
 <pre><b>GET</b> http://guc-api.herokuapp.com/graphql</pre>
 
