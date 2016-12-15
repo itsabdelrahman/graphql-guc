@@ -137,9 +137,7 @@ Response:
 ### Authentication
 Credentials are plainly provided as arguments to the root query *(to be improved)*.
 
-### GraphQL Calls
-
-#### Student
+### GraphQL Call
 
 <pre><b>GET</b> http://guc-api.herokuapp.com/graphql</pre>
 
