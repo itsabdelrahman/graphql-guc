@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/graphql-go/graphql"
@@ -133,8 +132,6 @@ var (
 
 						student := p.Source.(StudentAPI)
 						allExams, _ := GetUserExams(student.Username, student.Password)
-
-						fmt.Println(allExams)
 
 						if isCourseNameOK {
 							for _, exam := range allExams {
