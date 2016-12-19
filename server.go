@@ -18,12 +18,10 @@ func main() {
 	http.HandleFunc("/api/attendance", attendanceHandler)
 	http.HandleFunc("/api/exams", examsHandler)
 
-	h := handler.New(&handler.Config{
+	http.Handle("/graphql", handler.New(&handler.Config{
 		Schema: &schema,
 		Pretty: true,
-	})
-
-	http.Handle("/graphql", h)
+	}))
 
 	port := os.Getenv("PORT")
 	if port == "" {
