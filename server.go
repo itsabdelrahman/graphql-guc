@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/graphql-go/handler"
 )
 
 func main() {
@@ -15,7 +17,11 @@ func main() {
 	http.HandleFunc("/api/midterms", midtermsHandler)
 	http.HandleFunc("/api/attendance", attendanceHandler)
 	http.HandleFunc("/api/exams", examsHandler)
-	http.HandleFunc("/graphql", graphqlHandler)
+
+	http.Handle("/graphql", handler.New(&handler.Config{
+		Schema: &schema,
+		Pretty: true,
+	}))
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -64,11 +70,6 @@ func examsHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		sendJsonResponse(w, ResponseAPI{nil, exams})
 	}
-}
-
-func graphqlHandler(w http.ResponseWriter, r *http.Request) {
-	result := executeQuery(r.URL.Query()["query"][0], schema)
-	sendJsonResponse(w, result)
 }
 
 func basicAuthentication(r *http.Request) (string, string) {
