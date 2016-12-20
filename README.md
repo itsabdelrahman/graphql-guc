@@ -9,6 +9,10 @@ REST API wrapper *(with a GraphQL <img src="http://graphql.org/img/logo.svg" wid
 * The original GUC API is only exclusively used by the official GUC mobile application
 * The original GUC API is altogether poorly designed _(e.g. JSON embedded within XML responses)_
 
+## Usage
+* `go get ./...`
+* `go run server.go`
+
 ## REST API
 
 ### Authentication
