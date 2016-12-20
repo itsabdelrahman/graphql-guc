@@ -32,6 +32,7 @@ var (
 						password, isPasswordOK := p.Args["password"].(string)
 
 						if isUsernameOK && isPasswordOK {
+							username, password = strings.TrimSpace(username), strings.TrimSpace(password)
 							return factory.StudentAPI{Username: username, Password: password, Authorized: factory.IsUserAuthorized(username, password).IsAuthorized}, nil
 						}
 
