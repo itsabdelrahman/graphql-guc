@@ -1,13 +1,13 @@
 package main
 
 import (
-	"./factory"
-	"./graphql"
-	"./util"
 	"fmt"
+	"github.com/ar-maged/guc-api/graphql"
+	"github.com/ar-maged/guc-api/util"
+	"github.com/ar-maged/guc-api/factory"
+	"github.com/graphql-go/handler"
 	"net/http"
 	"os"
-	"github.com/graphql-go/handler"
 )
 
 func main() {

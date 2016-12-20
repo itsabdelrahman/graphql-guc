@@ -1,8 +1,8 @@
 package factory
 
 import (
-	"../util"
 	"errors"
+	"github.com/ar-maged/guc-api/util"
 	"strings"
 )
 
