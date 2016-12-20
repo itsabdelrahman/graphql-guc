@@ -2,8 +2,8 @@ package graphql
 
 import (
 	"github.com/ar-maged/guc-api/factory"
-	"strings"
 	"github.com/graphql-go/graphql"
+	"strings"
 )
 
 var (
