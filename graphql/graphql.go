@@ -1,13 +1,13 @@
-package main
+package graphql
 
 import (
+	"../factory"
 	"strings"
-
 	"github.com/graphql-go/graphql"
 )
 
 var (
-	schema, _ = graphql.NewSchema(
+	Schema, _ = graphql.NewSchema(
 		graphql.SchemaConfig{
 			Query: queryType,
 		},
@@ -32,7 +32,7 @@ var (
 						password, isPasswordOK := p.Args["password"].(string)
 
 						if isUsernameOK && isPasswordOK {
-							return StudentAPI{Username: username, Password: password, Authorized: IsUserAuthorized(username, password).IsAuthorized}, nil
+							return factory.StudentAPI{Username: username, Password: password, Authorized: factory.IsUserAuthorized(username, password).IsAuthorized}, nil
 						}
 
 						return nil, nil
@@ -58,13 +58,13 @@ var (
 					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 						courseName, isCourseNameOK := p.Args["course"].(string)
 
-						student := p.Source.(StudentAPI)
-						allCoursework, _ := GetUserCoursework(student.Username, student.Password)
+						student := p.Source.(factory.StudentAPI)
+						allCoursework, _ := factory.GetUserCoursework(student.Username, student.Password)
 
 						if isCourseNameOK {
 							for _, coursework := range allCoursework {
 								if strings.Contains(coursework.Name, courseName) {
-									return []CourseworkAPI{coursework}, nil
+									return []factory.CourseworkAPI{coursework}, nil
 								}
 							}
 						}
@@ -82,13 +82,13 @@ var (
 					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 						courseName, isCourseNameOK := p.Args["course"].(string)
 
-						student := p.Source.(StudentAPI)
-						allMidterms, _ := GetUserMidterms(student.Username, student.Password)
+						student := p.Source.(factory.StudentAPI)
+						allMidterms, _ := factory.GetUserMidterms(student.Username, student.Password)
 
 						if isCourseNameOK {
 							for _, midterm := range allMidterms {
 								if strings.Contains(midterm.Name, courseName) {
-									return []MidtermAPI{midterm}, nil
+									return []factory.MidtermAPI{midterm}, nil
 								}
 							}
 						}
@@ -106,13 +106,13 @@ var (
 					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 						courseName, isCourseNameOK := p.Args["course"].(string)
 
-						student := p.Source.(StudentAPI)
-						allAbsenceLevels, _ := GetUserAbsenceReports(student.Username, student.Password)
+						student := p.Source.(factory.StudentAPI)
+						allAbsenceLevels, _ := factory.GetUserAbsenceReports(student.Username, student.Password)
 
 						if isCourseNameOK {
 							for _, absenceLevel := range allAbsenceLevels {
 								if strings.Contains(absenceLevel.CourseName, courseName) {
-									return []AbsenceReportAPI{absenceLevel}, nil
+									return []factory.AbsenceReportAPI{absenceLevel}, nil
 								}
 							}
 						}
@@ -130,13 +130,13 @@ var (
 					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
 						courseName, isCourseNameOK := p.Args["course"].(string)
 
-						student := p.Source.(StudentAPI)
-						allExams, _ := GetUserExams(student.Username, student.Password)
+						student := p.Source.(factory.StudentAPI)
+						allExams, _ := factory.GetUserExams(student.Username, student.Password)
 
 						if isCourseNameOK {
 							for _, exam := range allExams {
 								if strings.Contains(exam.Course, courseName) {
-									return []ExamAPI{exam}, nil
+									return []factory.ExamAPI{exam}, nil
 								}
 							}
 						}

@@ -1,15 +1,8 @@
-package main
+package factory
 
 import (
-	"bytes"
-	"encoding/json"
-	"encoding/xml"
+	"../util"
 	"errors"
-	"fmt"
-	"io"
-	"io/ioutil"
-	"net/http"
-	"net/url"
 	"strings"
 )
 
@@ -25,26 +18,26 @@ const (
 )
 
 func IsUserAuthorized(username, password string) AuthorizedAPI {
-	responseBodyString := httpPostWithFormData(API, LOGIN_ENDPOINT, username, password, CLIENT_VERSION, APP_OS, OS_VERSION)
+	responseBodyString := util.HttpPostWithFormData(API, LOGIN_ENDPOINT, username, password, CLIENT_VERSION, APP_OS, OS_VERSION)
 
 	responseString := XMLResponseString{}
-	xmlToStruct(responseBodyString, &responseString)
+	util.XmlToStruct(responseBodyString, &responseString)
 
 	return NewAuthorizedAPI(responseString.Value)
 }
 
 func GetUserCoursework(username, password string) ([]CourseworkAPI, error) {
-	responseBodyString := httpPostWithFormData(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
+	responseBodyString := util.HttpPostWithFormData(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
 
 	responseString := XMLResponseString{}
-	xmlToStruct(responseBodyString, &responseString)
+	util.XmlToStruct(responseBodyString, &responseString)
 
 	if strings.Compare(responseString.Value, "[{\"error\":\"Unauthorized\"}]") == 0 {
 		return nil, errors.New("Unauthorized")
 	}
 
 	courseWork := Coursework{}
-	jsonToStruct(responseString.Value, &courseWork)
+	util.JsonToStruct(responseString.Value, &courseWork)
 
 	allCoursework := []CourseworkAPI{}
 
@@ -66,17 +59,17 @@ func GetUserCoursework(username, password string) ([]CourseworkAPI, error) {
 }
 
 func GetUserMidterms(username, password string) ([]MidtermAPI, error) {
-	responseBodyString := httpPostWithFormData(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
+	responseBodyString := util.HttpPostWithFormData(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
 
 	responseString := XMLResponseString{}
-	xmlToStruct(responseBodyString, &responseString)
+	util.XmlToStruct(responseBodyString, &responseString)
 
 	if strings.Compare(responseString.Value, "[{\"error\":\"Unauthorized\"}]") == 0 {
 		return nil, errors.New("Unauthorized")
 	}
 
 	courseWork := Coursework{}
-	jsonToStruct(responseString.Value, &courseWork)
+	util.JsonToStruct(responseString.Value, &courseWork)
 
 	midtermsAPI := []MidtermAPI{}
 
@@ -88,17 +81,17 @@ func GetUserMidterms(username, password string) ([]MidtermAPI, error) {
 }
 
 func GetUserAbsenceReports(username, password string) ([]AbsenceReportAPI, error) {
-	responseBodyString := httpPostWithFormData(API, ATTENDANCE_ENDPOINT, username, password, CLIENT_VERSION, "", "")
+	responseBodyString := util.HttpPostWithFormData(API, ATTENDANCE_ENDPOINT, username, password, CLIENT_VERSION, "", "")
 
 	responseString := XMLResponseString{}
-	xmlToStruct(responseBodyString, &responseString)
+	util.XmlToStruct(responseBodyString, &responseString)
 
 	if strings.Compare(responseString.Value, "[{\"error\":\"Unauthorized\"}]") == 0 {
 		return nil, errors.New("Unauthorized")
 	}
 
 	absence := Absence{}
-	jsonToStruct(responseString.Value, &absence)
+	util.JsonToStruct(responseString.Value, &absence)
 
 	absenceReportsAPI := []AbsenceReportAPI{}
 
@@ -110,17 +103,17 @@ func GetUserAbsenceReports(username, password string) ([]AbsenceReportAPI, error
 }
 
 func GetUserExams(username, password string) ([]ExamAPI, error) {
-	responseBodyString := httpPostWithFormData(API, EXAMS_ENDPOINT, username, password, CLIENT_VERSION, "", "")
+	responseBodyString := util.HttpPostWithFormData(API, EXAMS_ENDPOINT, username, password, CLIENT_VERSION, "", "")
 
 	responseString := XMLResponseString{}
-	xmlToStruct(responseBodyString, &responseString)
+	util.XmlToStruct(responseBodyString, &responseString)
 
 	if strings.Compare(responseString.Value, "[{\"error\":\"Unauthorized\"}]") == 0 {
 		return nil, errors.New("Unauthorized")
 	}
 
 	exams := []Exam{}
-	jsonToStruct(responseString.Value, &exams)
+	util.JsonToStruct(responseString.Value, &exams)
 
 	examsAPI := []ExamAPI{}
 
@@ -129,43 +122,4 @@ func GetUserExams(username, password string) ([]ExamAPI, error) {
 	}
 
 	return examsAPI, nil
-}
-
-func httpPostWithFormData(api, resource, username, password, clientVersion, appOS, osVersion string) string {
-	data := url.Values{}
-	data.Set("username", username)
-	data.Add("password", password)
-	data.Add("clientVersion", clientVersion)
-
-	if appOS != "" && osVersion != "" {
-		data.Add("app_os", appOS)
-		data.Add("os_version", osVersion)
-	}
-
-	uri, _ := url.ParseRequestURI(api)
-	uri.Path = resource
-	uriString := fmt.Sprintf("%v", uri)
-
-	client := &http.Client{}
-	request, _ := http.NewRequest("POST", uriString, bytes.NewBufferString(data.Encode()))
-	request.Header.Add("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8")
-
-	response, _ := client.Do(request)
-	defer response.Body.Close()
-	
-	responseBodyString := httpResponseBodyToString(response.Body)
-	return responseBodyString
-}
-
-func httpResponseBodyToString(responseBody io.ReadCloser) string {
-	responseBodyRead, _ := ioutil.ReadAll(responseBody)
-	return string(responseBodyRead)
-}
-
-func jsonToStruct(j string, v interface{}) error {
-	return json.Unmarshal([]byte(j), v)
-}
-
-func xmlToStruct(x string, v interface{}) error {
-	return xml.Unmarshal([]byte(x), v)
 }
