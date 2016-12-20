@@ -1,14 +1,13 @@
 package main
 
 import (
-	"encoding/base64"
-	"encoding/json"
 	"fmt"
+	"github.com/ar-maged/guc-api/factory"
+	"github.com/ar-maged/guc-api/graphql"
+	"github.com/ar-maged/guc-api/util"
+	"github.com/graphql-go/handler"
 	"net/http"
 	"os"
-	"strings"
-
-	"github.com/graphql-go/handler"
 )
 
 func main() {
@@ -19,7 +18,7 @@ func main() {
 	http.HandleFunc("/api/exams", examsHandler)
 
 	http.Handle("/graphql", handler.New(&handler.Config{
-		Schema: &schema,
+		Schema: &graphql.Schema,
 		Pretty: true,
 	}))
 
@@ -33,54 +32,41 @@ func main() {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	sendJsonResponse(w, ResponseAPI{nil, IsUserAuthorized(basicAuthentication(r))})
+	util.SendJsonResponse(w, factory.ResponseAPI{nil, factory.IsUserAuthorized(util.BasicAuthentication(r))})
 }
 
 func courseworkHandler(w http.ResponseWriter, r *http.Request) {
-	if coursework, err := GetUserCoursework(basicAuthentication(r)); err != nil {
+	if coursework, err := factory.GetUserCoursework(util.BasicAuthentication(r)); err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
-		sendJsonResponse(w, ResponseAPI{err.Error(), nil})
+		util.SendJsonResponse(w, factory.ResponseAPI{err.Error(), nil})
 	} else {
-		sendJsonResponse(w, ResponseAPI{nil, coursework})
+		util.SendJsonResponse(w, factory.ResponseAPI{nil, coursework})
 	}
 }
 
 func midtermsHandler(w http.ResponseWriter, r *http.Request) {
-	if midterms, err := GetUserMidterms(basicAuthentication(r)); err != nil {
+	if midterms, err := factory.GetUserMidterms(util.BasicAuthentication(r)); err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
-		sendJsonResponse(w, ResponseAPI{err.Error(), nil})
+		util.SendJsonResponse(w, factory.ResponseAPI{err.Error(), nil})
 	} else {
-		sendJsonResponse(w, ResponseAPI{nil, midterms})
+		util.SendJsonResponse(w, factory.ResponseAPI{nil, midterms})
 	}
 }
 
 func attendanceHandler(w http.ResponseWriter, r *http.Request) {
-	if reports, err := GetUserAbsenceReports(basicAuthentication(r)); err != nil {
+	if reports, err := factory.GetUserAbsenceReports(util.BasicAuthentication(r)); err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
-		sendJsonResponse(w, ResponseAPI{err.Error(), nil})
+		util.SendJsonResponse(w, factory.ResponseAPI{err.Error(), nil})
 	} else {
-		sendJsonResponse(w, ResponseAPI{nil, reports})
+		util.SendJsonResponse(w, factory.ResponseAPI{nil, reports})
 	}
 }
 
 func examsHandler(w http.ResponseWriter, r *http.Request) {
-	if exams, err := GetUserExams(basicAuthentication(r)); err != nil {
+	if exams, err := factory.GetUserExams(util.BasicAuthentication(r)); err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
-		sendJsonResponse(w, ResponseAPI{err.Error(), nil})
+		util.SendJsonResponse(w, factory.ResponseAPI{err.Error(), nil})
 	} else {
-		sendJsonResponse(w, ResponseAPI{nil, exams})
+		util.SendJsonResponse(w, factory.ResponseAPI{nil, exams})
 	}
-}
-
-func basicAuthentication(r *http.Request) (string, string) {
-	auth := strings.SplitN(r.Header["Authorization"][0], " ", 2)
-	payload, _ := base64.StdEncoding.DecodeString(auth[1])
-	pair := strings.SplitN(string(payload), ":", 2)
-
-	return pair[0], pair[1]
-}
-
-func sendJsonResponse(w http.ResponseWriter, v interface{}) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(v)
 }
