@@ -49,7 +49,7 @@ func BasicAuthentication(r *http.Request) (string, string) {
 	payload, _ := base64.StdEncoding.DecodeString(auth[1])
 	pair := strings.SplitN(string(payload), ":", 2)
 
-	return pair[0], pair[1]
+	return strings.TrimSpace(pair[0]), strings.TrimSpace(pair[1])
 }
 
 func JsonToStruct(j string, v interface{}) error {
