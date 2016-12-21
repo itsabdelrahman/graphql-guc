@@ -27,17 +27,7 @@ var (
 							Type: graphql.String,
 						},
 					},
-					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-						username, isUsernameOK := p.Args["username"].(string)
-						password, isPasswordOK := p.Args["password"].(string)
-
-						if isUsernameOK && isPasswordOK {
-							username, password = strings.TrimSpace(username), strings.TrimSpace(password)
-							return factory.StudentAPI{Username: username, Password: password, Authorized: factory.IsUserAuthorized(username, password).IsAuthorized}, nil
-						}
-
-						return nil, nil
-					},
+					Resolve: resolveLogin,
 				},
 			},
 		})
@@ -56,22 +46,7 @@ var (
 							Type: graphql.String,
 						},
 					},
-					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-						courseName, isCourseNameOK := p.Args["course"].(string)
-
-						student := p.Source.(factory.StudentAPI)
-						allCoursework, _ := factory.GetUserCoursework(student.Username, student.Password)
-
-						if isCourseNameOK {
-							for _, coursework := range allCoursework {
-								if strings.Contains(coursework.Name, courseName) {
-									return []factory.CourseworkAPI{coursework}, nil
-								}
-							}
-						}
-
-						return allCoursework, nil
-					},
+					Resolve: resolveCoursework,
 				},
 				"midtermsGrades": &graphql.Field{
 					Type: graphql.NewList(midtermType),
@@ -80,22 +55,7 @@ var (
 							Type: graphql.String,
 						},
 					},
-					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-						courseName, isCourseNameOK := p.Args["course"].(string)
-
-						student := p.Source.(factory.StudentAPI)
-						allMidterms, _ := factory.GetUserMidterms(student.Username, student.Password)
-
-						if isCourseNameOK {
-							for _, midterm := range allMidterms {
-								if strings.Contains(midterm.Name, courseName) {
-									return []factory.MidtermAPI{midterm}, nil
-								}
-							}
-						}
-
-						return allMidterms, nil
-					},
+					Resolve: resolveMidterms,
 				},
 				"absenceLevels": &graphql.Field{
 					Type: graphql.NewList(absenceType),
@@ -104,22 +64,7 @@ var (
 							Type: graphql.String,
 						},
 					},
-					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-						courseName, isCourseNameOK := p.Args["course"].(string)
-
-						student := p.Source.(factory.StudentAPI)
-						allAbsenceLevels, _ := factory.GetUserAbsenceReports(student.Username, student.Password)
-
-						if isCourseNameOK {
-							for _, absenceLevel := range allAbsenceLevels {
-								if strings.Contains(absenceLevel.CourseName, courseName) {
-									return []factory.AbsenceReportAPI{absenceLevel}, nil
-								}
-							}
-						}
-
-						return allAbsenceLevels, nil
-					},
+					Resolve: resolveAbsence,
 				},
 				"examsSchedule": &graphql.Field{
 					Type: graphql.NewList(examType),
@@ -128,22 +73,7 @@ var (
 							Type: graphql.String,
 						},
 					},
-					Resolve: func(p graphql.ResolveParams) (interface{}, error) {
-						courseName, isCourseNameOK := p.Args["course"].(string)
-
-						student := p.Source.(factory.StudentAPI)
-						allExams, _ := factory.GetUserExams(student.Username, student.Password)
-
-						if isCourseNameOK {
-							for _, exam := range allExams {
-								if strings.Contains(exam.Course, courseName) {
-									return []factory.ExamAPI{exam}, nil
-								}
-							}
-						}
-
-						return allExams, nil
-					},
+					Resolve: resolveExams,
 				},
 			},
 		},
@@ -228,3 +158,83 @@ var (
 		},
 	)
 )
+
+func resolveLogin(p graphql.ResolveParams) (interface{}, error) {
+	username, isUsernameOK := p.Args["username"].(string)
+	password, isPasswordOK := p.Args["password"].(string)
+
+	if isUsernameOK && isPasswordOK {
+		username, password = strings.TrimSpace(username), strings.TrimSpace(password)
+		return factory.StudentAPI{Username: username, Password: password, Authorized: factory.IsUserAuthorized(username, password).IsAuthorized}, nil
+	}
+
+	return nil, nil
+}
+
+func resolveCoursework(p graphql.ResolveParams) (interface{}, error) {
+	courseName, isCourseNameOK := p.Args["course"].(string)
+
+	student := p.Source.(factory.StudentAPI)
+	allCoursework, _ := factory.GetUserCoursework(student.Username, student.Password)
+
+	if isCourseNameOK {
+		for _, coursework := range allCoursework {
+			if strings.Contains(coursework.Name, courseName) {
+				return []factory.CourseworkAPI{coursework}, nil
+			}
+		}
+	}
+
+	return allCoursework, nil
+}
+
+func resolveMidterms(p graphql.ResolveParams) (interface{}, error) {
+	courseName, isCourseNameOK := p.Args["course"].(string)
+
+	student := p.Source.(factory.StudentAPI)
+	allMidterms, _ := factory.GetUserMidterms(student.Username, student.Password)
+
+	if isCourseNameOK {
+		for _, midterm := range allMidterms {
+			if strings.Contains(midterm.Name, courseName) {
+				return []factory.MidtermAPI{midterm}, nil
+			}
+		}
+	}
+
+	return allMidterms, nil
+}
+
+func resolveAbsence(p graphql.ResolveParams) (interface{}, error) {
+	courseName, isCourseNameOK := p.Args["course"].(string)
+
+	student := p.Source.(factory.StudentAPI)
+	allAbsenceLevels, _ := factory.GetUserAbsenceReports(student.Username, student.Password)
+
+	if isCourseNameOK {
+		for _, absenceLevel := range allAbsenceLevels {
+			if strings.Contains(absenceLevel.CourseName, courseName) {
+				return []factory.AbsenceReportAPI{absenceLevel}, nil
+			}
+		}
+	}
+
+	return allAbsenceLevels, nil
+}
+
+func resolveExams(p graphql.ResolveParams) (interface{}, error) {
+	courseName, isCourseNameOK := p.Args["course"].(string)
+
+	student := p.Source.(factory.StudentAPI)
+	allExams, _ := factory.GetUserExams(student.Username, student.Password)
+
+	if isCourseNameOK {
+		for _, exam := range allExams {
+			if strings.Contains(exam.Course, courseName) {
+				return []factory.ExamAPI{exam}, nil
+			}
+		}
+	}
+
+	return allExams, nil
+}
