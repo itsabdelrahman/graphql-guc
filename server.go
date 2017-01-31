@@ -38,41 +38,82 @@ func main() {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: factory.IsUserAuthorized(util.BasicAuthentication(r))})
+	if username, password, err := util.BasicAuthentication(r); err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
+	} else {
+		util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: factory.IsUserAuthorized(username, password)})
+	}
 }
 
 func courseworkHandler(w http.ResponseWriter, r *http.Request) {
-	if coursework, err := factory.GetUserCoursework(util.BasicAuthentication(r)); err != nil {
+	username, password, err := util.BasicAuthentication(r)
+	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
-	} else {
-		util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: coursework})
+		return
 	}
+
+	coursework, err := factory.GetUserCoursework(username, password)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
+		return
+	}
+
+	util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: coursework})
 }
 
 func midtermsHandler(w http.ResponseWriter, r *http.Request) {
-	if midterms, err := factory.GetUserMidterms(util.BasicAuthentication(r)); err != nil {
+	username, password, err := util.BasicAuthentication(r)
+	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
-	} else {
-		util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: midterms})
+		return
 	}
+
+	midterms, err := factory.GetUserMidterms(username, password)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
+		return
+	}
+
+	util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: midterms})
 }
 
 func attendanceHandler(w http.ResponseWriter, r *http.Request) {
-	if reports, err := factory.GetUserAbsenceReports(util.BasicAuthentication(r)); err != nil {
+	username, password, err := util.BasicAuthentication(r)
+	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
-	} else {
-		util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: reports})
+		return
 	}
+
+	reports, err := factory.GetUserAbsenceReports(username, password)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
+		return
+	}
+
+	util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: reports})
 }
 
 func examsHandler(w http.ResponseWriter, r *http.Request) {
-	if exams, err := factory.GetUserExams(util.BasicAuthentication(r)); err != nil {
+	username, password, err := util.BasicAuthentication(r)
+	if err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
 		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
-	} else {
-		util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: exams})
+		return
 	}
+
+	exams, err := factory.GetUserExams(username, password)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
+		return
+	}
+
+	util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: exams})
 }

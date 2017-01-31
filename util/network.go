@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -47,12 +48,18 @@ func SendJSONResponse(w http.ResponseWriter, v interface{}) {
 }
 
 // BasicAuthentication extracts credentials from an HTTP Authorization header
-func BasicAuthentication(r *http.Request) (string, string) {
-	auth := strings.SplitN(r.Header["Authorization"][0], " ", 2)
-	payload, _ := base64.StdEncoding.DecodeString(auth[1])
+func BasicAuthentication(r *http.Request) (string, string, error) {
+	auth := r.Header["Authorization"]
+
+	if len(auth) == 0 {
+		return "", "", errors.New("Unauthorized")
+	}
+
+	authSplit := strings.SplitN(r.Header["Authorization"][0], " ", 2)
+	payload, _ := base64.StdEncoding.DecodeString(authSplit[1])
 	pair := strings.SplitN(string(payload), ":", 2)
 
-	return strings.TrimSpace(pair[0]), strings.TrimSpace(pair[1])
+	return strings.TrimSpace(pair[0]), strings.TrimSpace(pair[1]), nil
 }
 
 // JSONToStruct unmarshals JSON to interface
