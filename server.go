@@ -8,20 +8,25 @@ import (
 	"github.com/ar-maged/guc-api/factory"
 	"github.com/ar-maged/guc-api/graphql"
 	"github.com/ar-maged/guc-api/util"
+	"github.com/gorilla/mux"
 	"github.com/graphql-go/handler"
 )
 
 func main() {
-	http.HandleFunc("/api/login", loginHandler)
-	http.HandleFunc("/api/coursework", courseworkHandler)
-	http.HandleFunc("/api/midterms", midtermsHandler)
-	http.HandleFunc("/api/attendance", attendanceHandler)
-	http.HandleFunc("/api/exams", examsHandler)
+	r := mux.NewRouter()
 
-	http.Handle("/graphql", handler.New(&handler.Config{
+	r.HandleFunc("/api/login", loginHandler).Methods("GET")
+	r.HandleFunc("/api/coursework", courseworkHandler).Methods("GET")
+	r.HandleFunc("/api/midterms", midtermsHandler).Methods("GET")
+	r.HandleFunc("/api/attendance", attendanceHandler).Methods("GET")
+	r.HandleFunc("/api/exams", examsHandler).Methods("GET")
+
+	r.Handle("/graphql", handler.New(&handler.Config{
 		Schema: &graphql.Schema,
 		Pretty: true,
 	}))
+
+	http.Handle("/", r)
 
 	port := os.Getenv("PORT")
 	if port == "" {
