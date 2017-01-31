@@ -2,42 +2,45 @@ package factory
 
 import (
 	"errors"
-	"github.com/ar-maged/guc-api/util"
 	"strings"
+
+	"github.com/ar-maged/guc-api/util"
 )
 
 const (
-	API                 = "https://m.guc.edu.eg"
-	LOGIN_ENDPOINT      = "/StudentServices.asmx/Login"
-	COURSEWORK_ENDPOINT = "/StudentServices.asmx/GetCourseWork"
-	ATTENDANCE_ENDPOINT = "/StudentServices.asmx/GetAttendance"
-	EXAMS_ENDPOINT      = "/StudentServices.asmx/GetExamsSchedule"
-	CLIENT_VERSION      = "1.3"
-	APP_OS              = "0"
-	OS_VERSION          = "6.0.1"
+	api                = "https://m.guc.edu.eg"
+	loginEndpoint      = "/StudentServices.asmx/Login"
+	courseworkEndpoint = "/StudentServices.asmx/GetCourseWork"
+	attendanceEndpoint = "/StudentServices.asmx/GetAttendance"
+	examsEndpoint      = "/StudentServices.asmx/GetExamsSchedule"
+	clientVersion      = "1.3"
+	appOs              = "0"
+	osVersion          = "6.0.1"
 )
 
+// IsUserAuthorized returns validity of student's credentials
 func IsUserAuthorized(username, password string) AuthorizedAPI {
-	responseBodyString := util.HttpPostWithFormData(API, LOGIN_ENDPOINT, username, password, CLIENT_VERSION, APP_OS, OS_VERSION)
+	responseBodyString := util.HTTPPostWithFormData(api, loginEndpoint, username, password, clientVersion, appOs, osVersion)
 
 	responseString := XMLResponseString{}
-	util.XmlToStruct(responseBodyString, &responseString)
+	util.XMLToStruct(responseBodyString, &responseString)
 
 	return NewAuthorizedAPI(responseString.Value)
 }
 
+// GetUserCoursework returns student's coursework
 func GetUserCoursework(username, password string) ([]CourseworkAPI, error) {
-	responseBodyString := util.HttpPostWithFormData(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
+	responseBodyString := util.HTTPPostWithFormData(api, courseworkEndpoint, username, password, clientVersion, "", "")
 
 	responseString := XMLResponseString{}
-	util.XmlToStruct(responseBodyString, &responseString)
+	util.XMLToStruct(responseBodyString, &responseString)
 
 	if strings.Compare(responseString.Value, "[{\"error\":\"Unauthorized\"}]") == 0 {
 		return nil, errors.New("Unauthorized")
 	}
 
 	courseWork := Coursework{}
-	util.JsonToStruct(responseString.Value, &courseWork)
+	util.JSONToStruct(responseString.Value, &courseWork)
 
 	allCoursework := []CourseworkAPI{}
 
@@ -45,7 +48,7 @@ func GetUserCoursework(username, password string) ([]CourseworkAPI, error) {
 		courseAPI := NewCourseworkAPI(course)
 
 		for _, grade := range courseWork.Grades {
-			if grade.CourseId == courseAPI.Id {
+			if grade.CourseID == courseAPI.ID {
 				if len(grade.Point) > 0 {
 					courseAPI.Grades = append(courseAPI.Grades, NewGradeAPI(grade))
 				}
@@ -58,18 +61,19 @@ func GetUserCoursework(username, password string) ([]CourseworkAPI, error) {
 	return allCoursework, nil
 }
 
+// GetUserMidterms returns student's midterms grades
 func GetUserMidterms(username, password string) ([]MidtermAPI, error) {
-	responseBodyString := util.HttpPostWithFormData(API, COURSEWORK_ENDPOINT, username, password, CLIENT_VERSION, "", "")
+	responseBodyString := util.HTTPPostWithFormData(api, courseworkEndpoint, username, password, clientVersion, "", "")
 
 	responseString := XMLResponseString{}
-	util.XmlToStruct(responseBodyString, &responseString)
+	util.XMLToStruct(responseBodyString, &responseString)
 
 	if strings.Compare(responseString.Value, "[{\"error\":\"Unauthorized\"}]") == 0 {
 		return nil, errors.New("Unauthorized")
 	}
 
 	courseWork := Coursework{}
-	util.JsonToStruct(responseString.Value, &courseWork)
+	util.JSONToStruct(responseString.Value, &courseWork)
 
 	midtermsAPI := []MidtermAPI{}
 
@@ -80,18 +84,19 @@ func GetUserMidterms(username, password string) ([]MidtermAPI, error) {
 	return midtermsAPI, nil
 }
 
+// GetUserAbsenceReports returns student's absence levels
 func GetUserAbsenceReports(username, password string) ([]AbsenceReportAPI, error) {
-	responseBodyString := util.HttpPostWithFormData(API, ATTENDANCE_ENDPOINT, username, password, CLIENT_VERSION, "", "")
+	responseBodyString := util.HTTPPostWithFormData(api, attendanceEndpoint, username, password, clientVersion, "", "")
 
 	responseString := XMLResponseString{}
-	util.XmlToStruct(responseBodyString, &responseString)
+	util.XMLToStruct(responseBodyString, &responseString)
 
 	if strings.Compare(responseString.Value, "[{\"error\":\"Unauthorized\"}]") == 0 {
 		return nil, errors.New("Unauthorized")
 	}
 
 	absence := Absence{}
-	util.JsonToStruct(responseString.Value, &absence)
+	util.JSONToStruct(responseString.Value, &absence)
 
 	absenceReportsAPI := []AbsenceReportAPI{}
 
@@ -102,18 +107,19 @@ func GetUserAbsenceReports(username, password string) ([]AbsenceReportAPI, error
 	return absenceReportsAPI, nil
 }
 
+// GetUserExams return student's exams schedule
 func GetUserExams(username, password string) ([]ExamAPI, error) {
-	responseBodyString := util.HttpPostWithFormData(API, EXAMS_ENDPOINT, username, password, CLIENT_VERSION, "", "")
+	responseBodyString := util.HTTPPostWithFormData(api, examsEndpoint, username, password, clientVersion, "", "")
 
 	responseString := XMLResponseString{}
-	util.XmlToStruct(responseBodyString, &responseString)
+	util.XMLToStruct(responseBodyString, &responseString)
 
 	if strings.Compare(responseString.Value, "[{\"error\":\"Unauthorized\"}]") == 0 {
 		return nil, errors.New("Unauthorized")
 	}
 
 	exams := []Exam{}
-	util.JsonToStruct(responseString.Value, &exams)
+	util.JSONToStruct(responseString.Value, &exams)
 
 	examsAPI := []ExamAPI{}
 

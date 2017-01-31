@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"net/http"
+	"os"
+
 	"github.com/ar-maged/guc-api/factory"
 	"github.com/ar-maged/guc-api/graphql"
 	"github.com/ar-maged/guc-api/util"
 	"github.com/graphql-go/handler"
-	"net/http"
-	"os"
 )
 
 func main() {
@@ -32,41 +33,41 @@ func main() {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
-	util.SendJsonResponse(w, factory.ResponseAPI{nil, factory.IsUserAuthorized(util.BasicAuthentication(r))})
+	util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: factory.IsUserAuthorized(util.BasicAuthentication(r))})
 }
 
 func courseworkHandler(w http.ResponseWriter, r *http.Request) {
 	if coursework, err := factory.GetUserCoursework(util.BasicAuthentication(r)); err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
-		util.SendJsonResponse(w, factory.ResponseAPI{err.Error(), nil})
+		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
 	} else {
-		util.SendJsonResponse(w, factory.ResponseAPI{nil, coursework})
+		util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: coursework})
 	}
 }
 
 func midtermsHandler(w http.ResponseWriter, r *http.Request) {
 	if midterms, err := factory.GetUserMidterms(util.BasicAuthentication(r)); err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
-		util.SendJsonResponse(w, factory.ResponseAPI{err.Error(), nil})
+		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
 	} else {
-		util.SendJsonResponse(w, factory.ResponseAPI{nil, midterms})
+		util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: midterms})
 	}
 }
 
 func attendanceHandler(w http.ResponseWriter, r *http.Request) {
 	if reports, err := factory.GetUserAbsenceReports(util.BasicAuthentication(r)); err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
-		util.SendJsonResponse(w, factory.ResponseAPI{err.Error(), nil})
+		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
 	} else {
-		util.SendJsonResponse(w, factory.ResponseAPI{nil, reports})
+		util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: reports})
 	}
 }
 
 func examsHandler(w http.ResponseWriter, r *http.Request) {
 	if exams, err := factory.GetUserExams(util.BasicAuthentication(r)); err != nil {
 		w.WriteHeader(http.StatusUnauthorized)
-		util.SendJsonResponse(w, factory.ResponseAPI{err.Error(), nil})
+		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
 	} else {
-		util.SendJsonResponse(w, factory.ResponseAPI{nil, exams})
+		util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: exams})
 	}
 }

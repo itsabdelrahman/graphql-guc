@@ -6,42 +6,50 @@ import (
 )
 
 type (
+	// XMLResponseString is the generic incoming response
 	XMLResponseString struct {
 		Value string `xml:",chardata"`
 	}
 
+	// Coursework is the incoming coursework representation
 	Coursework struct {
 		Courses  []Course  `json:"CurrentCourses"`
 		Grades   []Grade   `json:"CourseWork"`
 		Midterms []Midterm `json:"Midterm"`
 	}
 
+	// Course is the incoming course representation
 	Course struct {
-		Id   string `json:"sm_crs_id"`
+		ID   string `json:"sm_crs_id"`
 		Name string `json:"course_short_name"`
 	}
 
+	// Grade is the incoming grade representation
 	Grade struct {
-		CourseId   string `json:"sm_crs_id"`
+		CourseID   string `json:"sm_crs_id"`
 		ModuleName string `json:"eval_method_name"`
 		Point      string `json:"grade"`
 		MaxPoint   string `json:"max_point"`
 	}
 
+	// Midterm is the incoming midterm representation
 	Midterm struct {
 		CourseName string `json:"course_full_name"`
 		Percentage string `json:"total_perc"`
 	}
 
+	// Absence is the incoming absence representation
 	Absence struct {
 		AbsenceReports []AbsenceReport `json:"AbsenceReport"`
 	}
 
+	// AbsenceReport is the incoming absence report representation
 	AbsenceReport struct {
 		CourseName   string `json:"Name"`
 		AbsenceLevel string `json:"AbsenceLevel"`
 	}
 
+	// Exam is the incoming exam representation
 	Exam struct {
 		Course   string `json:"course_name"`
 		DateTime string `json:"start_time"`
@@ -49,38 +57,45 @@ type (
 		Seat     string `json:"seat_code"`
 	}
 
+	// ResponseAPI is the generic outgoing response
 	ResponseAPI struct {
 		Error interface{} `json:"error"`
 		Data  interface{} `json:"data"`
 	}
 
+	// AuthorizedAPI is the outgoing authorized representation
 	AuthorizedAPI struct {
 		IsAuthorized bool `json:"authorized"`
 	}
 
+	// CourseworkAPI is the outgoing coursework representation
 	CourseworkAPI struct {
-		Id     string     `json:"-"`
+		ID     string     `json:"-"`
 		Code   string     `json:"-"`
 		Name   string     `json:"course"`
 		Grades []GradeAPI `json:"grades"`
 	}
 
+	// GradeAPI is the outgoing grade representation
 	GradeAPI struct {
 		Module   string `json:"module"`
 		Point    string `json:"point"`
 		MaxPoint string `json:"maxPoint"`
 	}
 
+	// MidtermAPI is the outgoing midterm representation
 	MidtermAPI struct {
 		Name       string `json:"course"`
 		Percentage string `json:"percentage"`
 	}
 
+	// AbsenceReportAPI is the outgoing absence report representation
 	AbsenceReportAPI struct {
 		CourseName string `json:"course"`
 		Level      string `json:"level"`
 	}
 
+	// ExamAPI is the outgoing exam representation
 	ExamAPI struct {
 		Course   string    `json:"course"`
 		DateTime time.Time `json:"dateTime"`
@@ -88,6 +103,7 @@ type (
 		Seat     string    `json:"seat"`
 	}
 
+	// StudentAPI is the encapsulating representation of all student's data
 	StudentAPI struct {
 		Username       string             `json:"-"`
 		Password       string             `json:"-"`
@@ -99,6 +115,7 @@ type (
 	}
 )
 
+// NewAuthorizedAPI is the AuthorizedAPI constructor
 func NewAuthorizedAPI(authorized string) AuthorizedAPI {
 	authorizedAPI := AuthorizedAPI{}
 
@@ -111,10 +128,11 @@ func NewAuthorizedAPI(authorized string) AuthorizedAPI {
 	return authorizedAPI
 }
 
+// NewCourseworkAPI is the CourseworkAPI constructor
 func NewCourseworkAPI(course Course) CourseworkAPI {
 	courseAPI := CourseworkAPI{}
 
-	courseAPI.Id = course.Id
+	courseAPI.ID = course.ID
 	courseAPI.Grades = []GradeAPI{}
 
 	courseNameSplit := strings.Split(course.Name, "(")
@@ -124,6 +142,7 @@ func NewCourseworkAPI(course Course) CourseworkAPI {
 	return courseAPI
 }
 
+// NewGradeAPI is the GradeAPI constructor
 func NewGradeAPI(grade Grade) GradeAPI {
 	gradeAPI := GradeAPI{}
 
@@ -134,6 +153,7 @@ func NewGradeAPI(grade Grade) GradeAPI {
 	return gradeAPI
 }
 
+// NewMidtermAPI is the MidtermAPI constructor
 func NewMidtermAPI(midterm Midterm) MidtermAPI {
 	midtermAPI := MidtermAPI{}
 
@@ -145,6 +165,7 @@ func NewMidtermAPI(midterm Midterm) MidtermAPI {
 	return midtermAPI
 }
 
+// NewAbsenceReportAPI is the AbsenceReportAPI constructor
 func NewAbsenceReportAPI(absenceReport AbsenceReport) AbsenceReportAPI {
 	absenceReportAPI := AbsenceReportAPI{}
 
@@ -154,6 +175,7 @@ func NewAbsenceReportAPI(absenceReport AbsenceReport) AbsenceReportAPI {
 	return absenceReportAPI
 }
 
+// NewExamAPI is the ExamAPI constructor
 func NewExamAPI(exam Exam) ExamAPI {
 	examAPI := ExamAPI{}
 
