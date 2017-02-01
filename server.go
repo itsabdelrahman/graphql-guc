@@ -39,81 +39,65 @@ func main() {
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	if username, password, err := util.BasicAuthentication(r); err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
+		sendErrorJSONResponse(w, err)
 	} else {
-		util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: factory.IsUserAuthorized(username, password)})
+		sendDataJSONResponse(w, factory.IsUserAuthorized(username, password))
 	}
 }
 
 func courseworkHandler(w http.ResponseWriter, r *http.Request) {
-	username, password, err := util.BasicAuthentication(r)
-	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
-		return
+	if username, password, err := util.BasicAuthentication(r); err != nil {
+		sendErrorJSONResponse(w, err)
+	} else {
+		if coursework, err := factory.GetUserCoursework(username, password); err != nil {
+			sendErrorJSONResponse(w, err)
+		} else {
+			sendDataJSONResponse(w, coursework)
+		}
 	}
-
-	coursework, err := factory.GetUserCoursework(username, password)
-	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
-		return
-	}
-
-	util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: coursework})
 }
 
 func midtermsHandler(w http.ResponseWriter, r *http.Request) {
-	username, password, err := util.BasicAuthentication(r)
-	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
-		return
+	if username, password, err := util.BasicAuthentication(r); err != nil {
+		sendErrorJSONResponse(w, err)
+	} else {
+		if midterms, err := factory.GetUserMidterms(username, password); err != nil {
+			sendErrorJSONResponse(w, err)
+		} else {
+			sendDataJSONResponse(w, midterms)
+		}
 	}
-
-	midterms, err := factory.GetUserMidterms(username, password)
-	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
-		return
-	}
-
-	util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: midterms})
 }
 
 func attendanceHandler(w http.ResponseWriter, r *http.Request) {
-	username, password, err := util.BasicAuthentication(r)
-	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
-		return
+	if username, password, err := util.BasicAuthentication(r); err != nil {
+		sendErrorJSONResponse(w, err)
+	} else {
+		if reports, err := factory.GetUserAbsenceReports(username, password); err != nil {
+			sendErrorJSONResponse(w, err)
+		} else {
+			sendDataJSONResponse(w, reports)
+		}
 	}
-
-	reports, err := factory.GetUserAbsenceReports(username, password)
-	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
-		return
-	}
-
-	util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: reports})
 }
 
 func examsHandler(w http.ResponseWriter, r *http.Request) {
-	username, password, err := util.BasicAuthentication(r)
-	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
-		return
+	if username, password, err := util.BasicAuthentication(r); err != nil {
+		sendErrorJSONResponse(w, err)
+	} else {
+		if exams, err := factory.GetUserExams(username, password); err != nil {
+			sendErrorJSONResponse(w, err)
+		} else {
+			sendDataJSONResponse(w, exams)
+		}
 	}
+}
 
-	exams, err := factory.GetUserExams(username, password)
-	if err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
-		return
-	}
+func sendErrorJSONResponse(w http.ResponseWriter, err error) {
+	w.WriteHeader(http.StatusUnauthorized)
+	util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
+}
 
-	util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: exams})
+func sendDataJSONResponse(w http.ResponseWriter, data interface{}) {
+	util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: data})
 }
