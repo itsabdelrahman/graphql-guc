@@ -39,7 +39,7 @@ func main() {
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	if username, password, err := util.BasicAuthentication(r); err != nil {
-		sendErrorJSONResponse(w, err)
+		sendUnauthorizedJSONResponse(w, err)
 	} else {
 		sendDataJSONResponse(w, factory.IsUserAuthorized(username, password))
 	}
@@ -47,10 +47,10 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 func courseworkHandler(w http.ResponseWriter, r *http.Request) {
 	if username, password, err := util.BasicAuthentication(r); err != nil {
-		sendErrorJSONResponse(w, err)
+		sendUnauthorizedJSONResponse(w, err)
 	} else {
 		if coursework, err := factory.GetUserCoursework(username, password); err != nil {
-			sendErrorJSONResponse(w, err)
+			sendUnauthorizedJSONResponse(w, err)
 		} else {
 			sendDataJSONResponse(w, coursework)
 		}
@@ -59,10 +59,10 @@ func courseworkHandler(w http.ResponseWriter, r *http.Request) {
 
 func midtermsHandler(w http.ResponseWriter, r *http.Request) {
 	if username, password, err := util.BasicAuthentication(r); err != nil {
-		sendErrorJSONResponse(w, err)
+		sendUnauthorizedJSONResponse(w, err)
 	} else {
 		if midterms, err := factory.GetUserMidterms(username, password); err != nil {
-			sendErrorJSONResponse(w, err)
+			sendUnauthorizedJSONResponse(w, err)
 		} else {
 			sendDataJSONResponse(w, midterms)
 		}
@@ -71,10 +71,10 @@ func midtermsHandler(w http.ResponseWriter, r *http.Request) {
 
 func attendanceHandler(w http.ResponseWriter, r *http.Request) {
 	if username, password, err := util.BasicAuthentication(r); err != nil {
-		sendErrorJSONResponse(w, err)
+		sendUnauthorizedJSONResponse(w, err)
 	} else {
 		if reports, err := factory.GetUserAbsenceReports(username, password); err != nil {
-			sendErrorJSONResponse(w, err)
+			sendUnauthorizedJSONResponse(w, err)
 		} else {
 			sendDataJSONResponse(w, reports)
 		}
@@ -83,17 +83,17 @@ func attendanceHandler(w http.ResponseWriter, r *http.Request) {
 
 func examsHandler(w http.ResponseWriter, r *http.Request) {
 	if username, password, err := util.BasicAuthentication(r); err != nil {
-		sendErrorJSONResponse(w, err)
+		sendUnauthorizedJSONResponse(w, err)
 	} else {
 		if exams, err := factory.GetUserExams(username, password); err != nil {
-			sendErrorJSONResponse(w, err)
+			sendUnauthorizedJSONResponse(w, err)
 		} else {
 			sendDataJSONResponse(w, exams)
 		}
 	}
 }
 
-func sendErrorJSONResponse(w http.ResponseWriter, err error) {
+func sendUnauthorizedJSONResponse(w http.ResponseWriter, err error) {
 	w.WriteHeader(http.StatusUnauthorized)
 	util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
 }
