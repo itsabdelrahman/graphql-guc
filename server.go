@@ -13,20 +13,20 @@ import (
 )
 
 func main() {
-	r := mux.NewRouter()
+	router := mux.NewRouter()
 
-	r.HandleFunc("/api/login", loginHandler).Methods("GET")
-	r.HandleFunc("/api/coursework", courseworkHandler).Methods("GET")
-	r.HandleFunc("/api/midterms", midtermsHandler).Methods("GET")
-	r.HandleFunc("/api/attendance", attendanceHandler).Methods("GET")
-	r.HandleFunc("/api/exams", examsHandler).Methods("GET")
+	router.HandleFunc("/api/login", loginHandler).Methods("GET")
+	router.HandleFunc("/api/coursework", courseworkHandler).Methods("GET")
+	router.HandleFunc("/api/midterms", midtermsHandler).Methods("GET")
+	router.HandleFunc("/api/attendance", attendanceHandler).Methods("GET")
+	router.HandleFunc("/api/exams", examsHandler).Methods("GET")
 
-	r.Handle("/graphql", handler.New(&handler.Config{
+	router.Handle("/graphql", handler.New(&handler.Config{
 		Schema: &graphql.Schema,
 		Pretty: true,
 	}))
 
-	http.Handle("/", r)
+	http.Handle("/", router)
 
 	port := os.Getenv("PORT")
 	if port == "" {
