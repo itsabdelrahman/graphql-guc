@@ -180,7 +180,7 @@ func resolveCoursework(p graphql.ResolveParams) (interface{}, error) {
 
 	if isCourseNameOK {
 		for _, coursework := range allCoursework {
-			if strings.Contains(coursework.Name, courseName) {
+			if strings.Contains(strings.ToUpper(coursework.Name), strings.ToUpper(courseName)) {
 				return []factory.CourseworkAPI{coursework}, nil
 			}
 		}
