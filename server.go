@@ -10,6 +10,7 @@ import (
 	"github.com/ar-maged/guc-api/util"
 	"github.com/gorilla/mux"
 	"github.com/graphql-go/handler"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -28,13 +29,17 @@ func main() {
 
 	http.Handle("/", router)
 
+	corsHandler := cors.New(cors.Options{
+		AllowCredentials: true,
+	}).Handler(router)
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "3000"
 	}
 
 	fmt.Printf("Server listening on port %s...\n", port)
-	http.ListenAndServe(":"+port, nil)
+	http.ListenAndServe(":"+port, corsHandler)
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
