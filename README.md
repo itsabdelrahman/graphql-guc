@@ -2,14 +2,15 @@
 
 # GUC API
 
-REST API wrapper *(with a GraphQL <img src="http://graphql.org/img/logo.svg" width="15"/> endpoint atop)* for the German University in Cairo (GUC) ~~private~~ API.
+Public API wrapper for the German University in Cairo (GUC) private API.
 
 ## Why?
 
-* The original GUC API is only exclusively used by the official GUC mobile application
-* The original GUC API is altogether poorly designed _(e.g. JSON embedded within XML responses)_
+* The private GUC API is exclusively used by the official GUC mobile application
+* The private GUC API responses are altogether poorly designed _(e.g. JSON embedded within XML responses)_
 
 ## Usage
+
 * `go get ./...`
 * `go run server.go`
 
@@ -137,7 +138,8 @@ Response:
 ## GraphQL <img src="http://graphql.org/img/logo.svg" width="20"/>
 
 ### Authentication
-Credentials are plainly provided as arguments to the root query *(to be improved)*.
+
+Credentials are plainly provided as arguments to the root query.
 
 ### GraphQL Call
 
@@ -229,7 +231,7 @@ Response:
 
 ## Limitations
 
-The GUC servers go down quite often. Transitively, our API cannot serve anything during that time.
+The GUC servers go down quite often. Transitively, the API wrapper cannot serve anything during that time.
 
 ## License
 
