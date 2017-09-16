@@ -6,219 +6,15 @@
 
 <p align="center">Public API wrapper for the German University in Cairo (GUC) private API</p>
 
-## Why?
-
-* The private GUC API is exclusively used by the official GUC mobile application
-* The private GUC API responses are altogether poorly designed _(e.g. JSON embedded within XML responses)_
-
 ## Usage
 
-* `go get ./...`
-* `go run server.go`
-
-## REST API
-
-### Authentication
-
-All API calls require [basic authentication](https://en.wikipedia.org/wiki/Basic_access_authentication#Client_side).
-Example: if your username is `john.doe` & your password is `12345`, then your HTTP `Authorization` header should look like this: `Basic Z3VjaWFuOjEyMzQ1`.
-
-### REST API Calls
-
-#### Login
-
-<pre><b>GET</b> http://guc-api.herokuapp.com/api/<b><i>login</i></b></pre>
-
-Response:
-```javascript
-{  
-   "error": null,
-   "data": {  
-      "authorized": true
-   }
-}
 ```
-or
-```javascript
-{  
-   "error": null,
-   "data": {  
-      "authorized": false
-   }
-}
-```
-
-***
-
-#### Coursework
-
-<pre><b>GET</b> http://guc-api.herokuapp.com/api/<b><i>coursework</i></b></pre>
-
-Response:
-```javascript
-{  
-   "error": null,
-   "data": [  
-      {
-         "course": "Embedded System Architecture",
-         "grades": [  
-            {  
-               "module": "Assignment 1",
-               "point": "9.75",
-               "maxPoint": "10"
-            },
-            ...
-         ]
-      },
-      ...
-   ]
-}
-```
-
-***
-
-#### Midterms
-
-<pre><b>GET</b> http://guc-api.herokuapp.com/api/<b><i>midterms</i></b></pre>
-
-Response:
-```javascript
-{  
-   "error": null,
-   "data": [  
-      {  
-         "course": "Analysis and Design of Algorithms",
-         "percentage": "41.25"
-      },
-      ...
-   ]
-}
-```
-
-***
-
-#### Attendance
-
-<pre><b>GET</b> http://guc-api.herokuapp.com/api/<b><i>attendance</i></b></pre>
-
-Response:
-```javascript
-{  
-   "error": null,
-   "data": [  
-      {  
-         "course": "Computer Graphics",
-         "level": "1"
-      },
-      ...
-   ]
-}
-```
-
-***
-
-#### Exams Schedule
-
-<pre><b>GET</b> http://guc-api.herokuapp.com/api/<b><i>exams</i></b></pre>
-
-Response:
-```javascript
-{
-   "error": null,
-   "data": [
-      {
-         "course": "Analysis and Design of Algorithms",
-         "dateTime": "2016-10-24T16:00:00Z",
-         "venue": "Exam hall 2",
-         "seat": "E6"
-      },
-      ...
-   ]
-}
-```
-
-## GraphQL <img src="http://graphql.org/img/logo.svg" width="20"/>
-
-### Authentication
-
-Credentials are plainly provided as arguments to the root query.
-
-### GraphQL Call
-
-<pre><b>GET</b> http://guc-api.herokuapp.com/graphql</pre>
-
-Root Query:
-```graphql
-{
-    student(username: "john.doe", password: "12345") {
-        authorized,
-        coursework(course: "Advanced") {
-            course,
-            grades {
-                module,
-                point,
-                maxPoint
-            }
-        },
-        midtermsGrades(course: "Embedded") {
-            course,
-            percentage
-        },
-        absenceLevels(course: "Graphics") {
-            course,
-            level
-        },
-        examsSchedule(course: "Analysis") {
-            course,
-            dateTime,
-            venue,
-            seat
-        }
-    }
-}
-```
-Response:
-```javascript
-{  
-   "data": {  
-      "student": {  
-         "absenceLevels": [  
-            {  
-               "course": "Computer Graphics",
-               "level": 2
-            }
-         ],
-         "authorized": true,
-         "coursework": [  
-            {  
-               "course": "Advanced Computer lab",
-               "grades": [  
-                  {  
-                     "maxPoint": 1,
-                     "module": "In-Class Assignment 1",
-                     "point": 1
-                  },
-                  ...
-               ]
-            }
-         ],
-         "examsSchedule": [  
-            {
-               "course": "Analysis and Design of Algorithms",
-               "dateTime": "2016-10-24T16:00:00Z",
-               "venue": "Exam hall 2",
-               "seat": "E6"
-            }
-         ],
-         "midtermsGrades": [  
-            {  
-               "course": "Embedded System Architecture",
-               "percentage": 88.2353
-            }
-         ]
-      }
-   }
-}
+$ cd $GOPATH/src                                    # Change directory to GOPATH/src
+$ git clone git@github.com:ar-maged/guc-api.git     # Clone repository
+$ cd guc-api                                        # Change directory to project
+$ go get ./...                                      # Install dependencies
+$ go run server.go                                  # Run server
+$ open http://localhost:3000/graphql                # Open GraphiQL
 ```
 
 ## Roadmap
@@ -233,8 +29,8 @@ Response:
 
 ## Limitations
 
-The GUC servers go down quite often. Transitively, the API wrapper cannot serve anything during that time.
+The GUC server oftentimes goes down, which consequently cripples this wrapper.
 
 ## License
 
-This project is licensed under the MIT License.
+MIT License
