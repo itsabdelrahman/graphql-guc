@@ -8,7 +8,7 @@
 
 ## Usage
 
-```
+```shell
 $ cd $GOPATH/src                                    # Change directory to GOPATH/src
 $ git clone git@github.com:ar-maged/guc-api.git     # Clone repository
 $ cd guc-api                                        # Change directory to project
