@@ -25,6 +25,7 @@ func main() {
 	router.Handle("/graphql", handler.New(&handler.Config{
 		Schema: &graphql.Schema,
 		Pretty: true,
+		GraphiQL: true,
 	}))
 
 	http.Handle("/", router)
