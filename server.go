@@ -23,8 +23,9 @@ func main() {
 	router.HandleFunc("/api/exams", examsHandler).Methods("GET")
 
 	router.Handle("/graphql", handler.New(&handler.Config{
-		Schema: &graphql.Schema,
-		Pretty: true,
+		Schema:   &graphql.Schema,
+		Pretty:   true,
+		GraphiQL: true,
 	}))
 
 	http.Handle("/", router)
