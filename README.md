@@ -4,7 +4,10 @@
 
 <h1 align="center">GUC API</h1>
 
-<p align="center">Public API wrapper for the German University in Cairo (GUC) private API</p>
+<p align="center"> Public API wrapper for the German University in Cairo (GUC) private API</p>
+
+## Playground
+Check out your university data [here](http://bit.ly/2fcSUtz).
 
 ## Usage
 
