@@ -13,6 +13,7 @@ const (
 	courseworkEndpoint = "/StudentServices.asmx/GetCourseWork"
 	attendanceEndpoint = "/StudentServices.asmx/GetAttendance"
 	examsEndpoint      = "/StudentServices.asmx/GetExamsSchedule"
+	scheduleEndpoint   = "/StudentServices.asmx/GetSchedule"
 	clientVersion      = "1.3"
 	appOs              = "0"
 	osVersion          = "6.0.1"
@@ -87,7 +88,7 @@ func GetUserMidterms(username, password string) ([]MidtermAPI, error) {
 // GetUserAbsenceReports returns student's absence levels
 func GetUserAbsenceReports(username, password string) ([]AbsenceReportAPI, error) {
 	responseBodyString := util.HTTPPostWithFormData(api, attendanceEndpoint, username, password, clientVersion, "", "")
-
+	
 	responseString := XMLResponseString{}
 	util.XMLToStruct(responseBodyString, &responseString)
 
@@ -129,3 +130,27 @@ func GetUserExams(username, password string) ([]ExamAPI, error) {
 
 	return examsAPI, nil
 }
+
+// GetUserSchedule return student's schedule
+func GetUserSchedule(username, password string) ([]ScheduleAPI, error) {
+	responseBodyString := util.HTTPPostWithFormData(api, scheduleEndpoint, username, password, clientVersion, "", "")
+
+	responseString := XMLResponseString{}
+	util.XMLToStruct(responseBodyString, &responseString)
+
+	if strings.Compare(responseString.Value, "[{\"error\":\"Unauthorized\"}]") == 0 {
+		return nil, errors.New("Unauthorized")
+	}
+
+	schedules := []Schedule{}
+	util.JSONToStruct(responseString.Value, &schedules)
+
+	scheduleAPI := []ScheduleAPI{}
+
+	for _, schedule := range schedules {
+		scheduleAPI = append(scheduleAPI, NewScheduleAPI(schedule))
+	}
+
+	return scheduleAPI, nil
+}
+

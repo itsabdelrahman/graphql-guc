@@ -1,6 +1,7 @@
 package factory
 
 import (
+	"strconv"
 	"strings"
 	"time"
 )
@@ -57,6 +58,14 @@ type (
 		Seat     string `json:"seat_code"`
 	}
 
+	// Schedule is your schedule
+	Schedule struct {
+		Slot    string `json:"scd_col"`
+		Course  string `json:"course"`
+		Weekday string `json:"weekday"`
+		Group   string `json:"group_name"`
+	}
+
 	// ResponseAPI is the generic outgoing response
 	ResponseAPI struct {
 		Error interface{} `json:"error"`
@@ -103,15 +112,24 @@ type (
 		Seat     string    `json:"seat"`
 	}
 
+	// ScheduleAPI is the outgoing schedule representation
+	ScheduleAPI struct {
+		Weekday string `json:"weekday"`
+		Slot    int    `json:"slot"`
+		Course  string `json:"course"`
+		Group   string `json:"group_name"`
+	}
+
 	// StudentAPI is the encapsulating representation of all student's data
 	StudentAPI struct {
-		Username       string             `json:"-"`
-		Password       string             `json:"-"`
-		Authorized     bool               `json:"authorized"`
-		Coursework     []CourseworkAPI    `json:"coursework"`
-		MidtermsGrades []MidtermAPI       `json:"midtermsGrades"`
-		AbsenceLevels  []AbsenceReportAPI `json:"absenceLevels"`
-		ExamsSchedule  []ExamAPI          `json:"examsSchedule"`
+		Username        string             `json:"-"`
+		Password        string             `json:"-"`
+		Authorized      bool               `json:"authorized"`
+		Coursework      []CourseworkAPI    `json:"coursework"`
+		MidtermsGrades  []MidtermAPI       `json:"midtermsGrades"`
+		AbsenceLevels   []AbsenceReportAPI `json:"absenceLevels"`
+		ExamsSchedule   []ExamAPI          `json:"examsSchedule"`
+		StudentSchedule []ScheduleAPI      `json:"studentSchedule"`
 	}
 )
 
@@ -189,3 +207,21 @@ func NewExamAPI(exam Exam) ExamAPI {
 
 	return examAPI
 }
+
+// NewScheduleAPI is the ScheduleApi constructor
+func NewScheduleAPI(schedule Schedule) ScheduleAPI {
+	scheduleAPI := ScheduleAPI{}
+
+	slotNo, err := strconv.Atoi(schedule.Slot)
+	if err != nil {
+
+	}
+
+	scheduleAPI.Course = schedule.Course
+	scheduleAPI.Group = schedule.Group
+	scheduleAPI.Slot = slotNo
+	scheduleAPI.Weekday = schedule.Weekday
+
+	return scheduleAPI
+}
+
