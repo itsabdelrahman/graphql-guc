@@ -21,6 +21,7 @@ func main() {
 	router.HandleFunc("/api/midterms", midtermsHandler).Methods("GET")
 	router.HandleFunc("/api/attendance", attendanceHandler).Methods("GET")
 	router.HandleFunc("/api/exams", examsHandler).Methods("GET")
+	router.HandleFunc("/api/schedule", scheduleHandler).Methods("GET")
 
 	router.Handle("/graphql", handler.New(&handler.Config{
 		Schema:   &graphql.Schema,
@@ -99,6 +100,18 @@ func examsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func scheduleHandler(w http.ResponseWriter, r *http.Request) {
+	if username, password, err := util.BasicAuthentication(r); err != nil {
+		sendUnauthorizedJSONResponse(w, err)
+	} else {
+		if schedules, err := factory.GetUserSchedule(username, password); err != nil {
+			sendUnauthorizedJSONResponse(w, err)
+		} else {
+			sendDataJSONResponse(w, schedules)
+		}
+	}
+}
+
 func sendUnauthorizedJSONResponse(w http.ResponseWriter, err error) {
 	w.WriteHeader(http.StatusUnauthorized)
 	util.SendJSONResponse(w, factory.ResponseAPI{Error: err.Error(), Data: nil})
@@ -107,3 +120,4 @@ func sendUnauthorizedJSONResponse(w http.ResponseWriter, err error) {
 func sendDataJSONResponse(w http.ResponseWriter, data interface{}) {
 	util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: data})
 }
+
