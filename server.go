@@ -38,7 +38,7 @@ func main() {
 
 	allowedHeaders := handlers.AllowedHeaders([]string{"Authorization"})
 	allowedOrigins := handlers.AllowedOrigins([]string{"*"})
-	allowedMethods := handlers.AllowedMethods([]string{"GET", "OPTIONS"})
+	allowedMethods := handlers.AllowedMethods([]string{"GET", "POST", "OPTIONS"})
 
 	fmt.Printf("Server listening on port %s...\n", port)
 	http.ListenAndServe(":"+port, handlers.CORS(allowedHeaders, allowedOrigins, allowedMethods)(router))
@@ -120,4 +120,3 @@ func sendUnauthorizedJSONResponse(w http.ResponseWriter, err error) {
 func sendDataJSONResponse(w http.ResponseWriter, data interface{}) {
 	util.SendJSONResponse(w, factory.ResponseAPI{Error: nil, Data: data})
 }
-
