@@ -8,9 +8,9 @@ import (
 	"github.com/ar-maged/guc-api/factory"
 	"github.com/ar-maged/guc-api/graphql"
 	"github.com/ar-maged/guc-api/util"
-	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/graphql-go/handler"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -36,12 +36,15 @@ func main() {
 		port = "3000"
 	}
 
-	allowedHeaders := handlers.AllowedHeaders([]string{"Authorization"})
-	allowedOrigins := handlers.AllowedOrigins([]string{"*"})
-	allowedMethods := handlers.AllowedMethods([]string{"GET", "POST", "OPTIONS"})
+	corsOptions := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedHeaders:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
+		AllowCredentials: true,
+	})
 
 	fmt.Printf("Server listening on port %s...\n", port)
-	http.ListenAndServe(":"+port, handlers.CORS(allowedHeaders, allowedOrigins, allowedMethods)(router))
+	http.ListenAndServe(":"+port, corsOptions.Handler(router))
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
