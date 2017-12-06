@@ -77,6 +77,10 @@ var (
 					},
 					Resolve: resolveExams,
 				},
+				"schedule": &graphql.Field{
+					Type:    graphql.NewList(scheduleEntryType),
+					Resolve: resolveSchedule,
+				},
 			},
 		},
 	)
@@ -154,6 +158,64 @@ var (
 					Type: graphql.String,
 				},
 				"seat": &graphql.Field{
+					Type: graphql.String,
+				},
+			},
+		},
+	)
+
+	scheduleEntryType = graphql.NewObject(
+		graphql.ObjectConfig{
+			Name: "scheduleEntry",
+			Fields: graphql.Fields{
+				"course": &graphql.Field{
+					Type: graphql.String,
+				},
+				"weekday": &graphql.Field{
+					Type: graphql.NewEnum(graphql.EnumConfig{
+						Name: "Weekday",
+						Values: graphql.EnumValueConfigMap{
+							"SATURDAY": &graphql.EnumValueConfig{
+								Value: "SATURDAY",
+							},
+							"SUNDAY": &graphql.EnumValueConfig{
+								Value: "SUNDAY",
+							},
+							"MONDAY": &graphql.EnumValueConfig{
+								Value: "MONDAY",
+							},
+							"TUESDAY": &graphql.EnumValueConfig{
+								Value: "TUESDAY",
+							},
+							"WEDNESDAY": &graphql.EnumValueConfig{
+								Value: "WEDNESDAY",
+							},
+							"THURSDAY": &graphql.EnumValueConfig{
+								Value: "THURSDAY",
+							},
+						},
+					}),
+				},
+				"type": &graphql.Field{
+					Type: graphql.NewEnum(graphql.EnumConfig{
+						Name: "Type",
+						Values: graphql.EnumValueConfigMap{
+							"LECTURE": &graphql.EnumValueConfig{
+								Value: "LECTURE",
+							},
+							"TUTORIAL": &graphql.EnumValueConfig{
+								Value: "TUTORIAL",
+							},
+							"LAB": &graphql.EnumValueConfig{
+								Value: "LAB",
+							},
+						},
+					}),
+				},
+				"slot": &graphql.Field{
+					Type: graphql.Int,
+				},
+				"group": &graphql.Field{
 					Type: graphql.String,
 				},
 			},
@@ -239,4 +301,11 @@ func resolveExams(p graphql.ResolveParams) (interface{}, error) {
 	}
 
 	return allExams, nil
+}
+
+func resolveSchedule(p graphql.ResolveParams) (interface{}, error) {
+	student := p.Source.(factory.StudentAPI)
+	schedule, _ := factory.GetUserSchedule(student.Username, student.Password)
+
+	return schedule, nil
 }

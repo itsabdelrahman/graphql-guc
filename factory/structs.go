@@ -1,6 +1,8 @@
 package factory
 
 import (
+	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -117,7 +119,8 @@ type (
 		Weekday string `json:"weekday"`
 		Slot    int    `json:"slot"`
 		Course  string `json:"course"`
-		Group   string `json:"group_name"`
+		Group   string `json:"group"`
+		Type    string `json:"type"`
 	}
 
 	// StudentAPI is the encapsulating representation of all student's data
@@ -210,18 +213,30 @@ func NewExamAPI(exam Exam) ExamAPI {
 
 // NewScheduleAPI is the ScheduleApi constructor
 func NewScheduleAPI(schedule Schedule) ScheduleAPI {
+	fmt.Println(schedule.Course)
 	scheduleAPI := ScheduleAPI{}
 
-	slotNo, err := strconv.Atoi(schedule.Slot)
-	if err != nil {
+	slotNumber, _ := strconv.Atoi(schedule.Slot)
 
-	}
-
-	scheduleAPI.Course = schedule.Course
+	scheduleAPI.Course = strings.TrimSpace(strings.Split(schedule.Course, "-")[0])
 	scheduleAPI.Group = schedule.Group
-	scheduleAPI.Slot = slotNo
-	scheduleAPI.Weekday = schedule.Weekday
+	scheduleAPI.Slot = slotNumber
+	scheduleAPI.Weekday = strings.ToUpper(schedule.Weekday)
+
+	lectureRegex, _ := regexp.Compile(`\s*\(Lecture\)\s*`)
+	tutorialRegex, _ := regexp.Compile(`\s*\(Tut\)\s*`)
+	labRegex, _ := regexp.Compile(`\s*\(Lab\)\s*`)
+
+	switch {
+	case lectureRegex.MatchString(schedule.Course) == true:
+		scheduleAPI.Type = "LECTURE"
+	case tutorialRegex.MatchString(schedule.Course) == true:
+		scheduleAPI.Type = "TUTORIAL"
+	case labRegex.MatchString(schedule.Course) == true:
+		scheduleAPI.Type = "LAB"
+	default:
+		scheduleAPI.Type = ""
+	}
 
 	return scheduleAPI
 }
-
