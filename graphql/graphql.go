@@ -3,7 +3,8 @@ package graphql
 import (
 	"strings"
 
-	"github.com/ar-maged/guc-api/factory"
+	"guc-api/factory"
+
 	"github.com/graphql-go/graphql"
 )
 

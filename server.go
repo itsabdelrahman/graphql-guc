@@ -5,9 +5,10 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/ar-maged/guc-api/factory"
-	"github.com/ar-maged/guc-api/graphql"
-	"github.com/ar-maged/guc-api/util"
+	"guc-api/factory"
+	"guc-api/graphql"
+	"guc-api/util"
+
 	"github.com/gorilla/mux"
 	"github.com/graphql-go/handler"
 	"github.com/rs/cors"

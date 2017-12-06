@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/ar-maged/guc-api/util"
+	"guc-api/util"
 )
 
 const (
@@ -88,7 +88,7 @@ func GetUserMidterms(username, password string) ([]MidtermAPI, error) {
 // GetUserAbsenceReports returns student's absence levels
 func GetUserAbsenceReports(username, password string) ([]AbsenceReportAPI, error) {
 	responseBodyString := util.HTTPPostWithFormData(api, attendanceEndpoint, username, password, clientVersion, "", "")
-	
+
 	responseString := XMLResponseString{}
 	util.XMLToStruct(responseBodyString, &responseString)
 
@@ -153,4 +153,3 @@ func GetUserSchedule(username, password string) ([]ScheduleAPI, error) {
 
 	return scheduleAPI, nil
 }
-
