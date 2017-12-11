@@ -15,5 +15,25 @@
   "bugs": {
     "url": "https://github.com/ar-maged/guc-api/issues"
   },
-  "homepage": "https://github.com/ar-maged/guc-api#readme"
+  "homepage": "https://github.com/ar-maged/guc-api#readme",
+  "dependencies": {
+    "apollo-server-express": "^1.2.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "graphql": "^0.11.7",
+    "graphql-tools": "^2.12.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.13.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.0.0",
+    "morgan": "^1.9.0",
+    "prettier": "^1.9.1"
+  }
 }
