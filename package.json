@@ -1,0 +1,19 @@
+{
+  "name": "guc-api",
+  "version": "0.1.0",
+  "description": "Public API wrapper for the German University in Cairo (GUC) private API",
+  "main": "src/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ar-maged/guc-api.git"
+  },
+  "author": "A.R. Maged <abdulrahman.maged95@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ar-maged/guc-api/issues"
+  },
+  "homepage": "https://github.com/ar-maged/guc-api#readme"
+}
