@@ -5,7 +5,7 @@
   "main": "src/app.js",
   "scripts": {
     "precommit": "lint-staged",
-    "start": "nodemon src/app.js --exec babel-node",
+    "dev": "nodemon src/app.js --exec babel-node",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -36,6 +36,7 @@
     "husky": "^0.14.3",
     "lint-staged": "^6.0.0",
     "morgan": "^1.9.0",
+    "nodemon": "^1.12.5",
     "prettier": "^1.9.1"
   },
   "lint-staged": {
