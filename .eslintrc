@@ -1,4 +1,7 @@
 {
   "extends": "airbnb-base",
-  "plugins": ["import"]
+  "plugins": ["import"],
+  "rules": {
+    "function-paren-newline": 0
+  }
 }
