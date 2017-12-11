@@ -7,26 +7,21 @@
 <p align="center"> Public API wrapper for the German University in Cairo (GUC) private API</p>
 
 ## Playground
-Check out your university data [here](http://bit.ly/2fcSUtz).
+Check out your university data [here]().
 
 ## Usage
 
 ```bash
-$ cd $GOPATH/src                                    # Change directory to GOPATH/src
-$ git clone git@github.com:ar-maged/guc-api.git     # Clone repository
-$ cd guc-api                                        # Change directory to project
-$ go get ./...                                      # Install dependencies
-$ go run server.go                                  # Run server
-$ open http://localhost:3000/graphql                # Open GraphiQL
+
 ```
 
 ## Roadmap
 
-- [x] Login
-- [x] Coursework
-- [x] Midterms
-- [x] Attendance
-- [x] Exams Schedule
+- [ ] Login
+- [ ] Coursework
+- [ ] Midterms
+- [ ] Attendance
+- [ ] Exams Schedule
 - [ ] Schedule
 - [ ] Transcript
 
