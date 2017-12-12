@@ -1,8 +1,12 @@
-import { student } from './resolvers/queries';
+import { student, courses, schedule } from './resolvers/queries';
 
 const resolversMap = {
   Query: {
     student,
+  },
+  Student: {
+    courses,
+    schedule,
   },
 };
 
