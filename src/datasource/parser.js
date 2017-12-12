@@ -20,6 +20,25 @@ const transformCoursework = aggregation =>
     };
   })(aggregation.CourseWork);
 
+const transformMidterms = element => ({
+  code: R.pipe(
+    R.split('-'),
+    R.view(R.lensIndex(1)),
+    R.trim,
+    R.split(' '),
+    R.last,
+  )(element.course_full_name),
+  name: R.pipe(
+    R.split('-'),
+    R.view(R.lensIndex(1)),
+    R.trim,
+    R.split(' '),
+    R.dropLast(1),
+    R.join(' '),
+  )(element.course_full_name),
+  grade: Number(element.total_perc),
+});
+
 const transformAttendance = element => ({
   code: R.trim(element.Code),
   name: R.trim(element.Name),
@@ -66,8 +85,13 @@ export const parseLogin = response => R.pathEq(['data', 'd'], 'True')(response);
 export const parseCoursework = response =>
   R.pipe(R.path(['data', 'd']), JSON.parse, transformCoursework)(response);
 
-/** @TODO */
-export const parseMidterms = response => ({});
+export const parseMidterms = response =>
+  R.pipe(
+    R.path(['data', 'd']),
+    JSON.parse,
+    R.prop('Midterm'),
+    R.map(transformMidterms),
+  )(response);
 
 export const parseAttendance = response =>
   R.pipe(
