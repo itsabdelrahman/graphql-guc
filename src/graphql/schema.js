@@ -8,7 +8,7 @@ type Query {
 }
 
 type Student {
-  courses: [Course]
+  courses(code: String): [Course]
   schedule: [Slot]
 }
 

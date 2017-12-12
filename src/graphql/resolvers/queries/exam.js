@@ -1,6 +1,5 @@
-const examResolver = async (obj, args, context) => {
-  const { username, password } = context;
-  return {};
-};
+import R from 'ramda';
+import { getExams } from '../../../datasource';
 
-export default examResolver;
+export default async ({ code }, args, { username, password }) =>
+  R.find(R.propEq('code', code))(await getExams({ username, password }));

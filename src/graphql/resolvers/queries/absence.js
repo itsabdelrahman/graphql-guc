@@ -5,11 +5,8 @@ const absenceResolver = async (obj, args, context) => {
   const { code } = obj;
   const { username, password } = context;
 
-  // return R.pipe(R.find(R.propEq('code', code)), R.pick(['level', 'severity']))(
-  //   await getAttendance({ username, password }),
-  // );
-
-  return {};
+  const attendance = await getAttendance({ username, password });
+  return R.find(R.propEq('code', code))(attendance);
 };
 
 export default absenceResolver;
