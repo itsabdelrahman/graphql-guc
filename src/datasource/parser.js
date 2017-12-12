@@ -2,6 +2,12 @@ import R from 'ramda';
 import moment from 'moment';
 import { capitalize } from '../utilities';
 
+const transformAttendance = element => ({
+  code: R.replace(/\s/g, '', element.Code),
+  name: R.trim(element.Name),
+  level: Number(element.AbsenceLevel),
+});
+
 const transformCoursework = aggregation =>
   R.map(element => {
     const course = R.find(currentCourse =>
@@ -27,6 +33,7 @@ const transformMidterms = element => ({
     R.trim,
     R.split(' '),
     R.last,
+    R.trim,
   )(element.course_full_name),
   name: R.pipe(
     R.split('-'),
@@ -35,17 +42,12 @@ const transformMidterms = element => ({
     R.split(' '),
     R.dropLast(1),
     R.join(' '),
+    R.trim,
   )(element.course_full_name),
   grade: Number(element.total_perc),
 });
 
-const transformAttendance = element => ({
-  code: R.trim(element.Code),
-  name: R.trim(element.Name),
-  level: Number(element.AbsenceLevel),
-});
-
-const transformExamsSchedule = element => ({
+const transformExams = element => ({
   code: R.pipe(
     R.replace(/^.+-/, ''),
     R.trim,
@@ -70,7 +72,7 @@ const transformExamsSchedule = element => ({
 });
 
 const transformSchedule = element => ({
-  code: R.trim(element.course_short_code),
+  code: R.replace(/\s/g, '', element.course_short_code),
   name: R.pipe(R.split('-'), R.take(1), R.join(' '), R.trim)(element.course),
   type: R.equals('Tut', element.class_type)
     ? 'TUTORIAL'
@@ -81,6 +83,14 @@ const transformSchedule = element => ({
 });
 
 export const parseLogin = response => R.pathEq(['data', 'd'], 'True')(response);
+
+export const parseAttendance = response =>
+  R.pipe(
+    R.path(['data', 'd']),
+    JSON.parse,
+    R.prop('AbsenceReport'),
+    R.map(transformAttendance),
+  )(response);
 
 export const parseCoursework = response =>
   R.pipe(R.path(['data', 'd']), JSON.parse, transformCoursework)(response);
@@ -93,18 +103,8 @@ export const parseMidterms = response =>
     R.map(transformMidterms),
   )(response);
 
-export const parseAttendance = response =>
-  R.pipe(
-    R.path(['data', 'd']),
-    JSON.parse,
-    R.prop('AbsenceReport'),
-    R.map(transformAttendance),
-  )(response);
-
-export const parseExamsSchedule = response =>
-  R.pipe(R.path(['data', 'd']), JSON.parse, R.map(transformExamsSchedule))(
-    response,
-  );
+export const parseExams = response =>
+  R.pipe(R.path(['data', 'd']), JSON.parse, R.map(transformExams))(response);
 
 export const parseSchedule = response =>
   R.pipe(R.path(['data', 'd']), JSON.parse, R.map(transformSchedule))(response);

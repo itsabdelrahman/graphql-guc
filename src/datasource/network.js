@@ -16,6 +16,6 @@ export const requestCoursework = request(urls.COURSEWORK);
 
 export const requestAttendance = request(urls.ATTENDANCE);
 
-export const requestExamsSchedule = request(urls.EXAMS_SCHEDULE);
+export const requestExams = request(urls.EXAMS_SCHEDULE);
 
 export const requestSchedule = request(urls.SCHEDULE);
