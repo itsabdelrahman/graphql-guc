@@ -9,6 +9,7 @@ import {
 import {
   parseLogin,
   parseAttendance,
+  parseCourses,
   parseCoursework,
   parseMidterms,
   parseExams,
@@ -18,6 +19,8 @@ import {
 export const isAuthorized = R.pipeP(requestLogin, parseLogin);
 
 export const getAttendance = R.pipeP(requestAttendance, parseAttendance);
+
+export const getCourses = R.pipeP(requestCoursework, parseCourses);
 
 export const getCoursework = R.pipeP(requestCoursework, parseCoursework);
 

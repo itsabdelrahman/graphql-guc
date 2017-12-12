@@ -15,6 +15,13 @@ const transformAttendance = element => ({
   severity: computeAbsenceLevelSeverity(element.AbsenceLevel),
 });
 
+const transformCourses = element => ({
+  code: R.pipe(R.match(/\((.*?)\)/), R.view(R.lensIndex(1)))(
+    element.course_short_name,
+  ),
+  name: R.pipe(R.replace(/\((.*?)\)/, ''), R.trim)(element.course_short_name),
+});
+
 const transformCoursework = aggregation =>
   R.map(element => {
     const course = R.find(currentCourse =>
@@ -91,29 +98,43 @@ const transformSchedule = element => ({
   venue: R.trim(element.location),
 });
 
-export const parseLogin = response => R.pathEq(['data', 'd'], 'True')(response);
+export const parseLogin = R.pathEq(['data', 'd'], 'True');
 
-export const parseAttendance = response =>
-  R.pipe(
-    R.path(['data', 'd']),
-    JSON.parse,
-    R.prop('AbsenceReport'),
-    R.map(transformAttendance),
-  )(response);
+export const parseAttendance = R.pipe(
+  R.path(['data', 'd']),
+  JSON.parse,
+  R.prop('AbsenceReport'),
+  R.map(transformAttendance),
+);
 
-export const parseCoursework = response =>
-  R.pipe(R.path(['data', 'd']), JSON.parse, transformCoursework)(response);
+export const parseCourses = R.pipe(
+  R.path(['data', 'd']),
+  JSON.parse,
+  R.prop('CurrentCourses'),
+  R.map(transformCourses),
+);
 
-export const parseMidterms = response =>
-  R.pipe(
-    R.path(['data', 'd']),
-    JSON.parse,
-    R.prop('Midterm'),
-    R.map(transformMidterms),
-  )(response);
+export const parseCoursework = R.pipe(
+  R.path(['data', 'd']),
+  JSON.parse,
+  transformCoursework,
+);
 
-export const parseExams = response =>
-  R.pipe(R.path(['data', 'd']), JSON.parse, R.map(transformExams))(response);
+export const parseMidterms = R.pipe(
+  R.path(['data', 'd']),
+  JSON.parse,
+  R.prop('Midterm'),
+  R.map(transformMidterms),
+);
 
-export const parseSchedule = response =>
-  R.pipe(R.path(['data', 'd']), JSON.parse, R.map(transformSchedule))(response);
+export const parseExams = R.pipe(
+  R.path(['data', 'd']),
+  JSON.parse,
+  R.map(transformExams),
+);
+
+export const parseSchedule = R.pipe(
+  R.path(['data', 'd']),
+  JSON.parse,
+  R.map(transformSchedule),
+);
