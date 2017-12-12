@@ -1,5 +1,24 @@
 import R from 'ramda';
 import moment from 'moment';
+import { capitalize } from '../utilities';
+
+const transformCoursework = aggregation =>
+  R.map(element => {
+    const course = R.find(currentCourse =>
+      R.equals(currentCourse.sm_crs_id, element.sm_crs_id),
+    )(aggregation.CurrentCourses);
+    return {
+      code: R.pipe(R.match(/\((.*?)\)/), R.view(R.lensIndex(1)))(
+        course.course_short_name,
+      ),
+      name: R.pipe(R.replace(/\((.*?)\)/, ''), R.trim)(
+        course.course_short_name,
+      ),
+      type: R.pipe(R.trim, capitalize)(element.eval_method_name),
+      grade: Number(element.grade),
+      maximumGrade: Number(element.max_point),
+    };
+  })(aggregation.CourseWork);
 
 const transformAttendance = element => ({
   code: R.trim(element.Code),
@@ -44,8 +63,11 @@ const transformSchedule = element => ({
 
 export const parseLogin = response => R.pathEq(['data', 'd'], 'True')(response);
 
+export const parseCoursework = response =>
+  R.pipe(R.path(['data', 'd']), JSON.parse, transformCoursework)(response);
+
 /** @TODO */
-export const parseCoursework = response => ({});
+export const parseMidterms = response => ({});
 
 export const parseAttendance = response =>
   R.pipe(
