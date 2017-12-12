@@ -27,6 +27,7 @@ type Absence {
 }
 
 type Slot {
+  course: Course
   type: SlotType
   weekday: SlotWeekday
   number: Int

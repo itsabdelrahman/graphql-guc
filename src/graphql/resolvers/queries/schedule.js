@@ -1,6 +1,8 @@
+import { getSchedule } from '../../../datasource';
+
 const schedule = async (obj, args, context) => {
   const { username, password } = context;
-  return [];
+  return getSchedule({ username, password });
 };
 
 export default schedule;

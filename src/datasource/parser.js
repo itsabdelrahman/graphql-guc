@@ -2,10 +2,17 @@ import R from 'ramda';
 import moment from 'moment';
 import { capitalize } from '../utilities';
 
+const computeAbsenceLevelSeverity = level => {
+  if (R.equals(3, level)) return 'HIGH';
+  if (R.equals(2, level)) return 'MEDIUM';
+  return 'LOW';
+};
+
 const transformAttendance = element => ({
   code: R.replace(/\s/g, '', element.Code),
   name: R.trim(element.Name),
   level: Number(element.AbsenceLevel),
+  severity: computeAbsenceLevelSeverity(element.AbsenceLevel),
 });
 
 const transformCoursework = aggregation =>
@@ -72,13 +79,15 @@ const transformExams = element => ({
 });
 
 const transformSchedule = element => ({
-  code: R.replace(/\s/g, '', element.course_short_code),
-  name: R.pipe(R.split('-'), R.take(1), R.join(' '), R.trim)(element.course),
+  course: {
+    code: R.replace(/\s/g, '', element.course_short_code),
+    name: R.pipe(R.split('-'), R.take(1), R.join(' '), R.trim)(element.course),
+  },
   type: R.equals('Tut', element.class_type)
     ? 'TUTORIAL'
     : R.toUpper(element.class_type),
   weekday: R.toUpper(element.weekday),
-  slot: Number(element.scd_col),
+  number: Number(element.scd_col),
   venue: R.trim(element.location),
 });
 
