@@ -31,6 +31,17 @@ const transformExamsSchedule = element => ({
   ).toISOString(),
 });
 
+const transformSchedule = element => ({
+  code: R.trim(element.course_short_code),
+  name: R.pipe(R.split('-'), R.take(1), R.join(' '), R.trim)(element.course),
+  type: R.equals('Tut', element.class_type)
+    ? 'TUTORIAL'
+    : R.toUpper(element.class_type),
+  weekday: R.toUpper(element.weekday),
+  slot: Number(element.scd_col),
+  venue: R.trim(element.location),
+});
+
 export const parseLogin = response => R.pathEq(['data', 'd'], 'True')(response);
 
 /** @TODO */
@@ -49,5 +60,5 @@ export const parseExamsSchedule = response =>
     response,
   );
 
-/** @TODO */
-export const parseSchedule = response => ({});
+export const parseSchedule = response =>
+  R.pipe(R.path(['data', 'd']), JSON.parse, R.map(transformSchedule))(response);
