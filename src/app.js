@@ -22,6 +22,10 @@ app.use(
   bodyParser.json(),
   graphqlExpress({
     schema: executableSchema,
+    formatError: error => ({
+      message: error.message,
+      path: error.path,
+    }),
   }),
 );
 
