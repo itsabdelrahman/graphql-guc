@@ -4,7 +4,7 @@ schema {
 }
 
 type Query {
-  student(email: String!, password: String!): Student
+  student(username: String!, password: String!): Student
 }
 
 type Student {
