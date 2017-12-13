@@ -5,6 +5,7 @@ import {
   requestCoursework,
   requestExams,
   requestSchedule,
+  requestTranscript,
 } from './network';
 import {
   parseLogin,
@@ -14,6 +15,7 @@ import {
   parseMidterms,
   parseExams,
   parseSchedule,
+  parseTranscript,
 } from './parser';
 
 export const isAuthorized = R.pipeP(requestLogin, parseLogin);
@@ -29,3 +31,5 @@ export const getMidterms = R.pipeP(requestCoursework, parseMidterms);
 export const getExams = R.pipeP(requestExams, parseExams);
 
 export const getSchedule = R.pipeP(requestSchedule, parseSchedule);
+
+export const getTranscript = R.pipeP(requestTranscript, parseTranscript);

@@ -2,10 +2,11 @@ const API = 'https://m.guc.edu.eg/StudentServices.asmx';
 
 export const urls = {
   LOGIN: API.concat('/Login'),
-  COURSEWORK: API.concat('/GetCourseWork'),
   ATTENDANCE: API.concat('/GetAttendance'),
+  COURSEWORK: API.concat('/GetCourseWork'),
   EXAMS_SCHEDULE: API.concat('/GetExamsSchedule'),
   SCHEDULE: API.concat('/GetSchedule'),
+  TRANSCRIPT: API.concat('/GetTranscript'),
 };
 
 export const config = {

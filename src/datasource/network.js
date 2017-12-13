@@ -12,10 +12,12 @@ const request = url => credentials =>
 
 export const requestLogin = request(urls.LOGIN);
 
-export const requestCoursework = request(urls.COURSEWORK);
-
 export const requestAttendance = request(urls.ATTENDANCE);
+
+export const requestCoursework = request(urls.COURSEWORK);
 
 export const requestExams = request(urls.EXAMS_SCHEDULE);
 
 export const requestSchedule = request(urls.SCHEDULE);
+
+export const requestTranscript = request(urls.TRANSCRIPT);

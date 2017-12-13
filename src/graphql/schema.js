@@ -10,6 +10,7 @@ type Query {
 type Student {
   courses(code: String): [Course]
   schedule: [Slot]
+  transcript: Transcript
 }
 
 type Course {
@@ -50,6 +51,29 @@ type Exam {
   startsAt: String
 }
 
+type Transcript {
+  cumulativeGPA: Float
+  semesters: [Semester]
+}
+
+type Semester {
+  year: Int
+  type: SemesterType
+  gpa: Float
+  entries: [Entry]
+}
+
+type Entry {
+  course: Course
+  grade: Grade
+  creditHours: Int
+}
+
+type Grade {
+  german: Float
+  american: String
+}
+
 enum SlotWeekday {
   SATURDAY
   SUNDAY
@@ -69,5 +93,11 @@ enum AbsenceSeverity {
   HIGH
   MEDIUM
   LOW
+}
+
+enum SemesterType {
+  WINTER
+  SPRING
+  SUMMER
 }
 `;
