@@ -4,26 +4,29 @@
 
 <h1 align="center">GUC API</h1>
 
-<p align="center"> Public API wrapper for the German University in Cairo (GUC) private API</p>
+<p align="center">Public GraphQL wrapper for the German University in Cairo (GUC) private API</p>
+
+## Features
+
+* 🔑 Login
+* 📚 Courses
+* ✅ Attendance
+* 💯 Grades
+* 📝 Exams
+* 🗓️ Schedule
+* 📜 Transcript
 
 ## Playground
+
 Check out your university data [here]().
 
-## Usage
+## Development
 
 ```bash
-
+$ yarn
+$ yarn dev
+$ open http://localhost:8080/graphiql
 ```
-
-## Roadmap
-
-- [ ] Login
-- [ ] Coursework
-- [ ] Midterms
-- [ ] Attendance
-- [ ] Exams Schedule
-- [ ] Schedule
-- [ ] Transcript
 
 ## Limitations
 
