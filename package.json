@@ -1,7 +1,7 @@
 {
   "name": "guc-api",
   "version": "0.1.0",
-  "description": "Public API wrapper for the German University in Cairo (GUC) private API",
+  "description": "Public GraphQL wrapper for the German University in Cairo (GUC) private API",
   "main": "src/app.js",
   "scripts": {
     "precommit": "lint-staged",
