@@ -18,7 +18,7 @@
 
 ## Playground
 
-Check out your university data [here]().
+Check out your university data [here](https://guc-api-carflybkqf.now.sh/playground).
 
 ## Development
 
