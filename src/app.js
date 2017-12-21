@@ -2,7 +2,8 @@ import http from 'http';
 import express from 'express';
 import bodyParser from 'body-parser';
 import { makeExecutableSchema } from 'graphql-tools';
-import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
+import { graphqlExpress } from 'apollo-server-express';
+import graphqlPlayground from 'graphql-playground-middleware-express';
 import { graphqlSchema, graphqlResolvers } from './graphql';
 import config from './constants/config';
 
@@ -29,12 +30,7 @@ app.use(
   }),
 );
 
-app.use(
-  '/graphiql',
-  graphiqlExpress({
-    endpointURL: '/graphql',
-  }),
-);
+app.use('/playground', graphqlPlayground({ endpoint: '/graphql' }));
 
 app.server.listen(process.env.PORT || config.server.port);
 // eslint-disable-next-line no-console

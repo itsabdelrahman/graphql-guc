@@ -25,7 +25,7 @@ Check out your university data [here]().
 ```bash
 $ yarn
 $ yarn dev
-$ open http://localhost:8080/graphiql
+$ open http://localhost:8080/playground
 ```
 
 ## Limitations
