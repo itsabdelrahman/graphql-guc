@@ -4,9 +4,10 @@
   "description": "Public GraphQL wrapper for the German University in Cairo (GUC) private API",
   "main": "src/app.js",
   "scripts": {
-    "precommit": "lint-staged",
+    "start": "node index.js",
     "dev": "nodemon src/app.js --exec babel-node",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "precommit": "lint-staged"
   },
   "repository": {
     "type": "git",
@@ -21,9 +22,7 @@
   "dependencies": {
     "apollo-server-express": "^1.2.0",
     "axios": "^0.17.1",
-    "babel-cli": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
+    "babel-polyfill": "^6.26.0",
     "babel-register": "^6.26.0",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
@@ -34,6 +33,9 @@
     "ramda": "^0.25.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "eslint": "^4.13.0",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
