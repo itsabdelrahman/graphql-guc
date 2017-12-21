@@ -8,13 +8,13 @@
 
 ## Features
 
-* 🔑 Login
-* 📚 Courses
-* ✅ Attendance
-* 💯 Grades
-* 📝 Exams
-* 🗓️ Schedule
-* 📜 Transcript
+*  🔑  Login
+*  📚  Courses
+*  ✅  Attendance
+*  💯  Grades
+*  📝  Exams
+*  🗓️  Schedule
+*  📜  Transcript
 
 ## Playground
 
