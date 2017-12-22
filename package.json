@@ -1,5 +1,5 @@
 {
-  "name": "guc-api",
+  "name": "graphql-guc",
   "version": "0.1.0",
   "description": "Public GraphQL wrapper for the German University in Cairo (GUC) private API",
   "main": "src/app.js",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ar-maged/guc-api.git"
+    "url": "git+https://github.com/ar-maged/graphql-guc.git"
   },
   "author": "A.R. Maged <abdulrahman.maged95@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ar-maged/guc-api/issues"
+    "url": "https://github.com/ar-maged/graphql-guc/issues"
   },
-  "homepage": "https://github.com/ar-maged/guc-api#readme",
+  "homepage": "https://github.com/ar-maged/graphql-guc#readme",
   "dependencies": {
     "apollo-server-express": "^1.2.0",
     "axios": "^0.17.1",
