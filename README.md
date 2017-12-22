@@ -18,7 +18,7 @@
 
 ## Usage
 
-<pre><b>POST</b> https://graphql-guc.now.sh</pre>
+<pre><b style="color:cyan">POST</b> https://graphql-guc.now.sh</pre>
 
 <details>
 
@@ -81,9 +81,9 @@ query {
 }
 ```
 
-</details>
-
 Try out this query in the [live demo](https://graphql-guc.now.sh/playground).
+
+</details>
 
 ## Development
 
