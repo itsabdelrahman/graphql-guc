@@ -20,7 +20,7 @@
 
 ```graphql
 query {
-  student(username: "abdelrahman.ibrahim", password: "nazi1234567$") {
+  student(username: "john.doe", password: "123456") {
     courses {
       code
       name
