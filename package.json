@@ -1,7 +1,7 @@
 {
   "name": "graphql-guc",
   "version": "0.1.0",
-  "description": "Public GraphQL wrapper for the German University in Cairo (GUC) private API",
+  "description": "Get your German University in Cairo (GUC) student info with GraphQL!",
   "main": "src/app.js",
   "scripts": {
     "start": "node index.js",
