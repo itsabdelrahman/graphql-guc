@@ -1,0 +1,8 @@
+{
+  "extends": "airbnb-base",
+  "plugins": ["import"],
+  "rules": {
+    "function-paren-newline": 0,
+    "arrow-parens": 0
+  }
+}

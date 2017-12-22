@@ -1,38 +1,107 @@
 <p align="center">
-  <img src="https://lh6.ggpht.com/gNy40q6S_519oQZ_AE9sGypZ-Z94zDy2Xpm5Tg5mYf8yVOSLAxAhEatKLn0vJDyFErE=w300" width="80"/>
+  <img src="https://user-images.githubusercontent.com/11808903/34305458-e24969ee-e746-11e7-9d9d-f6c589b30f3c.png" width="200"/>
 </p>
 
-<h1 align="center">GUC API</h1>
+<h1 align="center">GraphQL GUC</h1>
 
-<p align="center"> Public API wrapper for the German University in Cairo (GUC) private API</p>
+<p align="center">Get your German University in Cairo (GUC) student info with GraphQL!</p>
 
-## Playground
-Check out your university data [here](http://bit.ly/2fcSUtz).
+## Features
+
+*  🔑  Login
+*  📚  Courses
+*  ✅  Attendance
+*  💯  Grades
+*  📝  Exams
+*  🗓️  Schedule
+*  📜  Transcript
 
 ## Usage
 
-```bash
-$ cd $GOPATH/src                                    # Change directory to GOPATH/src
-$ git clone git@github.com:ar-maged/guc-api.git     # Clone repository
-$ cd guc-api                                        # Change directory to project
-$ go get ./...                                      # Install dependencies
-$ go run server.go                                  # Run server
-$ open http://localhost:3000/graphql                # Open GraphiQL
+<pre><b>POST</b> https://graphql-guc.now.sh</pre>
+
+<details>
+
+<summary>Query</summary>
+
+<br />
+
+```graphql
+query {
+  student(username: "john.doe", password: "123456") {
+    courses {
+      code
+      name
+      absence {
+        level
+        severity
+      }
+      coursework {
+        type
+        grade
+        maximumGrade
+      }
+      midterm {
+        grade
+      }
+      exam {
+        venue
+        seat
+        startsAt
+      }
+    }
+    schedule {
+      type
+      weekday
+      number
+      venue
+      course {
+        code
+        name
+      }
+    }
+    transcript {
+      cumulativeGPA
+      semesters {
+        year
+        type
+        gpa
+        entries {
+          course {
+            code
+            name
+          }
+          grade {
+            german
+            american
+          }
+          creditHours
+        }
+      }
+    }
+  }
+}
 ```
 
-## Roadmap
+Try out this query in the [live demo](https://graphql-guc.now.sh/playground).
 
-- [x] Login
-- [x] Coursework
-- [x] Midterms
-- [x] Attendance
-- [x] Exams Schedule
-- [ ] Schedule
-- [ ] Transcript
+</details>
 
-## Limitations
+## Development
 
-The GUC server oftentimes goes down, which consequently cripples this wrapper.
+```bash
+$ yarn
+$ yarn dev
+$ open http://localhost:8080/playground
+```
+
+## Thanks
+
+* [Nabila Ahmed](https://github.com/Nabila63Ahmed), for her early adoption of the idea & help with coding a previous version of the project.
+
+* [Ahmed Elhanafy](https://github.com/ahmedlhanafy), for his inspired propulsion towards learning GraphQL.
+
+* [Abdullah Maged](https://www.behance.net/beedoz37718e3), for designing the logo.
 
 ## License
 
