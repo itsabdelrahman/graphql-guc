@@ -1,13 +1,13 @@
 import http from 'http';
 import express from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import { makeExecutableSchema } from 'graphql-tools';
 import { graphqlExpress } from 'apollo-server-express';
 import graphqlPlayground from 'graphql-playground-middleware-express';
 import { graphqlSchema, graphqlResolvers } from './graphql';
 import { get404HTML } from './utilities';
 import config from './constants/config';
-import cors from 'cors';
 
 const app = express();
 app.server = http.createServer(app);
