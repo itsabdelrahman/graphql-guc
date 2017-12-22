@@ -47,6 +47,10 @@ query {
       weekday
       number
       venue
+      course {
+        code
+        name
+      }
     }
     transcript {
       cumulativeGPA
