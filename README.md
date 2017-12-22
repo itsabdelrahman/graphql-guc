@@ -95,9 +95,13 @@ $ yarn dev
 $ open http://localhost:8080/playground
 ```
 
-## Limitations
+## Thanks
 
-The GUC server oftentimes goes down, which consequently cripples this wrapper.
+* [Nabila Ahmed](https://github.com/Nabila63Ahmed), for her early adoption of the idea & help with coding a previous version of the project.
+
+* [Ahmed Elhanafy](https://github.com/ahmedlhanafy), for his inspired propulsion towards learning GraphQL.
+
+* [Abdullah Maged](https://www.behance.net/beedoz37718e3), for designing the logo.
 
 ## License
 
