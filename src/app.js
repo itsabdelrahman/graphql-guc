@@ -5,6 +5,7 @@ import { makeExecutableSchema } from 'graphql-tools';
 import { graphqlExpress } from 'apollo-server-express';
 import graphqlPlayground from 'graphql-playground-middleware-express';
 import { graphqlSchema, graphqlResolvers } from './graphql';
+import { get404HTML } from './utilities';
 import config from './constants/config';
 
 const app = express();
@@ -33,6 +34,8 @@ app.use(
 app.use('/playground', graphqlPlayground({ endpoint: '/graphql' }));
 
 app.get('/', (req, res) => res.redirect('/playground'));
+
+app.get('*', (req, res) => res.status(404).send(get404HTML()));
 
 app.server.listen(process.env.PORT || config.server.port);
 // eslint-disable-next-line no-console
