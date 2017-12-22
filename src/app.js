@@ -1,6 +1,7 @@
 import http from 'http';
 import express from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import { makeExecutableSchema } from 'graphql-tools';
 import { graphqlExpress } from 'apollo-server-express';
 import graphqlPlayground from 'graphql-playground-middleware-express';
@@ -13,6 +14,7 @@ app.server = http.createServer(app);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 const executableSchema = makeExecutableSchema({
   typeDefs: [graphqlSchema],
