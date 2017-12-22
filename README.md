@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://lh6.ggpht.com/gNy40q6S_519oQZ_AE9sGypZ-Z94zDy2Xpm5Tg5mYf8yVOSLAxAhEatKLn0vJDyFErE=w300" width="120"/>
+  <img src="https://user-images.githubusercontent.com/11808903/34305458-e24969ee-e746-11e7-9d9d-f6c589b30f3c.png" width="120"/>
 </p>
 
 <h1 align="center">GraphQL GUC</h1>
