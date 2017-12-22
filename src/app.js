@@ -7,12 +7,14 @@ import graphqlPlayground from 'graphql-playground-middleware-express';
 import { graphqlSchema, graphqlResolvers } from './graphql';
 import { get404HTML } from './utilities';
 import config from './constants/config';
+import cors from 'cors';
 
 const app = express();
 app.server = http.createServer(app);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
 const executableSchema = makeExecutableSchema({
   typeDefs: [graphqlSchema],
