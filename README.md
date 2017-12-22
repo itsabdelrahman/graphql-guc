@@ -18,6 +18,12 @@
 
 ## Usage
 
+<pre><b>POST</b> https://graphql-guc.now.sh</pre>
+
+<details>
+
+<summary>Query</summary>
+
 ```graphql
 query {
   student(username: "john.doe", password: "123456") {
@@ -75,7 +81,9 @@ query {
 }
 ```
 
-Try this query in the [live demo](https://graphql-guc.now.sh/playground).
+</details>
+
+Try out this query in the [live demo](https://graphql-guc.now.sh/playground).
 
 ## Development
 
