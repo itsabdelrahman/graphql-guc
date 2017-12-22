@@ -24,6 +24,8 @@
 
 <summary>Query</summary>
 
+<br />
+
 ```graphql
 query {
   student(username: "john.doe", password: "123456") {
