@@ -1,9 +1,4 @@
-import R from 'ramda';
-
-export const capitalize = R.compose(
-  R.join(''),
-  R.over(R.lensIndex(0), R.toUpper),
-);
+export const capitalize = str => [str[0].toUpperCase(), str.slice(1)].join('');
 
 export const get404HTML = () => `
 <html>
