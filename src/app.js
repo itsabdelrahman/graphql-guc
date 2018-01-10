@@ -30,6 +30,7 @@ app.use(
       message: error.message,
       path: error.path,
     }),
+    tracing: true,
   }),
 );
 
