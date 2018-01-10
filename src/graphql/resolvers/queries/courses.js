@@ -27,7 +27,8 @@ const coursesResolver = async (obj, args, context) => {
 
   return R.pipe(
     filterBy('code', code),
-    R.map(R.pipe(augmentCoursework(coursework), augmentMidterm(midterms))),
+    R.map(augmentCoursework(coursework)),
+    R.map(augmentMidterm(midterms)),
   )(courses);
 };
 
