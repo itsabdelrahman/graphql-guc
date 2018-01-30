@@ -28,8 +28,13 @@ const augmentExams = exams => course =>
   R.assoc('exam', R.find(R.propEq('code', course.code))(exams))(course);
 
 const coursesResolver = async (obj, args, context) => {
+  const { isAuthorized } = obj;
   const { code } = args;
   const { username, password } = context;
+
+  if (!isAuthorized) {
+    return null;
+  }
 
   const [
     courseworkResponse,

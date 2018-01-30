@@ -29,6 +29,7 @@
 ```graphql
 query {
   student(username: "john.doe", password: "123456") {
+    isAuthorized
     courses {
       code
       name

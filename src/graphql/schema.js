@@ -8,6 +8,7 @@ type Query {
 }
 
 type Student {
+  isAuthorized: Boolean
   courses(code: String): [Course]
   schedule: [Slot]
   transcript: Transcript
