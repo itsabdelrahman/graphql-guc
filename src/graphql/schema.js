@@ -33,7 +33,12 @@ type Slot {
   type: SlotType
   weekday: SlotWeekday
   number: Int
-  venue: String
+  venue: Venue
+}
+
+type Venue {
+  room: String
+  building: String
 }
 
 type Component {
