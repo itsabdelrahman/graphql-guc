@@ -55,7 +55,10 @@ query {
       type
       weekday
       number
-      venue
+      venue {
+        room
+        building
+      }
       course {
         code
         name
