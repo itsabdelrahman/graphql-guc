@@ -1,11 +1,4 @@
-import {
-  student,
-  courses,
-  absence,
-  exam,
-  schedule,
-  transcript,
-} from './resolvers/queries';
+import { student, courses, schedule, transcript } from './resolvers/queries';
 
 const resolversMap = {
   Query: {
@@ -15,10 +8,6 @@ const resolversMap = {
     courses,
     schedule,
     transcript,
-  },
-  Course: {
-    absence,
-    exam,
   },
 };
 

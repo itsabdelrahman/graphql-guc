@@ -8,6 +8,32 @@ const computeAbsenceLevelSeverity = level => {
   return 'LOW';
 };
 
+const computeVenueBuilding = venue => {
+  if (new RegExp(/^H/).test(venue)) {
+    if (R.contains(venue)(['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7'])) {
+      return 'B';
+    }
+    if (
+      R.contains(venue)(['H8', 'H9', 'H10', 'H11', 'H12', 'H13', 'H14', 'H15'])
+    ) {
+      return 'C';
+    }
+    if (R.contains(venue)(['H16', 'H17', 'H18', 'H19'])) {
+      return 'D';
+    }
+  }
+  if (new RegExp(/^B/).test(venue)) {
+    return 'B';
+  }
+  if (new RegExp(/^C/).test(venue)) {
+    return 'C';
+  }
+  if (new RegExp(/^D/).test(venue)) {
+    return 'D';
+  }
+  return null;
+};
+
 const transformAttendance = element => ({
   code: R.replace(/\s/g, '', element.Code),
   name: R.trim(element.Name),
@@ -97,51 +123,59 @@ const transformSchedule = element => ({
     : R.toUpper(element.class_type),
   weekday: R.toUpper(element.weekday),
   number: Number(element.scd_col),
-  venue: R.trim(element.location),
+  venue: {
+    room: R.trim(element.location),
+    building: R.pipe(R.trim, computeVenueBuilding)(element.location),
+  },
 });
 
-const transformTranscript = aggregation => ({
-  cumulativeGPA: aggregation.CumGPA,
-  semesters: R.pipe(
-    R.map(element => {
-      const semester = R.find(R.propEq('season_id', element.season_id))(
-        aggregation.Transcript,
-      );
-      return {
-        year: R.pipe(
-          R.prop('Semester'),
-          R.split(' '),
-          R.takeLast(1),
-          R.join(''),
-          Number,
-        )(semester),
-        type: R.pipe(
-          R.prop('Semester'),
-          R.split(' '),
-          R.take(1),
-          R.join(''),
-          R.toUpper,
-        )(semester),
-        gpa: element.gpa,
-        entries: R.pipe(
-          R.filter(R.eqProps('Semester', semester)),
-          R.map(entry => ({
-            course: {
-              code: R.replace(/\s/g, '', entry.course_code),
-              name: R.trim(entry.course_name),
-            },
-            grade: {
-              german: Number(entry.de_result),
-              american: entry.us_result,
-            },
-            creditHours: Number(entry.total_h),
-          })),
-        )(aggregation.Transcript),
-      };
-    }),
-    R.uniqWith(R.allPass([R.eqProps('year'), R.eqProps('type')])),
-  )(aggregation.GPAPerSn),
-});
+const transformTranscript = aggregation => {
+  if (R.pipe(R.head, R.prop('error'))(aggregation)) {
+    return null;
+  }
+  return {
+    cumulativeGPA: aggregation.CumGPA,
+    semesters: R.pipe(
+      R.map(element => {
+        const semester = R.find(R.propEq('season_id', element.season_id))(
+          aggregation.Transcript,
+        );
+        return {
+          year: R.pipe(
+            R.prop('Semester'),
+            R.split(' '),
+            R.takeLast(1),
+            R.join(''),
+            Number,
+          )(semester),
+          type: R.pipe(
+            R.prop('Semester'),
+            R.split(' '),
+            R.take(1),
+            R.join(''),
+            R.toUpper,
+          )(semester),
+          gpa: element.gpa,
+          entries: R.pipe(
+            R.filter(R.eqProps('Semester', semester)),
+            R.map(entry => ({
+              course: {
+                code: R.replace(/\s/g, '', entry.course_code),
+                name: R.trim(entry.course_name),
+              },
+              grade: {
+                german: Number(entry.de_result),
+                american: entry.us_result,
+              },
+              creditHours: Number(entry.total_h),
+            })),
+          )(aggregation.Transcript),
+        };
+      }),
+      R.uniqWith(R.allPass([R.eqProps('year'), R.eqProps('type')])),
+    )(aggregation.GPAPerSn),
+  };
+};
 
 export const parseLogin = R.pathEq(['data', 'd'], 'True');
 

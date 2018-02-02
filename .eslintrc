@@ -1,6 +1,9 @@
 {
   "extends": "airbnb-base",
   "plugins": ["import"],
+  "env": {
+    "jest": true
+  },
   "rules": {
     "function-paren-newline": 0,
     "arrow-parens": 0

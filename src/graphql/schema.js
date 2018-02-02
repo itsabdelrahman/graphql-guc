@@ -8,6 +8,7 @@ type Query {
 }
 
 type Student {
+  isAuthorized: Boolean
   courses(code: String): [Course]
   schedule: [Slot]
   transcript: Transcript
@@ -32,7 +33,12 @@ type Slot {
   type: SlotType
   weekday: SlotWeekday
   number: Int
-  venue: String
+  venue: Venue
+}
+
+type Venue {
+  room: String
+  building: String
 }
 
 type Component {
