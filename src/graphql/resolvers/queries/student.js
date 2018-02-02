@@ -1,6 +1,6 @@
 import { isAuthorized } from '../../../datasource';
 
-const student = async (obj, args, context) => {
+const studentResolver = async (obj, args, context) => {
   const { username, password } = args;
   const areAuthenticCredentials = await isAuthorized({ username, password });
 
@@ -12,4 +12,4 @@ const student = async (obj, args, context) => {
   return { isAuthorized: areAuthenticCredentials };
 };
 
-export default student;
+export default studentResolver;
