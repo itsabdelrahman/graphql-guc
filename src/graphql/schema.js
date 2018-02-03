@@ -52,7 +52,7 @@ type Midterm {
 }
 
 type Exam {
-  venue: String
+  venue: Venue
   seat: String
   startsAt: String
 }

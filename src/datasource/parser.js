@@ -104,7 +104,10 @@ const transformExams = element => ({
     R.dropLast(1),
     R.join(' '),
   )(element.course_name),
-  venue: element.rsrc_code,
+  venue: {
+    room: R.trim(element.rsrc_code),
+    building: R.pipe(R.trim, computeVenueBuilding)(element.rsrc_code),
+  },
   seat: element.seat_code,
   startsAt: moment(
     R.replace(/\s\s/g, ' ', element.start_time),
