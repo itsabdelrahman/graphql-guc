@@ -42,10 +42,10 @@ const transformAttendance = element => ({
 });
 
 const transformCourses = element => ({
-  code: R.pipe(R.match(/\((.*?)\)/), R.view(R.lensIndex(1)))(
+  code: R.pipe(R.match(/\((.*?)\)/g), R.last, R.dropLast(1), R.tail)(
     element.course_short_name,
   ),
-  name: R.pipe(R.replace(/\((.*?)\)/, ''), R.trim)(element.course_short_name),
+  name: R.pipe(R.replace(/\((.*?)\)/g, ''), R.trim)(element.course_short_name),
 });
 
 const transformCoursework = aggregation =>
@@ -54,10 +54,10 @@ const transformCoursework = aggregation =>
       R.equals(currentCourse.sm_crs_id, element.sm_crs_id),
     )(aggregation.CurrentCourses);
     return {
-      code: R.pipe(R.match(/\((.*?)\)/), R.view(R.lensIndex(1)))(
+      code: R.pipe(R.match(/\((.*?)\)/g), R.last, R.dropLast(1), R.tail)(
         course.course_short_name,
       ),
-      name: R.pipe(R.replace(/\((.*?)\)/, ''), R.trim)(
+      name: R.pipe(R.replace(/\((.*?)\)/g, ''), R.trim)(
         course.course_short_name,
       ),
       type: R.pipe(R.trim, capitalize)(element.eval_method_name),
