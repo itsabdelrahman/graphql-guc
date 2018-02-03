@@ -46,7 +46,10 @@ query {
         grade
       }
       exam {
-        venue
+        venue {
+          room
+          building
+        }
         seat
         startsAt
       }
