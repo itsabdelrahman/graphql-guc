@@ -1,6 +1,6 @@
 {
   "name": "graphql-guc",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Get your German University in Cairo (GUC) student info with GraphQL!",
   "main": "src/app.js",
   "scripts": {
