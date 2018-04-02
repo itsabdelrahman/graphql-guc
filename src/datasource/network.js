@@ -1,5 +1,15 @@
+import R from 'ramda';
 import axios from 'axios';
 import { urls, config } from './constants';
+import {
+  areMockCredentials,
+  mockLoginRequest,
+  mockAttendanceRequest,
+  mockCourseworkRequest,
+  mockExamsRequest,
+  mockScheduleRequest,
+  mockTranscriptRequest,
+} from './mock';
 
 const request = url => credentials =>
   axios.post(url, {
@@ -10,14 +20,38 @@ const request = url => credentials =>
     password: credentials.password,
   });
 
-export const requestLogin = request(urls.LOGIN);
+export const requestLogin = R.ifElse(
+  areMockCredentials,
+  mockLoginRequest,
+  request(urls.LOGIN),
+);
 
-export const requestAttendance = request(urls.ATTENDANCE);
+export const requestAttendance = R.ifElse(
+  areMockCredentials,
+  mockAttendanceRequest,
+  request(urls.ATTENDANCE),
+);
 
-export const requestCoursework = request(urls.COURSEWORK);
+export const requestCoursework = R.ifElse(
+  areMockCredentials,
+  mockCourseworkRequest,
+  request(urls.COURSEWORK),
+);
 
-export const requestExams = request(urls.EXAMS_SCHEDULE);
+export const requestExams = R.ifElse(
+  areMockCredentials,
+  mockExamsRequest,
+  request(urls.EXAMS_SCHEDULE),
+);
 
-export const requestSchedule = request(urls.SCHEDULE);
+export const requestSchedule = R.ifElse(
+  areMockCredentials,
+  mockScheduleRequest,
+  request(urls.SCHEDULE),
+);
 
-export const requestTranscript = request(urls.TRANSCRIPT);
+export const requestTranscript = R.ifElse(
+  areMockCredentials,
+  mockTranscriptRequest,
+  request(urls.TRANSCRIPT),
+);
