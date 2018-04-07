@@ -49,22 +49,25 @@ const transformCourses = element => ({
 });
 
 const transformCoursework = aggregation =>
-  R.map(element => {
-    const course = R.find(currentCourse =>
-      R.equals(currentCourse.sm_crs_id, element.sm_crs_id),
-    )(aggregation.CurrentCourses);
-    return {
-      code: R.pipe(R.match(/\((.*?)\)/g), R.last, R.dropLast(1), R.tail)(
-        course.course_short_name,
-      ),
-      name: R.pipe(R.replace(/\((.*?)\)/g, ''), R.trim)(
-        course.course_short_name,
-      ),
-      type: R.pipe(R.trim, capitalize)(element.eval_method_name),
-      grade: Number(element.grade),
-      maximumGrade: Number(element.max_point),
-    };
-  })(aggregation.CourseWork);
+  R.pipe(
+    R.map(element => {
+      const course = R.find(currentCourse =>
+        R.equals(currentCourse.sm_crs_id, element.sm_crs_id),
+      )(aggregation.CurrentCourses);
+      return {
+        code: R.pipe(R.match(/\((.*?)\)/g), R.last, R.dropLast(1), R.tail)(
+          course.course_short_name,
+        ),
+        name: R.pipe(R.replace(/\((.*?)\)/g, ''), R.trim)(
+          course.course_short_name,
+        ),
+        type: R.pipe(R.trim, capitalize)(element.eval_method_name),
+        grade: R.propEq('grade', '')(element) ? null : Number(element.grade),
+        maximumGrade: Number(element.max_point),
+      };
+    }),
+    R.reject(R.propEq('grade', null)),
+  )(aggregation.CourseWork);
 
 const transformMidterms = element => ({
   code: R.pipe(
