@@ -1,5 +1,6 @@
 import R from 'ramda';
 import moment from 'moment';
+import toTitleCase from 'to-title-case';
 import { capitalize } from '../utilities';
 
 const computeAbsenceLevelSeverity = level => {
@@ -36,7 +37,7 @@ const computeVenueBuilding = venue => {
 
 const transformAttendance = element => ({
   code: R.replace(/\s/g, '', element.Code),
-  name: R.trim(element.Name),
+  name: R.pipe(R.trim, toTitleCase)(element.Name),
   level: Number(element.AbsenceLevel),
   severity: computeAbsenceLevelSeverity(element.AbsenceLevel),
 });
@@ -45,26 +46,31 @@ const transformCourses = element => ({
   code: R.pipe(R.match(/\((.*?)\)/g), R.last, R.dropLast(1), R.tail)(
     element.course_short_name,
   ),
-  name: R.pipe(R.replace(/\((.*?)\)/g, ''), R.trim)(element.course_short_name),
+  name: R.pipe(R.replace(/\((.*?)\)/g, ''), R.trim, toTitleCase)(
+    element.course_short_name,
+  ),
 });
 
 const transformCoursework = aggregation =>
-  R.map(element => {
-    const course = R.find(currentCourse =>
-      R.equals(currentCourse.sm_crs_id, element.sm_crs_id),
-    )(aggregation.CurrentCourses);
-    return {
-      code: R.pipe(R.match(/\((.*?)\)/g), R.last, R.dropLast(1), R.tail)(
-        course.course_short_name,
-      ),
-      name: R.pipe(R.replace(/\((.*?)\)/g, ''), R.trim)(
-        course.course_short_name,
-      ),
-      type: R.pipe(R.trim, capitalize)(element.eval_method_name),
-      grade: Number(element.grade),
-      maximumGrade: Number(element.max_point),
-    };
-  })(aggregation.CourseWork);
+  R.pipe(
+    R.map(element => {
+      const course = R.find(currentCourse =>
+        R.equals(currentCourse.sm_crs_id, element.sm_crs_id),
+      )(aggregation.CurrentCourses);
+      return {
+        code: R.pipe(R.match(/\((.*?)\)/g), R.last, R.dropLast(1), R.tail)(
+          course.course_short_name,
+        ),
+        name: R.pipe(R.replace(/\((.*?)\)/g, ''), R.trim, toTitleCase)(
+          course.course_short_name,
+        ),
+        type: R.pipe(R.trim, capitalize)(element.eval_method_name),
+        grade: R.propEq('grade', '')(element) ? null : Number(element.grade),
+        maximumGrade: Number(element.max_point),
+      };
+    }),
+    R.reject(R.propEq('grade', null)),
+  )(aggregation.CourseWork);
 
 const transformMidterms = element => ({
   code: R.pipe(
@@ -83,6 +89,7 @@ const transformMidterms = element => ({
     R.dropLast(1),
     R.join(' '),
     R.trim,
+    toTitleCase,
   )(element.course_full_name),
   grade: Number(element.total_perc),
 });
@@ -103,6 +110,7 @@ const transformExams = element => ({
     R.split(' '),
     R.dropLast(1),
     R.join(' '),
+    toTitleCase,
   )(element.course_name),
   venue: {
     room: R.trim(element.rsrc_code),
@@ -119,7 +127,9 @@ const transformExams = element => ({
 const transformSchedule = element => ({
   course: {
     code: R.replace(/\s/g, '', element.course_short_code),
-    name: R.pipe(R.split('-'), R.take(1), R.join(' '), R.trim)(element.course),
+    name: R.pipe(R.split('-'), R.take(1), R.join(' '), R.trim, toTitleCase)(
+      element.course,
+    ),
   },
   type: R.equals('Tut', element.class_type)
     ? 'TUTORIAL'
@@ -164,7 +174,7 @@ const transformTranscript = aggregation => {
             R.map(entry => ({
               course: {
                 code: R.replace(/\s/g, '', entry.course_code),
-                name: R.trim(entry.course_name),
+                name: R.pipe(R.trim, toTitleCase)(entry.course_name),
               },
               grade: {
                 german: Number(entry.de_result),
