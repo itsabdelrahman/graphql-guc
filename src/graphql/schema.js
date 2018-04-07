@@ -1,10 +1,16 @@
 export default `
 schema {
   query: Query
+  mutation: Mutation
 }
 
 type Query {
   student(username: String!, password: String!): Student
+  authenticatedStudent(token: String!): Student
+}
+
+type Mutation {
+  login(username: String!, password: String!): AuthenticationData
 }
 
 type Student {
@@ -12,6 +18,11 @@ type Student {
   courses(code: String): [Course]
   schedule: [Slot]
   transcript: Transcript
+}
+
+type AuthenticationData {
+  isAuthorized: Boolean
+  token: String
 }
 
 type Course {
