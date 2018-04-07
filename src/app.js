@@ -26,7 +26,7 @@ app.use(
   graphqlExpress({
     schema: executableSchema,
     formatError: error => ({
-      message: error.message,
+      message: 'Internal Server Error',
       path: error.path,
     }),
     tracing: true,
