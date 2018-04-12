@@ -16,7 +16,7 @@ const request = url => credentials =>
     clientVersion: config.CLIENT_VERSION,
     app_os: config.APP_OS,
     os_version: config.OS_VERSION,
-    username: credentials.username,
+    username: R.trim(credentials.username),
     password: credentials.password,
   });
 
