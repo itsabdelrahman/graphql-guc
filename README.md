@@ -102,6 +102,10 @@ $ yarn dev
 $ open http://localhost:8080/playground
 ```
 
+## Notable Dependents
+
+* [GUC Hub](https://github.com/ahmedlhanafy/guchub)
+
 ## Thanks
 
 * [Nabila Ahmed](https://github.com/Nabila63Ahmed), for her early adoption of the idea & help with coding a previous version of the project.
