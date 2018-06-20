@@ -1074,6 +1074,12 @@ chardet@^0.4.0:
   version "0.4.2"
   resolved "https://registry.npmjs.org/chardet/-/chardet-0.4.2.tgz#b5473b33dc97c424e5d98dc87d55d4d8a29c8bf2"
 
+check-env@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.npmjs.org/check-env/-/check-env-1.3.0.tgz#bd2b230d8d36dc7342dc5286869407bcf172ce3a"
+  dependencies:
+    cowsay "^1.1.9"
+
 chokidar@^1.6.1, chokidar@^1.7.0:
   version "1.7.0"
   resolved "https://registry.npmjs.org/chokidar/-/chokidar-1.7.0.tgz#798e689778151c8076b4b360e5edd28cda2bb468"
@@ -1250,6 +1256,15 @@ cosmiconfig@^3.1.0:
     js-yaml "^3.9.0"
     parse-json "^3.0.0"
     require-from-string "^2.0.1"
+
+cowsay@^1.1.9:
+  version "1.3.1"
+  resolved "https://registry.npmjs.org/cowsay/-/cowsay-1.3.1.tgz#56b2a9bde3c865abaa272c6bb68906f68bee9810"
+  dependencies:
+    get-stdin "^5.0.1"
+    optimist "~0.6.1"
+    string-width "~2.1.1"
+    strip-eof "^1.0.0"
 
 create-error-class@^3.0.0:
   version "3.0.2"
@@ -1991,6 +2006,10 @@ get-caller-file@^1.0.1:
 get-own-enumerable-property-symbols@^2.0.1:
   version "2.0.1"
   resolved "https://registry.npmjs.org/get-own-enumerable-property-symbols/-/get-own-enumerable-property-symbols-2.0.1.tgz#5c4ad87f2834c4b9b4e84549dc1e0650fb38c24b"
+
+get-stdin@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.npmjs.org/get-stdin/-/get-stdin-5.0.1.tgz#122e161591e21ff4c52530305693f20e6393a398"
 
 get-stream@^3.0.0:
   version "3.0.0"
@@ -3663,7 +3682,7 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-optimist@^0.6.1:
+optimist@^0.6.1, optimist@~0.6.1:
   version "0.6.1"
   resolved "https://registry.npmjs.org/optimist/-/optimist-0.6.1.tgz#da3ea74686fa21a19a111c326e90eb15a0196686"
   dependencies:
@@ -4496,7 +4515,7 @@ string-width@^1.0.1, string-width@^1.0.2:
     is-fullwidth-code-point "^1.0.0"
     strip-ansi "^3.0.0"
 
-string-width@^2.0.0, string-width@^2.1.0, string-width@^2.1.1:
+string-width@^2.0.0, string-width@^2.1.0, string-width@^2.1.1, string-width@~2.1.1:
   version "2.1.1"
   resolved "https://registry.npmjs.org/string-width/-/string-width-2.1.1.tgz#ab93f27a8dc13d28cac815c462143a6d9012ae9e"
   dependencies:

@@ -5,8 +5,11 @@ import cors from 'cors';
 import { makeExecutableSchema } from 'graphql-tools';
 import { graphqlExpress } from 'apollo-server-express';
 import graphqlPlayground from 'graphql-playground-middleware-express';
+import checkEnv from 'check-env';
 import { graphqlSchema, graphqlResolvers } from './graphql';
 import config from './constants/config';
+
+checkEnv(['ENCRYPTION_KEY']);
 
 const app = express();
 app.server = http.createServer(app);
