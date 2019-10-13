@@ -14,6 +14,6 @@ export const decrypt = key => encryptedData => {
     .concat(decipher.final('utf-8'));
 };
 
-export const encryptWithStoredKey = encrypt(process.env.ENCRYPTION_KEY);
+export const encryptWithStoredKey = encrypt(process.env.encryption_key);
 
-export const decryptWithStoredKey = decrypt(process.env.ENCRYPTION_KEY);
+export const decryptWithStoredKey = decrypt(process.env.encryption_key);

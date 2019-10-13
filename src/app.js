@@ -9,7 +9,7 @@ import checkEnv from 'check-env';
 import { graphqlSchema, graphqlResolvers } from './graphql';
 import config from './constants/config';
 
-checkEnv(['ENCRYPTION_KEY']);
+checkEnv(['encryption_key']);
 
 const app = express();
 app.server = http.createServer(app);
