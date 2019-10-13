@@ -233,6 +233,9 @@ export const parseSchedule = R.pipe(
 
 export const parseTranscript = R.pipe(
   R.path(['data', 'd']),
-  JSON.parse,
-  transformTranscript,
+  R.ifElse(
+    R.equals(''),
+    R.always({ cumulativeGPA: 0, semesters: [] }),
+    R.pipe(data => JSON.parse(data), transformTranscript),
+  ),
 );
