@@ -11,6 +11,8 @@ import config from './constants/config';
 
 checkEnv(['encryption_key']);
 
+const PORT = process.env.PORT || config.server.port;
+
 const app = express();
 app.server = http.createServer(app);
 
@@ -40,6 +42,6 @@ app.get('/playground', graphqlPlayground({ endpoint: '/graphql' }));
 
 app.get('/', (req, res) => res.redirect('/playground'));
 
-app.server.listen(process.env.PORT || config.server.port);
+app.server.listen(PORT);
 // eslint-disable-next-line no-console
-console.log(`🚀  Server listening on port ${app.server.address().port}...`);
+console.log(`🚀  Server listening on port ${PORT}...`);
