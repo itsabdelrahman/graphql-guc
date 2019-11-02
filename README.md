@@ -8,13 +8,13 @@
 
 ## Features
 
-*  🔑  Login
-*  📚  Courses
-*  ✅  Attendance
-*  💯  Grades
-*  📝  Exams
-*  🗓️  Schedule
-*  📜  Transcript
+* 🔑 Login
+* 📚 Courses
+* ✅ Attendance
+* 💯 Grades
+* 📝 Exams
+* 🗓️ Schedule
+* 📜 Transcript
 
 ## Usage
 
@@ -110,7 +110,7 @@ $ open http://localhost:8080/playground
 
 * [Nabila Ahmed](https://github.com/Nabila63Ahmed), for her early adoption of the idea & help with coding a previous version of the project.
 
-* [Ahmed Elhanafy](https://github.com/ahmedlhanafy), for his inspired propulsion towards learning GraphQL.
+* [Ahmed Elhanafy](https://github.com/ahmedlhanafy), for his inspired encouragement of learning GraphQL.
 
 * [Abdullah Maged](https://www.behance.net/beedoz37718e3), for designing the logo.
 
