@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/ar-maged/graphql-guc#readme",
   "dependencies": {
-    "apollo-server-express": "^1.2.0",
+    "apollo-server-express": "^2.14.2",
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
     "babel-register": "^6.26.0",
