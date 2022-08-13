@@ -108,7 +108,7 @@ $ open http://localhost:8080/playground
 
 ## Thanks
 
-* [Nabila Ahmed](https://github.com/Nabila63Ahmed), for her early adoption of the idea & help with coding a previous version of the project.
+* [Nabila Hashad](https://github.com/nhashad), for her early adoption of the idea & help with coding a previous version of the project.
 
 * [Ahmed Elhanafy](https://github.com/ahmedlhanafy), for his inspired encouragement of learning GraphQL.
 
