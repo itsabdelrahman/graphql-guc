@@ -1,3 +1,6 @@
+> **Warning**
+> GraphQL GUC is unable to function anymore, since the underlying [data source](https://m.guc.edu.eg) has been decommissioned by the GUC (which also led the [official GUC mobile app](https://play.google.com/store/apps/details?id=eg.edu.guc&gl=US) to stop functioning as well).
+
 <p align="center">
   <img src="https://user-images.githubusercontent.com/11808903/34305458-e24969ee-e746-11e7-9d9d-f6c589b30f3c.png" width="200"/>
 </p>
